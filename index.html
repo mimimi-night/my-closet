@@ -59,7 +59,7 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   overflow-y: auto;
 }
 .modal-content h2 { color: #c9a96e; margin-bottom: 16px; font-size: 16px; letter-spacing: 2px; }
-.photo-buttons { display: flex; gap: 10px; margin-bottom: 16px; }
+.photo-buttons { display: flex; gap: 10px; margin-bottom: 12px; }
 .photo-btn {
   flex: 1;
   padding: 12px;
@@ -70,6 +70,13 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   font-size: 13px;
   cursor: pointer;
   text-align: center;
+}
+.photo-hint {
+  font-size: 11px;
+  color: #888;
+  text-align: center;
+  margin-bottom: 12px;
+  line-height: 1.5;
 }
 .photo-preview {
   width: 100%;
@@ -82,9 +89,29 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   align-items: center;
   margin-bottom: 16px;
   overflow: hidden;
+  position: relative;
 }
 .photo-preview img { width: 100%; height: 100%; object-fit: cover; }
 .photo-preview span { color: #888; font-size: 14px; }
+.center-guide {
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  width: 50%;
+  height: 50%;
+  border: 2px dashed #c9a96e88;
+  border-radius: 8px;
+  pointer-events: none;
+}
+.center-guide-label {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: #c9a96e88;
+  white-space: nowrap;
+}
 input[type="file"] { display: none; }
 select, input[type="text"] {
   width: 100%;
@@ -123,7 +150,7 @@ select, input[type="text"] {
   font-size: 13px;
   cursor: pointer;
 }
-.btn-row { display: flex; gap: 10px; margin-top: 8px; }
+.btn-row { display: flex; gap: 10px; margin-top: 16px; }
 .btn-save {
   flex: 1; padding: 12px;
   background: #c9a96e; color: #111;
@@ -170,6 +197,7 @@ select, input[type="text"] {
 .card-info { padding: 10px; }
 .card-category { font-size: 11px; color: #c9a96e; letter-spacing: 1px; }
 .card-season { font-size: 11px; color: #888; margin-top: 2px; }
+.card-taste { font-size: 11px; color: #c9a96e88; margin-top: 2px; }
 .card-color {
   display: inline-block;
   width: 12px;
@@ -231,6 +259,9 @@ select, input[type="text"] {
       <div class="photo-btn" onclick="document.getElementById('cameraInput').click()">📷 カメラで撮影</div>
       <div class="photo-btn" onclick="document.getElementById('albumInput').click()">🖼️ アルバムから選ぶ</div>
     </div>
+
+    <p class="photo-hint">⚠ 色の自動分析は写真中央のアイテムを基準にします。<br>アイテムが中央に映るように撮影してください。</p>
+
     <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="previewPhoto(event)">
     <input type="file" id="albumInput" accept="image/*" onchange="previewPhoto(event)">
 
@@ -255,7 +286,7 @@ select, input[type="text"] {
     </select>
 
     <div class="taste-section">
-      <label>テイスト（複数選択OK）</label>
+      <label>テイスト（1つ選択）</label>
       <div class="taste-tags" id="tasteTags"></div>
       <div class="add-taste-row">
         <input type="text" id="newTasteInput" placeholder="テイストを追加">
@@ -275,7 +306,7 @@ select, input[type="text"] {
 <script>
 let items = JSON.parse(localStorage.getItem('closet_items') || '[]');
 let tastes = JSON.parse(localStorage.getItem('closet_tastes') || '["カジュアル","フェミニン","ストリート","フォーマル"]');
-let selectedTastes = [];
+let selectedTaste = null;
 let currentFilter = '全て';
 let currentPhoto = null;
 let currentColor = null;
@@ -287,17 +318,15 @@ function saveTastes() {
 function renderTasteTags() {
   const container = document.getElementById('tasteTags');
   container.innerHTML = tastes.map(t => `
-    <button class="taste-tag ${selectedTastes.includes(t) ? 'selected' : ''}" onclick="toggleTaste('${t}')">
+    <button class="taste-tag ${selectedTaste === t ? 'selected' : ''}" onclick="selectTaste('${t}')">
       ${t}
       <span onclick="deleteTaste(event,'${t}')" style="font-size:14px">×</span>
     </button>
   `).join('');
 }
 
-function toggleTaste(t) {
-  selectedTastes.includes(t)
-    ? selectedTastes = selectedTastes.filter(x => x !== t)
-    : selectedTastes.push(t);
+function selectTaste(t) {
+  selectedTaste = selectedTaste === t ? null : t;
   renderTasteTags();
 }
 
@@ -305,7 +334,7 @@ function deleteTaste(e, t) {
   e.stopPropagation();
   if (confirm(`「${t}」を削除しますか？`)) {
     tastes = tastes.filter(x => x !== t);
-    selectedTastes = selectedTastes.filter(x => x !== t);
+    if (selectedTaste === t) selectedTaste = null;
     saveTastes();
     renderTasteTags();
   }
@@ -330,7 +359,6 @@ function extractColor(dataUrl, callback) {
     canvas.width = size;
     canvas.height = size;
     const ctx = canvas.getContext('2d');
-    // 中央部分だけを切り取って色を分析
     const cx = img.width * 0.25;
     const cy = img.height * 0.25;
     const cw = img.width * 0.5;
@@ -339,14 +367,9 @@ function extractColor(dataUrl, callback) {
     const data = ctx.getImageData(0, 0, size, size).data;
     let r = 0, g = 0, b = 0, count = 0;
     for (let i = 0; i < data.length; i += 16) {
-      r += data[i];
-      g += data[i+1];
-      b += data[i+2];
-      count++;
+      r += data[i]; g += data[i+1]; b += data[i+2]; count++;
     }
-    r = Math.round(r / count);
-    g = Math.round(g / count);
-    b = Math.round(b / count);
+    r = Math.round(r/count); g = Math.round(g/count); b = Math.round(b/count);
     callback(`rgb(${r},${g},${b})`);
   };
   img.src = dataUrl;
@@ -362,8 +385,7 @@ function compressImage(file, callback) {
       let w = img.width, h = img.height;
       if (w > h) { if (w > MAX) { h = h * MAX / w; w = MAX; } }
       else { if (h > MAX) { w = w * MAX / h; h = MAX; } }
-      canvas.width = w;
-      canvas.height = h;
+      canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
       callback(canvas.toDataURL('image/jpeg', 0.7));
     };
@@ -377,7 +399,13 @@ function previewPhoto(e) {
   if (!file) return;
   compressImage(file, function(compressed) {
     currentPhoto = compressed;
-    document.getElementById('photoPreview').innerHTML = `<img src="${compressed}">`;
+    const preview = document.getElementById('photoPreview');
+    preview.innerHTML = `
+      <img src="${compressed}">
+      <div class="center-guide">
+        <span class="center-guide-label">この範囲で色を分析</span>
+      </div>
+    `;
     extractColor(compressed, function(color) {
       currentColor = color;
     });
@@ -385,7 +413,7 @@ function previewPhoto(e) {
 }
 
 function openModal() {
-  selectedTastes = [];
+  selectedTaste = null;
   currentPhoto = null;
   currentColor = null;
   renderTasteTags();
@@ -401,7 +429,7 @@ function closeModal() {
   document.getElementById('memo').value = '';
   document.getElementById('newTasteInput').value = '';
   document.getElementById('photoPreview').innerHTML = '<span>写真を選んでください</span>';
-  selectedTastes = [];
+  selectedTaste = null;
   currentPhoto = null;
   currentColor = null;
 }
@@ -419,7 +447,7 @@ function saveItem() {
     color: currentColor,
     category,
     season,
-    tastes: [...selectedTastes],
+    taste: selectedTaste,
     memo
   };
   items.push(item);
@@ -465,7 +493,8 @@ function renderGrid() {
           ${item.color ? `<span class="card-color" style="background:${item.color}"></span>` : ''}
           ${item.category}
         </div>
-        <div class="card-season">${item.season}　${item.tastes ? item.tastes.join('・') : ''}</div>
+        <div class="card-season">${item.season}</div>
+        ${item.taste ? `<div class="card-taste">${item.taste}</div>` : ''}
         ${item.memo ? `<div class="card-season">${item.memo}</div>` : ''}
       </div>
     </div>
