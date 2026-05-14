@@ -23,6 +23,22 @@ header {
   z-index: 50;
 }
 header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
+.header-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+.header-btn {
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid #c9a96e44;
+  background: transparent;
+  color: #c9a96e;
+  font-size: 12px;
+  cursor: pointer;
+}
+.header-btn.active { background: #c9a96e; color: #111; }
 .add-btn {
   position: fixed;
   bottom: 24px;
@@ -95,10 +111,8 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
 .photo-preview span { color: #888; font-size: 14px; }
 .center-guide {
   position: absolute;
-  top: 25%;
-  left: 25%;
-  width: 50%;
-  height: 50%;
+  top: 25%; left: 25%;
+  width: 50%; height: 50%;
   border-radius: 8px;
   pointer-events: none;
   display: flex;
@@ -143,12 +157,9 @@ select option { background: #333; }
 .add-taste-row input { flex: 1; margin-bottom: 0; padding: 8px 12px; font-size: 13px; }
 .add-taste-row button {
   padding: 8px 14px;
-  background: #c9a96e;
-  color: #111;
-  border: none;
-  border-radius: 10px;
-  font-size: 13px;
-  cursor: pointer;
+  background: #c9a96e; color: #111;
+  border: none; border-radius: 10px;
+  font-size: 13px; cursor: pointer;
 }
 .btn-row { display: flex; gap: 10px; margin-top: 16px; }
 .btn-save {
@@ -164,8 +175,7 @@ select option { background: #333; }
   font-size: 15px; cursor: pointer;
 }
 .filter-row {
-  display: flex;
-  gap: 8px;
+  display: flex; gap: 8px;
   padding: 12px 16px;
   overflow-x: auto;
 }
@@ -175,23 +185,87 @@ select option { background: #333; }
   border: 1px solid #c9a96e44;
   background: transparent;
   color: #c9a96e;
-  font-size: 12px;
-  cursor: pointer;
+  font-size: 12px; cursor: pointer;
   white-space: nowrap;
 }
 .filter-btn.active { background: #c9a96e; color: #111; }
-.color-notice {
-  font-size: 11px;
-  color: #888;
-  padding: 0 16px 10px;
+
+/* 詳細検索パネル */
+.search-panel {
+  display: none;
+  background: #1e1e1e;
+  border-bottom: 1px solid #c9a96e22;
+  padding: 16px;
+}
+.search-panel.show { display: block; }
+.search-panel h3 { font-size: 13px; color: #c9a96e; margin-bottom: 12px; letter-spacing: 2px; }
+.search-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.search-select {
+  flex: 1;
+  min-width: 120px;
+  padding: 8px 10px;
+  background: #2a2a2a;
+  border: 1px solid #c9a96e33;
+  border-radius: 8px;
+  color: #f0e6d3;
+  font-size: 12px;
+  margin-bottom: 0;
+}
+.color-search-row {
   display: flex;
+  gap: 8px;
   align-items: center;
-  gap: 6px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.color-chip {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+  transition: transform 0.1s;
+}
+.color-chip.selected {
+  border: 2px solid #fff;
+  transform: scale(1.2);
+}
+.color-chip-clear {
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid #c9a96e44;
+  border-radius: 12px;
+  color: #888;
+  font-size: 11px;
+  cursor: pointer;
+}
+.search-btns { display: flex; gap: 8px; }
+.btn-search {
+  flex: 1; padding: 10px;
+  background: #c9a96e; color: #111;
+  border: none; border-radius: 8px;
+  font-size: 13px; font-weight: bold; cursor: pointer;
+}
+.btn-search-reset {
+  flex: 1; padding: 10px;
+  background: #333; color: #888;
+  border: none; border-radius: 8px;
+  font-size: 13px; cursor: pointer;
+}
+.search-result-notice {
+  font-size: 11px;
+  color: #c9a96e88;
+  padding: 6px 16px 0;
+}
+
+.color-notice {
+  font-size: 11px; color: #888;
+  padding: 0 16px 10px;
+  display: flex; align-items: center; gap: 6px;
 }
 .color-notice-dot {
   display: inline-block;
-  width: 10px;
-  height: 10px;
+  width: 10px; height: 10px;
   border-radius: 50%;
   background: linear-gradient(135deg, #e74c3c, #3498db, #2ecc71);
   flex-shrink: 0;
@@ -211,51 +285,31 @@ select option { background: #333; }
   position: relative;
 }
 .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
-.card-info {
-  padding: 10px;
-  position: relative;
-}
-.card-category { font-size: 11px; color: #c9a96e; letter-spacing: 1px; margin-bottom: 2px; display: flex; align-items: center; gap: 4px; }
+.card-info { padding: 10px; position: relative; }
+.card-category { font-size: 11px; color: #c9a96e; letter-spacing: 1px; margin-bottom: 2px; }
 .card-season { font-size: 11px; color: #888; margin-top: 2px; }
 .card-taste { font-size: 11px; color: #c9a96e88; margin-top: 2px; }
-.card-color {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1px solid #ffffff33;
-  flex-shrink: 0;
-}
 .card-color-bottom {
   position: absolute;
-  bottom: 10px;
-  left: 10px;
-  width: 12px;
-  height: 12px;
+  bottom: 10px; left: 10px;
+  width: 12px; height: 12px;
   border-radius: 50%;
   border: 1px solid #ffffff55;
 }
 .card-delete {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 8px; right: 8px;
   background: rgba(0,0,0,0.6);
-  border: none;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  color: white;
-  font-size: 14px;
+  border: none; border-radius: 50%;
+  width: 28px; height: 28px;
+  color: white; font-size: 14px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
 }
 .empty {
   text-align: center;
   padding: 60px 20px;
-  color: #555;
-  font-size: 14px;
+  color: #555; font-size: 14px;
   grid-column: span 2;
 }
 </style>
@@ -264,7 +318,43 @@ select option { background: #333; }
 
 <header>
   <h1>あなたクローゼット</h1>
+  <div class="header-buttons">
+    <button class="header-btn" id="searchToggleBtn" onclick="toggleSearch()">🔍 詳細検索</button>
+  </div>
 </header>
+
+<div class="search-panel" id="searchPanel">
+  <h3>詳細検索</h3>
+  <div class="search-row">
+    <select class="search-select" id="searchCategory">
+      <option value="">カテゴリ：全て</option>
+      <option>トップス</option>
+      <option>ボトムス</option>
+      <option>ワンピース</option>
+      <option>アウター</option>
+      <option>シューズ</option>
+    </select>
+    <select class="search-select" id="searchSeason">
+      <option value="">季節：全て</option>
+      <option>春夏</option>
+      <option>秋冬</option>
+      <option>オールシーズン</option>
+    </select>
+  </div>
+  <select class="search-select" id="searchTaste" style="width:100%;margin-bottom:10px;">
+    <option value="">テイスト：全て</option>
+  </select>
+
+  <div style="font-size:11px;color:#c9a96e;margin-bottom:8px;">メインカラーで絞り込む</div>
+  <div class="color-search-row" id="colorChips"></div>
+
+  <div class="search-btns">
+    <button class="btn-search-reset" onclick="resetSearch()">リセット</button>
+    <button class="btn-search" onclick="doSearch()">検索する</button>
+  </div>
+</div>
+
+<div class="search-result-notice" id="searchResultNotice"></div>
 
 <div class="filter-row">
   <button class="filter-btn active" onclick="filterItems('全て')">全て</button>
@@ -287,21 +377,16 @@ select option { background: #333; }
 <div class="modal" id="modal">
   <div class="modal-content">
     <h2>服を追加する</h2>
-
     <div class="photo-buttons">
       <div class="photo-btn" onclick="document.getElementById('cameraInput').click()">📷 カメラで撮影</div>
       <div class="photo-btn" onclick="document.getElementById('albumInput').click()">🖼️ アルバムから選ぶ</div>
     </div>
-
     <p class="photo-hint">⚠ 色の自動分析は写真中央のアイテムを基準にします。<br>アイテムが中央に映るように撮影してください。</p>
-
     <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="previewPhoto(event)">
     <input type="file" id="albumInput" accept="image/*" onchange="previewPhoto(event)">
-
     <div class="photo-preview" id="photoPreview">
       <span>写真を選んでください</span>
     </div>
-
     <select id="category">
       <option value="">カテゴリを選ぶ</option>
       <option>トップス</option>
@@ -310,18 +395,15 @@ select option { background: #333; }
       <option>アウター</option>
       <option>シューズ</option>
     </select>
-
     <select id="season">
       <option value="">季節を選ぶ</option>
       <option>春夏</option>
       <option>秋冬</option>
       <option>オールシーズン</option>
     </select>
-
     <select id="tasteSelect">
       <option value="">テイストを選ぶ</option>
     </select>
-
     <div class="taste-section">
       <label>テイストを追加・削除</label>
       <div class="taste-tags" id="tasteTags"></div>
@@ -330,9 +412,7 @@ select option { background: #333; }
         <button onclick="addTaste()">追加</button>
       </div>
     </div>
-
     <input type="text" id="memo" placeholder="メモ（任意）">
-
     <div class="btn-row">
       <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
       <button class="btn-save" onclick="saveItem()">保存する</button>
@@ -346,6 +426,37 @@ let tastes = JSON.parse(localStorage.getItem('closet_tastes') || '["カジュア
 let currentFilter = '全て';
 let currentPhoto = null;
 let currentColor = null;
+let isSearchMode = false;
+let searchResults = null;
+let selectedSearchColor = null;
+
+// 色カテゴリの定義
+const colorCategories = [
+  { label: '白', color: '#f5f5f5', range: (r,g,b) => r>200 && g>200 && b>200 },
+  { label: '黒', color: '#222222', range: (r,g,b) => r<60 && g<60 && b<60 },
+  { label: 'グレー', color: '#888888', range: (r,g,b) => Math.abs(r-g)<30 && Math.abs(g-b)<30 && r>=60 && r<=200 },
+  { label: '赤', color: '#e74c3c', range: (r,g,b) => r>150 && g<100 && b<100 },
+  { label: 'ピンク', color: '#ff8fa3', range: (r,g,b) => r>180 && g<160 && b<160 && g>80 },
+  { label: 'オレンジ', color: '#e67e22', range: (r,g,b) => r>180 && g>100 && g<160 && b<80 },
+  { label: '黄', color: '#f1c40f', range: (r,g,b) => r>180 && g>160 && b<100 },
+  { label: '緑', color: '#2ecc71', range: (r,g,b) => g>120 && r<g && b<g },
+  { label: '青', color: '#3498db', range: (r,g,b) => b>120 && r<b && g<b },
+  { label: '紺', color: '#1a237e', range: (r,g,b) => b>60 && b>r && b>g && b<130 && r<80 },
+  { label: '紫', color: '#9b59b6', range: (r,g,b) => r>80 && b>80 && r>g && b>g },
+  { label: 'ベージュ', color: '#c9a96e', range: (r,g,b) => r>160 && g>130 && b>80 && r>b && g>b },
+  { label: '茶', color: '#795548', range: (r,g,b) => r>100 && g>60 && b<80 && r>g && g>b },
+];
+
+function getColorCategory(colorStr) {
+  if (!colorStr) return null;
+  const match = colorStr.match(/rgb\((\d+),(\d+),(\d+)\)/);
+  if (!match) return null;
+  const r = parseInt(match[1]), g = parseInt(match[2]), b = parseInt(match[3]);
+  for (const cat of colorCategories) {
+    if (cat.range(r, g, b)) return cat.label;
+  }
+  return null;
+}
 
 function saveTastes() {
   localStorage.setItem('closet_tastes', JSON.stringify(tastes));
@@ -353,9 +464,11 @@ function saveTastes() {
 
 function renderTasteSelect() {
   const sel = document.getElementById('tasteSelect');
-  const current = sel.value;
   sel.innerHTML = '<option value="">テイストを選ぶ</option>' +
-    tastes.map(t => `<option value="${t}" ${current === t ? 'selected' : ''}>${t}</option>`).join('');
+    tastes.map(t => `<option value="${t}">${t}</option>`).join('');
+  const searchSel = document.getElementById('searchTaste');
+  searchSel.innerHTML = '<option value="">テイスト：全て</option>' +
+    tastes.map(t => `<option value="${t}">${t}</option>`).join('');
 }
 
 function renderTasteTags() {
@@ -365,6 +478,64 @@ function renderTasteTags() {
       ${t} <span style="font-size:14px">×</span>
     </button>
   `).join('');
+}
+
+function renderColorChips() {
+  const container = document.getElementById('colorChips');
+  container.innerHTML = colorCategories.map(cat => `
+    <div class="color-chip ${selectedSearchColor === cat.label ? 'selected' : ''}"
+      style="background:${cat.color}"
+      onclick="selectSearchColor('${cat.label}')"
+      title="${cat.label}">
+    </div>
+  `).join('') + `<button class="color-chip-clear" onclick="selectSearchColor(null)">指定なし</button>`;
+}
+
+function selectSearchColor(label) {
+  selectedSearchColor = label;
+  renderColorChips();
+}
+
+function toggleSearch() {
+  const panel = document.getElementById('searchPanel');
+  const btn = document.getElementById('searchToggleBtn');
+  panel.classList.toggle('show');
+  btn.classList.toggle('active');
+  renderColorChips();
+}
+
+function doSearch() {
+  const category = document.getElementById('searchCategory').value;
+  const season = document.getElementById('searchSeason').value;
+  const taste = document.getElementById('searchTaste').value;
+
+  searchResults = items.filter(item => {
+    if (category && item.category !== category) return false;
+    if (season && item.season !== season) return false;
+    if (taste && item.taste !== taste) return false;
+    if (selectedSearchColor) {
+      const cat = getColorCategory(item.color);
+      if (cat !== selectedSearchColor) return false;
+    }
+    return true;
+  });
+
+  isSearchMode = true;
+  document.getElementById('searchResultNotice').textContent =
+    `検索結果：${searchResults.length}件`;
+  renderGrid();
+}
+
+function resetSearch() {
+  document.getElementById('searchCategory').value = '';
+  document.getElementById('searchSeason').value = '';
+  document.getElementById('searchTaste').value = '';
+  selectedSearchColor = null;
+  renderColorChips();
+  isSearchMode = false;
+  searchResults = null;
+  document.getElementById('searchResultNotice').textContent = '';
+  renderGrid();
 }
 
 function deleteTaste(e, t) {
@@ -389,7 +560,6 @@ function addTaste() {
   renderTasteTags();
 }
 
-// 輝度を計算して明るい色か暗い色か判定
 function getBrightness(r, g, b) {
   return (r * 299 + g * 587 + b * 114) / 1000;
 }
@@ -401,17 +571,11 @@ function extractColor(dataUrl, callback) {
     const size = 100;
     canvas.width = size; canvas.height = size;
     const ctx = canvas.getContext('2d');
-    const cx = img.width * 0.25;
-    const cy = img.height * 0.25;
-    const cw = img.width * 0.5;
-    const ch = img.height * 0.5;
-    ctx.drawImage(img, cx, cy, cw, ch, 0, 0, size, size);
+    ctx.drawImage(img, img.width*0.25, img.height*0.25, img.width*0.5, img.height*0.5, 0, 0, size, size);
     const data = ctx.getImageData(0, 0, size, size).data;
-    let r = 0, g = 0, b = 0, count = 0;
-    for (let i = 0; i < data.length; i += 16) {
-      r += data[i]; g += data[i+1]; b += data[i+2]; count++;
-    }
-    r = Math.round(r/count); g = Math.round(g/count); b = Math.round(b/count);
+    let r=0, g=0, b=0, count=0;
+    for (let i=0; i<data.length; i+=16) { r+=data[i]; g+=data[i+1]; b+=data[i+2]; count++; }
+    r=Math.round(r/count); g=Math.round(g/count); b=Math.round(b/count);
     callback(`rgb(${r},${g},${b})`, r, g, b);
   };
   img.src = dataUrl;
@@ -424,10 +588,9 @@ function compressImage(file, callback) {
     img.onload = function() {
       const canvas = document.createElement('canvas');
       const MAX = 600;
-      let w = img.width, h = img.height;
-      if (w > h) { if (w > MAX) { h = h * MAX / w; w = MAX; } }
-      else { if (h > MAX) { w = w * MAX / h; h = MAX; } }
-      canvas.width = w; canvas.height = h;
+      let w=img.width, h=img.height;
+      if (w>h) { if (w>MAX) { h=h*MAX/w; w=MAX; } } else { if (h>MAX) { w=w*MAX/h; h=MAX; } }
+      canvas.width=w; canvas.height=h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
       callback(canvas.toDataURL('image/jpeg', 0.7));
     };
@@ -443,16 +606,13 @@ function previewPhoto(e) {
     currentPhoto = compressed;
     extractColor(compressed, function(colorStr, r, g, b) {
       currentColor = colorStr;
-      // 輝度に応じてガイドの色を変える
       const brightness = getBrightness(r, g, b);
-      const guideColor = brightness > 128
-        ? 'rgba(0,0,0,0.7)'      // 明るい服 → 暗いガイド
-        : 'rgba(255,255,255,0.7)'; // 暗い服 → 明るいガイド
-      const preview = document.getElementById('photoPreview');
-      preview.innerHTML = `
+      const guideColor = brightness > 128 ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)';
+      const bgColor = brightness > 128 ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)';
+      document.getElementById('photoPreview').innerHTML = `
         <img src="${compressed}">
-        <div class="center-guide" style="border: 2px dashed ${guideColor};">
-          <span class="center-guide-label" style="color:${guideColor}; background:${brightness > 128 ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)'};">この範囲で色を分析</span>
+        <div class="center-guide" style="border:2px dashed ${guideColor};">
+          <span class="center-guide-label" style="color:${guideColor};background:${bgColor};">この範囲で色を分析</span>
         </div>
       `;
     });
@@ -460,8 +620,7 @@ function previewPhoto(e) {
 }
 
 function openModal() {
-  currentPhoto = null;
-  currentColor = null;
+  currentPhoto = null; currentColor = null;
   renderTasteSelect();
   renderTasteTags();
   document.getElementById('modal').classList.add('show');
@@ -469,16 +628,12 @@ function openModal() {
 
 function closeModal() {
   document.getElementById('modal').classList.remove('show');
-  document.getElementById('cameraInput').value = '';
-  document.getElementById('albumInput').value = '';
-  document.getElementById('category').value = '';
-  document.getElementById('season').value = '';
-  document.getElementById('tasteSelect').value = '';
+  ['cameraInput','albumInput'].forEach(id => document.getElementById(id).value = '');
+  ['category','season','tasteSelect'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('memo').value = '';
   document.getElementById('newTasteInput').value = '';
   document.getElementById('photoPreview').innerHTML = '<span>写真を選んでください</span>';
-  currentPhoto = null;
-  currentColor = null;
+  currentPhoto = null; currentColor = null;
 }
 
 function saveItem() {
@@ -489,12 +644,7 @@ function saveItem() {
   if (!currentPhoto) { alert('写真を選んでください！'); return; }
   if (!category) { alert('カテゴリを選んでください！'); return; }
   if (!season) { alert('季節を選んでください！'); return; }
-  const item = {
-    id: Date.now(),
-    photo: currentPhoto,
-    color: currentColor,
-    category, season, taste, memo
-  };
+  const item = { id: Date.now(), photo: currentPhoto, color: currentColor, category, season, taste, memo };
   items.push(item);
   try {
     localStorage.setItem('closet_items', JSON.stringify(items));
@@ -510,12 +660,16 @@ function deleteItem(id) {
   if (confirm('この服を削除しますか？')) {
     items = items.filter(i => i.id !== id);
     localStorage.setItem('closet_items', JSON.stringify(items));
-    renderGrid();
+    if (isSearchMode) doSearch();
+    else renderGrid();
   }
 }
 
 function filterItems(filter) {
   currentFilter = filter;
+  isSearchMode = false;
+  searchResults = null;
+  document.getElementById('searchResultNotice').textContent = '';
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.classList.toggle('active', btn.textContent.trim() === filter);
   });
@@ -524,17 +678,17 @@ function filterItems(filter) {
 
 function renderGrid() {
   const grid = document.getElementById('grid');
-  const filtered = currentFilter === '全て' ? items : items.filter(i => i.category === currentFilter);
-  if (filtered.length === 0) {
-    grid.innerHTML = '<div class="empty">まだ服が登録されていません！<br>＋ボタンから追加してね</div>';
+  let source = isSearchMode ? searchResults : (currentFilter === '全て' ? items : items.filter(i => i.category === currentFilter));
+  if (!source || source.length === 0) {
+    grid.innerHTML = `<div class="empty">${isSearchMode ? '条件に一致する服が見つかりませんでした' : 'まだ服が登録されていません！<br>＋ボタンから追加してね'}</div>`;
     return;
   }
-  grid.innerHTML = filtered.map(item => `
+  grid.innerHTML = source.map(item => `
     <div class="card">
       <img src="${item.photo}" alt="${item.category}">
       <button class="card-delete" onclick="deleteItem(${item.id})">×</button>
       ${item.color ? `<div class="card-color-bottom" style="background:${item.color}"></div>` : ''}
-      <div class="card-info" style="${item.color ? 'padding-left: 28px;' : ''}">
+      <div class="card-info" style="${item.color ? 'padding-left:28px;' : ''}">
         <div class="card-category">${item.category}</div>
         <div class="card-season">${item.season}</div>
         ${item.taste ? `<div class="card-taste">${item.taste}</div>` : ''}
@@ -544,6 +698,7 @@ function renderGrid() {
   `).join('');
 }
 
+renderTasteSelect();
 renderGrid();
 </script>
 </body>
