@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>マイクローゼット</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Hiragino Sans', sans-serif;
+  background: #1a1a1a;
+  color: #f0e6d3;
+  min-height: 100vh;
+}
+header {
+  background: #111;
+  padding: 16px 20px;
+  text-align: center;
+  border-bottom: 1px solid #c9a96e44;
+}
+header h1 {
+  font-size: 20px;
+  color: #c9a96e;
+  letter-spacing: 3px;
+}
+.add-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #c9a96e;
+  color: #111;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 28px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  z-index: 100;
+}
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8);
+  z-index: 200;
+  justify-content: center;
+  align-items: flex-end;
+}
+.modal.show { display: flex; }
+.modal-content {
+  background: #222;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 20px 20px 0 0;
+  padding: 24px;
+}
+.modal-content h2 {
+  color: #c9a96e;
+  margin-bottom: 16px;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+.photo-area {
+  width: 100%;
+  height: 200px;
+  background: #333;
+  border: 2px dashed #c9a96e44;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.photo-area img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.photo-area span { color: #888; font-size: 14px; margin-top: 8px; }
+input[type="file"] { display: none; }
+select, input[type="text"] {
+  width: 100%;
+  padding: 10px 14px;
+  background: #333;
+  border: 1px solid #c9a96e44;
+  border-radius: 10px;
+  color: #f0e6d3;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.btn-save {
+  flex: 1;
+  padding: 12px;
+  background: #c9a96e;
+  color: #111;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-cancel {
+  flex: 1;
+  padding: 12px;
+  background: #333;
+  color: #f0e6d3;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 16px;
+}
+.card {
+  background: #222;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #c9a96e22;
+}
+.card img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+}
+.card-info {
+  padding: 10px;
+}
+.card-category {
+  font-size: 11px;
+  color: #c9a96e;
+  letter-spacing: 1px;
+}
+.card-season {
+  font-size: 11px;
+  color: #888;
+  margin-top: 2px;
+}
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #555;
+  font-size: 14px;
+}
+.filter-row {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  overflow-x: auto;
+}
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid #c9a96e44;
+  background: transparent;
+  color: #c9a96e;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.filter-btn.active {
+  background: #c9a96e;
+  color: #111;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>👗 マイクローゼット</h1>
+</header>
+
+<div class="filter-row">
+  <button class="filter-btn active" onclick="filterItems('全て')">全て</button>
+  <button class="filter-btn" onclick="filterItems('トップス')">トップス</button>
+  <button class="filter-btn" onclick="filterItems('ボトムス')">ボトムス</button>
+  <button class="filter-btn" onclick="filterItems('ワンピース')">ワンピース</button>
+  <button class="filter-btn" onclick="filterItems('アウター')">アウター</button>
+  <button class="filter-btn" onclick="filterItems('シューズ')">シューズ</button>
+  <button class="filter-btn" onclick="filterItems('バッグ')">バッグ</button>
+</div>
+
+<div class="grid" id="grid">
+  <div class="empty" id="empty">まだ服が登録されていません！<br>＋ボタンから追加してね</div>
+</div>
+
+<button class="add-btn" onclick="openModal()">＋</button>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h2>服を追加する</h2>
+    <div class="photo-area" id="photoArea" onclick="document.getElementById('fileInput').click()">
+      <span style="font-size:32px">📷</span>
+      <span>タップして写真を選ぶ</span>
+    </div>
+    <input type="file" id="fileInput" accept="image/*" capture="environment" onchange="previewPhoto(event)">
+    <select id="category">
+      <option value="">カテゴリを選ぶ</option>
+      <option>トップス</option>
+      <option>ボトムス</option>
+      <option>ワンピース</option>
+      <option>アウター</option>
+      <option>シューズ</option>
+      <option>バッグ</option>
+    </select>
+    <select id="season">
+      <option value="">季節を選ぶ</option>
+      <option>春夏</option>
+      <option>秋冬</option>
+      <option>オールシーズン</option>
+    </select>
+    <select id="style">
+      <option value="">テイストを選ぶ</option>
+      <option>カジュアル</option>
+      <option>フェミニン</option>
+      <option>ストリート</option>
+      <option>きれいめ</option>
+      <option>エキゾチック</option>
+      <option>モード</option>
+    </select>
+    <input type="text" id="memo" placeholder="メモ（任意）">
+    <div class="btn-row">
+      <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
+      <button class="btn-save" onclick="saveItem()">保存する</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let items = JSON.parse(localStorage.getItem('closet') || '[]');
+let currentFilter = '全て';
+let currentPhoto = null;
+
+function openModal() {
+  document.getElementById('modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+  document.getElementById('fileInput').value = '';
+  document.getElementById('category').value = '';
+  document.getElementById('season').value = '';
+  document.getElementById('style').value = '';
+  document.getElementById('memo').value = '';
+  currentPhoto = null;
+  const area = document.getElementById('photoArea');
+  area.innerHTML = '<span style="font-size:32px">📷</span><span>タップして写真を選ぶ</span>';
+}
+
+function previewPhoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    currentPhoto = ev.target.result;
+    const area = document.getElementById('photoArea');
+    area.innerHTML = '<img src="' + currentPhoto + '">';
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveItem() {
+  const category = document.getElementById('category').value;
+  const season = document.getElementById('season').value;
+  const style = document.getElementById('style').value;
+  const memo = document.getElementById('memo').value;
+  if (!currentPhoto) { alert('写真を選んでください！'); return; }
+  if (!category) { alert('カテゴリを選んでください！'); return; }
+  if (!season) { alert('季節を選んでください！'); return; }
+  const item = { id: Date.now(), photo: currentPhoto, category, season, style, memo };
+  items.push(item);
+  localStorage.setItem('closet', JSON.stringify(items));
+  closeModal();
+  renderGrid();
+}
+
+function filterItems(filter) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent === filter);
+  });
+  renderGrid();
+}
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  const filtered = currentFilter === '全て' ? items : items.filter(i => i.category === currentFilter);
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="empty" style="grid-column:span 2">まだ服が登録されていません！<br>＋ボタンから追加してね</div>';
+    return;
+  }
+  grid.innerHTML = filtered.map(item => `
+    <div class="card">
+      <img src="${item.photo}" alt="${item.category}">
+      <div class="card-info">
+        <div class="card-category">${item.category}</div>
+        <div class="card-season">${item.season}　${item.style || ''}</div>
+        ${item.memo ? '<div class="card-season">' + item.memo + '</div>' : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+renderGrid();
+</script>
+</body>
+</html>
