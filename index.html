@@ -77,35 +77,24 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
 .modal-content h2 { color: #c9a96e; margin-bottom: 16px; font-size: 16px; letter-spacing: 2px; }
 .photo-buttons { display: flex; gap: 10px; margin-bottom: 12px; }
 .photo-btn {
-  flex: 1;
-  padding: 12px;
+  flex: 1; padding: 12px;
   background: #333;
   border: 1px solid #c9a96e44;
   border-radius: 10px;
   color: #f0e6d3;
-  font-size: 13px;
-  cursor: pointer;
-  text-align: center;
+  font-size: 13px; cursor: pointer; text-align: center;
 }
 .photo-hint {
-  font-size: 11px;
-  color: #888;
-  text-align: center;
-  margin-bottom: 12px;
-  line-height: 1.5;
+  font-size: 11px; color: #888;
+  text-align: center; margin-bottom: 12px; line-height: 1.5;
 }
 .photo-preview {
-  width: 100%;
-  height: 200px;
+  width: 100%; height: 200px;
   background: #333;
   border: 2px dashed #c9a96e44;
   border-radius: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 16px;
-  overflow: hidden;
-  position: relative;
+  display: flex; justify-content: center; align-items: center;
+  margin-bottom: 16px; overflow: hidden; position: relative;
 }
 .photo-preview img { width: 100%; height: 100%; object-fit: cover; }
 .photo-preview span { color: #888; font-size: 14px; }
@@ -113,224 +102,137 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   position: absolute;
   top: 25%; left: 25%;
   width: 50%; height: 50%;
-  border-radius: 8px;
-  pointer-events: none;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  padding-bottom: 6px;
+  border-radius: 8px; pointer-events: none;
+  display: flex; justify-content: center; align-items: flex-end; padding-bottom: 6px;
 }
 .center-guide-label {
-  font-size: 10px;
-  white-space: nowrap;
-  padding: 2px 6px;
-  border-radius: 4px;
+  font-size: 10px; white-space: nowrap; padding: 2px 6px; border-radius: 4px;
 }
 input[type="file"] { display: none; }
 select, input[type="text"] {
-  width: 100%;
-  padding: 10px 14px;
-  background: #333;
-  border: 1px solid #c9a96e44;
-  border-radius: 10px;
-  color: #f0e6d3;
-  font-size: 14px;
-  margin-bottom: 12px;
+  width: 100%; padding: 10px 14px;
+  background: #333; border: 1px solid #c9a96e44;
+  border-radius: 10px; color: #f0e6d3;
+  font-size: 14px; margin-bottom: 12px;
 }
 select option { background: #333; }
 .taste-section { margin-bottom: 12px; }
 .taste-section label { font-size: 12px; color: #c9a96e; display: block; margin-bottom: 8px; }
 .taste-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
 .taste-tag {
-  padding: 6px 12px;
-  border-radius: 20px;
-  border: 1px solid #c9a96e44;
-  background: transparent;
-  color: #c9a96e;
-  font-size: 12px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  padding: 6px 12px; border-radius: 20px;
+  border: 1px solid #c9a96e44; background: transparent;
+  color: #c9a96e; font-size: 12px; cursor: pointer;
+  display: flex; align-items: center; gap: 6px;
 }
 .add-taste-row { display: flex; gap: 8px; }
 .add-taste-row input { flex: 1; margin-bottom: 0; padding: 8px 12px; font-size: 13px; }
 .add-taste-row button {
-  padding: 8px 14px;
-  background: #c9a96e; color: #111;
-  border: none; border-radius: 10px;
-  font-size: 13px; cursor: pointer;
+  padding: 8px 14px; background: #c9a96e; color: #111;
+  border: none; border-radius: 10px; font-size: 13px; cursor: pointer;
 }
 .btn-row { display: flex; gap: 10px; margin-top: 16px; }
 .btn-save {
-  flex: 1; padding: 12px;
-  background: #c9a96e; color: #111;
-  border: none; border-radius: 10px;
-  font-size: 15px; font-weight: bold; cursor: pointer;
+  flex: 1; padding: 12px; background: #c9a96e; color: #111;
+  border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer;
 }
 .btn-cancel {
-  flex: 1; padding: 12px;
-  background: #333; color: #f0e6d3;
-  border: none; border-radius: 10px;
-  font-size: 15px; cursor: pointer;
+  flex: 1; padding: 12px; background: #333; color: #f0e6d3;
+  border: none; border-radius: 10px; font-size: 15px; cursor: pointer;
 }
 .filter-row {
-  display: flex; gap: 8px;
-  padding: 12px 16px;
-  overflow-x: auto;
+  display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto;
 }
 .filter-btn {
-  padding: 6px 14px;
-  border-radius: 20px;
-  border: 1px solid #c9a96e44;
-  background: transparent;
-  color: #c9a96e;
-  font-size: 12px; cursor: pointer;
-  white-space: nowrap;
+  padding: 6px 14px; border-radius: 20px;
+  border: 1px solid #c9a96e44; background: transparent;
+  color: #c9a96e; font-size: 12px; cursor: pointer; white-space: nowrap;
 }
 .filter-btn.active { background: #c9a96e; color: #111; }
-
-/* 詳細検索パネル */
 .search-panel {
-  display: none;
-  background: #1e1e1e;
-  border-bottom: 1px solid #c9a96e22;
-  padding: 16px;
+  display: none; background: #1e1e1e;
+  border-bottom: 1px solid #c9a96e22; padding: 16px;
 }
 .search-panel.show { display: block; }
 .search-panel h3 { font-size: 13px; color: #c9a96e; margin-bottom: 12px; letter-spacing: 2px; }
 .search-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
 .search-select {
-  flex: 1;
-  min-width: 120px;
-  padding: 8px 10px;
-  background: #2a2a2a;
-  border: 1px solid #c9a96e33;
-  border-radius: 8px;
-  color: #f0e6d3;
-  font-size: 12px;
-  margin-bottom: 0;
+  flex: 1; min-width: 120px; padding: 8px 10px;
+  background: #2a2a2a; border: 1px solid #c9a96e33;
+  border-radius: 8px; color: #f0e6d3; font-size: 12px; margin-bottom: 0;
 }
-.color-search-row {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
+.color-search-section { margin-bottom: 12px; }
+.color-search-label { font-size: 11px; color: #c9a96e; margin-bottom: 10px; }
+.color-chips-row {
+  display: flex; gap: 10px; flex-wrap: wrap; align-items: center; padding-bottom: 8px;
+}
+.color-chip-wrap {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer;
 }
 .color-chip {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  cursor: pointer;
+  width: 32px; height: 32px; border-radius: 50%;
   border: 2px solid transparent;
+  transition: transform 0.15s, border 0.15s;
   flex-shrink: 0;
-  transition: transform 0.1s;
-  position: relative;
 }
 .color-chip.selected {
   border: 2px solid #fff;
   transform: scale(1.2);
+  box-shadow: 0 0 6px rgba(255,255,255,0.4);
 }
-.color-chip-label {
-  position: absolute;
-  bottom: -16px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 9px;
-  color: #888;
-  white-space: nowrap;
+.color-chip-name { font-size: 9px; color: #888; }
+.color-clear-btn {
+  padding: 4px 10px; background: transparent;
+  border: 1px solid #c9a96e44; border-radius: 12px;
+  color: #888; font-size: 11px; cursor: pointer; align-self: center;
 }
-.color-chip-clear {
-  padding: 4px 10px;
-  background: transparent;
-  border: 1px solid #c9a96e44;
-  border-radius: 12px;
-  color: #888;
-  font-size: 11px;
-  cursor: pointer;
-}
-.no-colors-msg {
-  font-size: 11px;
-  color: #666;
-  padding: 4px 0;
-}
-.search-btns { display: flex; gap: 8px; margin-top: 8px; }
+.no-colors-msg { font-size: 11px; color: #666; padding: 4px 0; }
+.search-btns { display: flex; gap: 8px; }
 .btn-search {
-  flex: 1; padding: 10px;
-  background: #c9a96e; color: #111;
-  border: none; border-radius: 8px;
-  font-size: 13px; font-weight: bold; cursor: pointer;
+  flex: 1; padding: 10px; background: #c9a96e; color: #111;
+  border: none; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer;
 }
 .btn-search-reset {
-  flex: 1; padding: 10px;
-  background: #333; color: #888;
-  border: none; border-radius: 8px;
-  font-size: 13px; cursor: pointer;
+  flex: 1; padding: 10px; background: #333; color: #888;
+  border: none; border-radius: 8px; font-size: 13px; cursor: pointer;
 }
 .search-result-notice {
-  font-size: 11px;
-  color: #c9a96e88;
-  padding: 6px 16px 0;
+  font-size: 11px; color: #c9a96e88; padding: 6px 16px 0;
 }
 .color-notice {
-  font-size: 11px; color: #888;
-  padding: 0 16px 10px;
+  font-size: 11px; color: #888; padding: 0 16px 10px;
   display: flex; align-items: center; gap: 6px;
 }
 .color-notice-bar {
-  display: inline-block;
-  width: 18px; height: 4px;
+  display: inline-block; width: 18px; height: 4px;
   border-radius: 2px;
   background: linear-gradient(to right, #e74c3c, #3498db, #2ecc71);
   flex-shrink: 0;
 }
 .grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  padding: 16px;
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 12px; padding: 16px;
 }
 .card {
-  background: #222;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid #c9a96e22;
-  position: relative;
+  background: #222; border-radius: 12px;
+  overflow: hidden; border: 1px solid #c9a96e22; position: relative;
 }
 .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
-.card-info {
-  padding: 10px 10px 10px 10px;
-  position: relative;
-}
-.card-color-bar {
-  width: 3px;
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  border-radius: 0 0 0 12px;
-}
-.card-info-inner {
-  padding-left: 10px;
-}
+.card-info { display: flex; padding: 0; position: relative; }
+.card-color-bar { width: 3px; flex-shrink: 0; }
+.card-info-inner { padding: 10px; flex: 1; }
 .card-category { font-size: 11px; color: #c9a96e; letter-spacing: 1px; margin-bottom: 2px; }
 .card-season { font-size: 11px; color: #888; margin-top: 2px; }
 .card-taste { font-size: 11px; color: #c9a96e88; margin-top: 2px; }
 .card-delete {
-  position: absolute;
-  top: 8px; right: 8px;
-  background: rgba(0,0,0,0.6);
-  border: none; border-radius: 50%;
-  width: 28px; height: 28px;
-  color: white; font-size: 14px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(0,0,0,0.6); border: none; border-radius: 50%;
+  width: 28px; height: 28px; color: white; font-size: 14px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
 }
 .empty {
-  text-align: center;
-  padding: 60px 20px;
-  color: #555; font-size: 14px;
-  grid-column: span 2;
+  text-align: center; padding: 60px 20px;
+  color: #555; font-size: 14px; grid-column: span 2;
 }
 </style>
 </head>
@@ -361,11 +263,15 @@ select option { background: #333; }
       <option>オールシーズン</option>
     </select>
   </div>
-  <select class="search-select" id="searchTaste" style="width:100%;margin-bottom:10px;">
+  <select class="search-select" id="searchTaste" style="width:100%;margin-bottom:12px;">
     <option value="">テイスト：全て</option>
   </select>
-  <div style="font-size:11px;color:#c9a96e;margin-bottom:12px;">メインカラーで絞り込む</div>
-  <div class="color-search-row" id="colorChips"></div>
+
+  <div class="color-search-section">
+    <div class="color-search-label">メインカラーで絞り込む（タップして選択）</div>
+    <div class="color-chips-row" id="colorChips"></div>
+  </div>
+
   <div class="search-btns">
     <button class="btn-search-reset" onclick="resetSearch()">リセット</button>
     <button class="btn-search" onclick="doSearch()">検索する</button>
@@ -389,7 +295,6 @@ select option { background: #333; }
 </div>
 
 <div class="grid" id="grid"></div>
-
 <button class="add-btn" onclick="openModal()">＋</button>
 
 <div class="modal" id="modal">
@@ -446,43 +351,25 @@ let currentPhoto = null;
 let currentColor = null;
 let isSearchMode = false;
 let searchResults = null;
-let selectedSearchColor = null;
+let selectedSearchColor = null; // rgb文字列
 
-const colorCategories = [
-  { label: '白', color: '#f0f0f0', range: (r,g,b) => r>200 && g>200 && b>200 },
-  { label: '黒', color: '#333333', range: (r,g,b) => r<60 && g<60 && b<60 },
-  { label: 'グレー', color: '#888888', range: (r,g,b) => Math.abs(r-g)<30 && Math.abs(g-b)<30 && r>=60 && r<=200 },
-  { label: '赤', color: '#e74c3c', range: (r,g,b) => r>150 && g<100 && b<100 },
-  { label: 'ピンク', color: '#ff8fa3', range: (r,g,b) => r>180 && g<160 && b<160 && g>80 },
-  { label: 'オレンジ', color: '#e67e22', range: (r,g,b) => r>180 && g>100 && g<160 && b<80 },
-  { label: '黄', color: '#f1c40f', range: (r,g,b) => r>180 && g>160 && b<100 },
-  { label: '緑', color: '#2ecc71', range: (r,g,b) => g>120 && r<g && b<g },
-  { label: '青', color: '#3498db', range: (r,g,b) => b>120 && r<b && g<b },
-  { label: '紺', color: '#1a237e', range: (r,g,b) => b>60 && b>r && b>g && b<130 && r<80 },
-  { label: '紫', color: '#9b59b6', range: (r,g,b) => r>80 && b>80 && r>g && b>g },
-  { label: 'ベージュ', color: '#c9a96e', range: (r,g,b) => r>160 && g>130 && b>80 && r>b && g>b },
-  { label: '茶', color: '#795548', range: (r,g,b) => r>100 && g>60 && b<80 && r>g && g>b },
-];
-
-function getColorCategory(colorStr) {
-  if (!colorStr) return null;
-  const match = colorStr.match(/rgb\((\d+),(\d+),(\d+)\)/);
-  if (!match) return null;
-  const r = parseInt(match[1]), g = parseInt(match[2]), b = parseInt(match[3]);
-  for (const cat of colorCategories) {
-    if (cat.range(r, g, b)) return cat.label;
-  }
-  return null;
+// 2つのrgb値が「似てるか」を判定（色差が閾値以内なら同じ色とみなす）
+function colorDistance(c1, c2) {
+  const parse = s => { const m = s.match(/rgb\((\d+),(\d+),(\d+)\)/); return m ? [+m[1],+m[2],+m[3]] : null; };
+  const a = parse(c1), b = parse(c2);
+  if (!a || !b) return 999;
+  return Math.sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2 + (a[2]-b[2])**2);
 }
 
-// 保存済みアイテムから使われてるカラーだけを抽出
-function getUsedColorCategories() {
-  const used = new Set();
-  items.forEach(item => {
-    const cat = getColorCategory(item.color);
-    if (cat) used.add(cat);
+// 保存済みアイテムからユニークな代表色を抽出（似てる色はまとめる）
+function getUniqueColors() {
+  const colors = items.filter(i => i.color).map(i => i.color);
+  const unique = [];
+  colors.forEach(c => {
+    const near = unique.find(u => colorDistance(u, c) < 40);
+    if (!near) unique.push(c);
   });
-  return colorCategories.filter(c => used.has(c.label));
+  return unique;
 }
 
 function saveTastes() {
@@ -509,25 +396,22 @@ function renderTasteTags() {
 
 function renderColorChips() {
   const container = document.getElementById('colorChips');
-  const usedColors = getUsedColorCategories();
-  if (usedColors.length === 0) {
+  const uniqueColors = getUniqueColors();
+  if (uniqueColors.length === 0) {
     container.innerHTML = '<span class="no-colors-msg">服を登録するとカラーが表示されます</span>';
     return;
   }
-  container.innerHTML = usedColors.map(cat => `
-    <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
-      <div class="color-chip ${selectedSearchColor === cat.label ? 'selected' : ''}"
-        style="background:${cat.color}"
-        onclick="selectSearchColor('${cat.label}')"
-        title="${cat.label}">
-        <span class="color-chip-label">${cat.label}</span>
+  container.innerHTML = uniqueColors.map((color, i) => `
+    <div class="color-chip-wrap" onclick="selectSearchColor('${color}')">
+      <div class="color-chip ${selectedSearchColor && colorDistance(selectedSearchColor, color) < 40 ? 'selected' : ''}"
+        style="background:${color};">
       </div>
     </div>
-  `).join('') + `<button class="color-chip-clear" onclick="selectSearchColor(null)">指定なし</button>`;
+  `).join('') + `<button class="color-clear-btn" onclick="selectSearchColor(null)">指定なし</button>`;
 }
 
-function selectSearchColor(label) {
-  selectedSearchColor = label;
+function selectSearchColor(color) {
+  selectedSearchColor = color;
   renderColorChips();
 }
 
@@ -548,8 +432,7 @@ function doSearch() {
     if (season && item.season !== season) return false;
     if (taste && item.taste !== taste) return false;
     if (selectedSearchColor) {
-      const cat = getColorCategory(item.color);
-      if (cat !== selectedSearchColor) return false;
+      if (!item.color || colorDistance(item.color, selectedSearchColor) >= 40) return false;
     }
     return true;
   });
@@ -574,9 +457,7 @@ function deleteTaste(e, t) {
   e.stopPropagation();
   if (confirm(`「${t}」を削除しますか？`)) {
     tastes = tastes.filter(x => x !== t);
-    saveTastes();
-    renderTasteSelect();
-    renderTasteTags();
+    saveTastes(); renderTasteSelect(); renderTasteTags();
   }
 }
 
@@ -586,10 +467,8 @@ function addTaste() {
   if (!val) return;
   if (tastes.includes(val)) { alert('すでに存在します！'); return; }
   tastes.push(val);
-  saveTastes();
-  input.value = '';
-  renderTasteSelect();
-  renderTasteTags();
+  saveTastes(); input.value = '';
+  renderTasteSelect(); renderTasteTags();
 }
 
 function getBrightness(r, g, b) {
@@ -653,8 +532,7 @@ function previewPhoto(e) {
 
 function openModal() {
   currentPhoto = null; currentColor = null;
-  renderTasteSelect();
-  renderTasteTags();
+  renderTasteSelect(); renderTasteTags();
   document.getElementById('modal').classList.add('show');
 }
 
@@ -680,8 +558,7 @@ function saveItem() {
   items.push(item);
   try {
     localStorage.setItem('closet_items', JSON.stringify(items));
-    closeModal();
-    renderGrid();
+    closeModal(); renderGrid();
   } catch(e) {
     alert('保存できませんでした。写真が多すぎる可能性があります。');
     items.pop();
@@ -692,15 +569,13 @@ function deleteItem(id) {
   if (confirm('この服を削除しますか？')) {
     items = items.filter(i => i.id !== id);
     localStorage.setItem('closet_items', JSON.stringify(items));
-    if (isSearchMode) doSearch();
-    else renderGrid();
+    if (isSearchMode) doSearch(); else renderGrid();
   }
 }
 
 function filterItems(filter) {
   currentFilter = filter;
-  isSearchMode = false;
-  searchResults = null;
+  isSearchMode = false; searchResults = null;
   document.getElementById('searchResultNotice').textContent = '';
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.classList.toggle('active', btn.textContent.trim() === filter);
@@ -719,9 +594,9 @@ function renderGrid() {
     <div class="card">
       <img src="${item.photo}" alt="${item.category}">
       <button class="card-delete" onclick="deleteItem(${item.id})">×</button>
-      <div class="card-info" style="display:flex;padding:0;">
+      <div class="card-info">
         ${item.color ? `<div class="card-color-bar" style="background:${item.color};"></div>` : ''}
-        <div class="card-info-inner" style="padding:10px;">
+        <div class="card-info-inner">
           <div class="card-category">${item.category}</div>
           <div class="card-season">${item.season}</div>
           ${item.taste ? `<div class="card-taste">${item.taste}</div>` : ''}
