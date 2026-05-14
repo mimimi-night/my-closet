@@ -99,18 +99,18 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   left: 25%;
   width: 50%;
   height: 50%;
-  border: 2px dashed #c9a96e88;
   border-radius: 8px;
   pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 6px;
 }
 .center-guide-label {
-  position: absolute;
-  bottom: -20px;
-  left: 50%;
-  transform: translateX(-50%);
   font-size: 10px;
-  color: #c9a96e88;
   white-space: nowrap;
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 input[type="file"] { display: none; }
 select, input[type="text"] {
@@ -139,7 +139,6 @@ select option { background: #333; }
   align-items: center;
   gap: 6px;
 }
-.taste-tag.selected { background: #c9a96e; color: #111; }
 .add-taste-row { display: flex; gap: 8px; }
 .add-taste-row input { flex: 1; margin-bottom: 0; padding: 8px 12px; font-size: 13px; }
 .add-taste-row button {
@@ -212,8 +211,11 @@ select option { background: #333; }
   position: relative;
 }
 .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
-.card-info { padding: 10px; }
-.card-category { font-size: 11px; color: #c9a96e; letter-spacing: 1px; margin-bottom: 2px; }
+.card-info {
+  padding: 10px;
+  position: relative;
+}
+.card-category { font-size: 11px; color: #c9a96e; letter-spacing: 1px; margin-bottom: 2px; display: flex; align-items: center; gap: 4px; }
 .card-season { font-size: 11px; color: #888; margin-top: 2px; }
 .card-taste { font-size: 11px; color: #c9a96e88; margin-top: 2px; }
 .card-color {
@@ -221,10 +223,17 @@ select option { background: #333; }
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  margin-right: 4px;
-  vertical-align: middle;
   border: 1px solid #ffffff33;
   flex-shrink: 0;
+}
+.card-color-bottom {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid #ffffff55;
 }
 .card-delete {
   position: absolute;
@@ -268,7 +277,7 @@ select option { background: #333; }
 
 <div class="color-notice">
   <span class="color-notice-dot"></span>
-  カード左上の丸は、写真から自動診断したメインカラーです
+  カード左下の丸は、写真から自動診断したメインカラーです
 </div>
 
 <div class="grid" id="grid"></div>
@@ -380,6 +389,11 @@ function addTaste() {
   renderTasteTags();
 }
 
+// 輝度を計算して明るい色か暗い色か判定
+function getBrightness(r, g, b) {
+  return (r * 299 + g * 587 + b * 114) / 1000;
+}
+
 function extractColor(dataUrl, callback) {
   const img = new Image();
   img.onload = function() {
@@ -398,7 +412,7 @@ function extractColor(dataUrl, callback) {
       r += data[i]; g += data[i+1]; b += data[i+2]; count++;
     }
     r = Math.round(r/count); g = Math.round(g/count); b = Math.round(b/count);
-    callback(`rgb(${r},${g},${b})`);
+    callback(`rgb(${r},${g},${b})`, r, g, b);
   };
   img.src = dataUrl;
 }
@@ -427,15 +441,20 @@ function previewPhoto(e) {
   if (!file) return;
   compressImage(file, function(compressed) {
     currentPhoto = compressed;
-    const preview = document.getElementById('photoPreview');
-    preview.innerHTML = `
-      <img src="${compressed}">
-      <div class="center-guide">
-        <span class="center-guide-label">この範囲で色を分析</span>
-      </div>
-    `;
-    extractColor(compressed, function(color) {
-      currentColor = color;
+    extractColor(compressed, function(colorStr, r, g, b) {
+      currentColor = colorStr;
+      // 輝度に応じてガイドの色を変える
+      const brightness = getBrightness(r, g, b);
+      const guideColor = brightness > 128
+        ? 'rgba(0,0,0,0.7)'      // 明るい服 → 暗いガイド
+        : 'rgba(255,255,255,0.7)'; // 暗い服 → 明るいガイド
+      const preview = document.getElementById('photoPreview');
+      preview.innerHTML = `
+        <img src="${compressed}">
+        <div class="center-guide" style="border: 2px dashed ${guideColor};">
+          <span class="center-guide-label" style="color:${guideColor}; background:${brightness > 128 ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)'};">この範囲で色を分析</span>
+        </div>
+      `;
     });
   });
 }
@@ -514,11 +533,9 @@ function renderGrid() {
     <div class="card">
       <img src="${item.photo}" alt="${item.category}">
       <button class="card-delete" onclick="deleteItem(${item.id})">×</button>
-      <div class="card-info">
-        <div class="card-category">
-          ${item.color ? `<span class="card-color" style="background:${item.color}"></span>` : ''}
-          ${item.category}
-        </div>
+      ${item.color ? `<div class="card-color-bottom" style="background:${item.color}"></div>` : ''}
+      <div class="card-info" style="${item.color ? 'padding-left: 28px;' : ''}">
+        <div class="card-category">${item.category}</div>
         <div class="card-season">${item.season}</div>
         ${item.taste ? `<div class="card-taste">${item.taste}</div>` : ''}
         ${item.memo ? `<div class="card-season">${item.memo}</div>` : ''}
