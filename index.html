@@ -123,6 +123,7 @@ select, input[type="text"] {
   font-size: 14px;
   margin-bottom: 12px;
 }
+select option { background: #333; }
 .taste-section { margin-bottom: 12px; }
 .taste-section label { font-size: 12px; color: #c9a96e; display: block; margin-bottom: 8px; }
 .taste-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
@@ -180,6 +181,23 @@ select, input[type="text"] {
   white-space: nowrap;
 }
 .filter-btn.active { background: #c9a96e; color: #111; }
+.color-notice {
+  font-size: 11px;
+  color: #888;
+  padding: 0 16px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.color-notice-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e74c3c, #3498db, #2ecc71);
+  flex-shrink: 0;
+  border: 1px solid #ffffff33;
+}
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -195,17 +213,18 @@ select, input[type="text"] {
 }
 .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
 .card-info { padding: 10px; }
-.card-category { font-size: 11px; color: #c9a96e; letter-spacing: 1px; }
+.card-category { font-size: 11px; color: #c9a96e; letter-spacing: 1px; margin-bottom: 2px; }
 .card-season { font-size: 11px; color: #888; margin-top: 2px; }
 .card-taste { font-size: 11px; color: #c9a96e88; margin-top: 2px; }
 .card-color {
   display: inline-block;
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   margin-right: 4px;
   vertical-align: middle;
   border: 1px solid #ffffff33;
+  flex-shrink: 0;
 }
 .card-delete {
   position: absolute;
@@ -247,6 +266,11 @@ select, input[type="text"] {
   <button class="filter-btn" onclick="filterItems('シューズ')">シューズ</button>
 </div>
 
+<div class="color-notice">
+  <span class="color-notice-dot"></span>
+  カード左上の丸は、写真から自動診断したメインカラーです
+</div>
+
 <div class="grid" id="grid"></div>
 
 <button class="add-btn" onclick="openModal()">＋</button>
@@ -285,8 +309,12 @@ select, input[type="text"] {
       <option>オールシーズン</option>
     </select>
 
+    <select id="tasteSelect">
+      <option value="">テイストを選ぶ</option>
+    </select>
+
     <div class="taste-section">
-      <label>テイスト（1つ選択）</label>
+      <label>テイストを追加・削除</label>
       <div class="taste-tags" id="tasteTags"></div>
       <div class="add-taste-row">
         <input type="text" id="newTasteInput" placeholder="テイストを追加">
@@ -306,7 +334,6 @@ select, input[type="text"] {
 <script>
 let items = JSON.parse(localStorage.getItem('closet_items') || '[]');
 let tastes = JSON.parse(localStorage.getItem('closet_tastes') || '["カジュアル","フェミニン","ストリート","フォーマル"]');
-let selectedTaste = null;
 let currentFilter = '全て';
 let currentPhoto = null;
 let currentColor = null;
@@ -315,27 +342,28 @@ function saveTastes() {
   localStorage.setItem('closet_tastes', JSON.stringify(tastes));
 }
 
+function renderTasteSelect() {
+  const sel = document.getElementById('tasteSelect');
+  const current = sel.value;
+  sel.innerHTML = '<option value="">テイストを選ぶ</option>' +
+    tastes.map(t => `<option value="${t}" ${current === t ? 'selected' : ''}>${t}</option>`).join('');
+}
+
 function renderTasteTags() {
   const container = document.getElementById('tasteTags');
   container.innerHTML = tastes.map(t => `
-    <button class="taste-tag ${selectedTaste === t ? 'selected' : ''}" onclick="selectTaste('${t}')">
-      ${t}
-      <span onclick="deleteTaste(event,'${t}')" style="font-size:14px">×</span>
+    <button class="taste-tag" onclick="deleteTaste(event,'${t}')">
+      ${t} <span style="font-size:14px">×</span>
     </button>
   `).join('');
-}
-
-function selectTaste(t) {
-  selectedTaste = selectedTaste === t ? null : t;
-  renderTasteTags();
 }
 
 function deleteTaste(e, t) {
   e.stopPropagation();
   if (confirm(`「${t}」を削除しますか？`)) {
     tastes = tastes.filter(x => x !== t);
-    if (selectedTaste === t) selectedTaste = null;
     saveTastes();
+    renderTasteSelect();
     renderTasteTags();
   }
 }
@@ -348,6 +376,7 @@ function addTaste() {
   tastes.push(val);
   saveTastes();
   input.value = '';
+  renderTasteSelect();
   renderTasteTags();
 }
 
@@ -356,8 +385,7 @@ function extractColor(dataUrl, callback) {
   img.onload = function() {
     const canvas = document.createElement('canvas');
     const size = 100;
-    canvas.width = size;
-    canvas.height = size;
+    canvas.width = size; canvas.height = size;
     const ctx = canvas.getContext('2d');
     const cx = img.width * 0.25;
     const cy = img.height * 0.25;
@@ -413,9 +441,9 @@ function previewPhoto(e) {
 }
 
 function openModal() {
-  selectedTaste = null;
   currentPhoto = null;
   currentColor = null;
+  renderTasteSelect();
   renderTasteTags();
   document.getElementById('modal').classList.add('show');
 }
@@ -426,10 +454,10 @@ function closeModal() {
   document.getElementById('albumInput').value = '';
   document.getElementById('category').value = '';
   document.getElementById('season').value = '';
+  document.getElementById('tasteSelect').value = '';
   document.getElementById('memo').value = '';
   document.getElementById('newTasteInput').value = '';
   document.getElementById('photoPreview').innerHTML = '<span>写真を選んでください</span>';
-  selectedTaste = null;
   currentPhoto = null;
   currentColor = null;
 }
@@ -437,6 +465,7 @@ function closeModal() {
 function saveItem() {
   const category = document.getElementById('category').value;
   const season = document.getElementById('season').value;
+  const taste = document.getElementById('tasteSelect').value;
   const memo = document.getElementById('memo').value;
   if (!currentPhoto) { alert('写真を選んでください！'); return; }
   if (!category) { alert('カテゴリを選んでください！'); return; }
@@ -445,10 +474,7 @@ function saveItem() {
     id: Date.now(),
     photo: currentPhoto,
     color: currentColor,
-    category,
-    season,
-    taste: selectedTaste,
-    memo
+    category, season, taste, memo
   };
   items.push(item);
   try {
