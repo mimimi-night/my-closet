@@ -225,10 +225,20 @@ select option { background: #333; }
   border: 2px solid transparent;
   flex-shrink: 0;
   transition: transform 0.1s;
+  position: relative;
 }
 .color-chip.selected {
   border: 2px solid #fff;
   transform: scale(1.2);
+}
+.color-chip-label {
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  color: #888;
+  white-space: nowrap;
 }
 .color-chip-clear {
   padding: 4px 10px;
@@ -239,7 +249,12 @@ select option { background: #333; }
   font-size: 11px;
   cursor: pointer;
 }
-.search-btns { display: flex; gap: 8px; }
+.no-colors-msg {
+  font-size: 11px;
+  color: #666;
+  padding: 4px 0;
+}
+.search-btns { display: flex; gap: 8px; margin-top: 8px; }
 .btn-search {
   flex: 1; padding: 10px;
   background: #c9a96e; color: #111;
@@ -257,19 +272,17 @@ select option { background: #333; }
   color: #c9a96e88;
   padding: 6px 16px 0;
 }
-
 .color-notice {
   font-size: 11px; color: #888;
   padding: 0 16px 10px;
   display: flex; align-items: center; gap: 6px;
 }
-.color-notice-dot {
+.color-notice-bar {
   display: inline-block;
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #e74c3c, #3498db, #2ecc71);
+  width: 18px; height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, #e74c3c, #3498db, #2ecc71);
   flex-shrink: 0;
-  border: 1px solid #ffffff33;
 }
 .grid {
   display: grid;
@@ -285,17 +298,24 @@ select option { background: #333; }
   position: relative;
 }
 .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
-.card-info { padding: 10px; position: relative; }
+.card-info {
+  padding: 10px 10px 10px 10px;
+  position: relative;
+}
+.card-color-bar {
+  width: 3px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 0 0 0 12px;
+}
+.card-info-inner {
+  padding-left: 10px;
+}
 .card-category { font-size: 11px; color: #c9a96e; letter-spacing: 1px; margin-bottom: 2px; }
 .card-season { font-size: 11px; color: #888; margin-top: 2px; }
 .card-taste { font-size: 11px; color: #c9a96e88; margin-top: 2px; }
-.card-color-bottom {
-  position: absolute;
-  bottom: 10px; left: 10px;
-  width: 12px; height: 12px;
-  border-radius: 50%;
-  border: 1px solid #ffffff55;
-}
 .card-delete {
   position: absolute;
   top: 8px; right: 8px;
@@ -344,10 +364,8 @@ select option { background: #333; }
   <select class="search-select" id="searchTaste" style="width:100%;margin-bottom:10px;">
     <option value="">テイスト：全て</option>
   </select>
-
-  <div style="font-size:11px;color:#c9a96e;margin-bottom:8px;">メインカラーで絞り込む</div>
+  <div style="font-size:11px;color:#c9a96e;margin-bottom:12px;">メインカラーで絞り込む</div>
   <div class="color-search-row" id="colorChips"></div>
-
   <div class="search-btns">
     <button class="btn-search-reset" onclick="resetSearch()">リセット</button>
     <button class="btn-search" onclick="doSearch()">検索する</button>
@@ -366,8 +384,8 @@ select option { background: #333; }
 </div>
 
 <div class="color-notice">
-  <span class="color-notice-dot"></span>
-  カード左下の丸は、写真から自動診断したメインカラーです
+  <span class="color-notice-bar"></span>
+  カード左端のバーは、写真から自動診断したメインカラーです
 </div>
 
 <div class="grid" id="grid"></div>
@@ -430,10 +448,9 @@ let isSearchMode = false;
 let searchResults = null;
 let selectedSearchColor = null;
 
-// 色カテゴリの定義
 const colorCategories = [
-  { label: '白', color: '#f5f5f5', range: (r,g,b) => r>200 && g>200 && b>200 },
-  { label: '黒', color: '#222222', range: (r,g,b) => r<60 && g<60 && b<60 },
+  { label: '白', color: '#f0f0f0', range: (r,g,b) => r>200 && g>200 && b>200 },
+  { label: '黒', color: '#333333', range: (r,g,b) => r<60 && g<60 && b<60 },
   { label: 'グレー', color: '#888888', range: (r,g,b) => Math.abs(r-g)<30 && Math.abs(g-b)<30 && r>=60 && r<=200 },
   { label: '赤', color: '#e74c3c', range: (r,g,b) => r>150 && g<100 && b<100 },
   { label: 'ピンク', color: '#ff8fa3', range: (r,g,b) => r>180 && g<160 && b<160 && g>80 },
@@ -456,6 +473,16 @@ function getColorCategory(colorStr) {
     if (cat.range(r, g, b)) return cat.label;
   }
   return null;
+}
+
+// 保存済みアイテムから使われてるカラーだけを抽出
+function getUsedColorCategories() {
+  const used = new Set();
+  items.forEach(item => {
+    const cat = getColorCategory(item.color);
+    if (cat) used.add(cat);
+  });
+  return colorCategories.filter(c => used.has(c.label));
 }
 
 function saveTastes() {
@@ -482,11 +509,19 @@ function renderTasteTags() {
 
 function renderColorChips() {
   const container = document.getElementById('colorChips');
-  container.innerHTML = colorCategories.map(cat => `
-    <div class="color-chip ${selectedSearchColor === cat.label ? 'selected' : ''}"
-      style="background:${cat.color}"
-      onclick="selectSearchColor('${cat.label}')"
-      title="${cat.label}">
+  const usedColors = getUsedColorCategories();
+  if (usedColors.length === 0) {
+    container.innerHTML = '<span class="no-colors-msg">服を登録するとカラーが表示されます</span>';
+    return;
+  }
+  container.innerHTML = usedColors.map(cat => `
+    <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+      <div class="color-chip ${selectedSearchColor === cat.label ? 'selected' : ''}"
+        style="background:${cat.color}"
+        onclick="selectSearchColor('${cat.label}')"
+        title="${cat.label}">
+        <span class="color-chip-label">${cat.label}</span>
+      </div>
     </div>
   `).join('') + `<button class="color-chip-clear" onclick="selectSearchColor(null)">指定なし</button>`;
 }
@@ -501,14 +536,13 @@ function toggleSearch() {
   const btn = document.getElementById('searchToggleBtn');
   panel.classList.toggle('show');
   btn.classList.toggle('active');
-  renderColorChips();
+  if (panel.classList.contains('show')) renderColorChips();
 }
 
 function doSearch() {
   const category = document.getElementById('searchCategory').value;
   const season = document.getElementById('searchSeason').value;
   const taste = document.getElementById('searchTaste').value;
-
   searchResults = items.filter(item => {
     if (category && item.category !== category) return false;
     if (season && item.season !== season) return false;
@@ -519,10 +553,8 @@ function doSearch() {
     }
     return true;
   });
-
   isSearchMode = true;
-  document.getElementById('searchResultNotice').textContent =
-    `検索結果：${searchResults.length}件`;
+  document.getElementById('searchResultNotice').textContent = `検索結果：${searchResults.length}件`;
   renderGrid();
 }
 
@@ -687,12 +719,14 @@ function renderGrid() {
     <div class="card">
       <img src="${item.photo}" alt="${item.category}">
       <button class="card-delete" onclick="deleteItem(${item.id})">×</button>
-      ${item.color ? `<div class="card-color-bottom" style="background:${item.color}"></div>` : ''}
-      <div class="card-info" style="${item.color ? 'padding-left:28px;' : ''}">
-        <div class="card-category">${item.category}</div>
-        <div class="card-season">${item.season}</div>
-        ${item.taste ? `<div class="card-taste">${item.taste}</div>` : ''}
-        ${item.memo ? `<div class="card-season">${item.memo}</div>` : ''}
+      <div class="card-info" style="display:flex;padding:0;">
+        ${item.color ? `<div class="card-color-bar" style="background:${item.color};"></div>` : ''}
+        <div class="card-info-inner" style="padding:10px;">
+          <div class="card-category">${item.category}</div>
+          <div class="card-season">${item.season}</div>
+          ${item.taste ? `<div class="card-taste">${item.taste}</div>` : ''}
+          ${item.memo ? `<div class="card-season">${item.memo}</div>` : ''}
+        </div>
       </div>
     </div>
   `).join('');
