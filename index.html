@@ -11,18 +11,18 @@ body {
   background: #1a1a1a;
   color: #f0e6d3;
   min-height: 100vh;
+  padding-bottom: 100px;
 }
 header {
   background: #111;
   padding: 16px 20px;
   text-align: center;
   border-bottom: 1px solid #c9a96e44;
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
-header h1 {
-  font-size: 20px;
-  color: #c9a96e;
-  letter-spacing: 3px;
-}
+header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
 .add-btn {
   position: fixed;
   bottom: 24px;
@@ -55,33 +55,40 @@ header h1 {
   max-width: 500px;
   border-radius: 20px 20px 0 0;
   padding: 24px;
+  max-height: 90vh;
+  overflow-y: auto;
 }
-.modal-content h2 {
-  color: #c9a96e;
+.modal-content h2 { color: #c9a96e; margin-bottom: 16px; font-size: 16px; letter-spacing: 2px; }
+.photo-buttons {
+  display: flex;
+  gap: 10px;
   margin-bottom: 16px;
-  font-size: 16px;
-  letter-spacing: 2px;
 }
-.photo-area {
+.photo-btn {
+  flex: 1;
+  padding: 12px;
+  background: #333;
+  border: 1px solid #c9a96e44;
+  border-radius: 10px;
+  color: #f0e6d3;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: center;
+}
+.photo-preview {
   width: 100%;
   height: 200px;
   background: #333;
   border: 2px dashed #c9a96e44;
   border-radius: 12px;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
   margin-bottom: 16px;
   overflow: hidden;
 }
-.photo-area img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.photo-area span { color: #888; font-size: 14px; margin-top: 8px; }
+.photo-preview img { width: 100%; height: 100%; object-fit: cover; }
+.photo-preview span { color: #888; font-size: 14px; }
 input[type="file"] { display: none; }
 select, input[type="text"] {
   width: 100%;
@@ -93,67 +100,63 @@ select, input[type="text"] {
   font-size: 14px;
   margin-bottom: 12px;
 }
-.btn-row {
+.taste-section { margin-bottom: 12px; }
+.taste-section label { font-size: 12px; color: #c9a96e; display: block; margin-bottom: 8px; }
+.taste-tags {
   display: flex;
-  gap: 10px;
-  margin-top: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
 }
-.btn-save {
+.taste-tag {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid #c9a96e44;
+  background: transparent;
+  color: #c9a96e;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.taste-tag.selected { background: #c9a96e; color: #111; }
+.taste-tag .delete-taste {
+  font-size: 14px;
+  line-height: 1;
+  color: inherit;
+}
+.add-taste-row {
+  display: flex;
+  gap: 8px;
+}
+.add-taste-row input {
   flex: 1;
-  padding: 12px;
+  margin-bottom: 0;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+.add-taste-row button {
+  padding: 8px 14px;
   background: #c9a96e;
   color: #111;
   border: none;
   border-radius: 10px;
-  font-size: 15px;
-  font-weight: bold;
+  font-size: 13px;
   cursor: pointer;
+}
+.btn-row { display: flex; gap: 10px; margin-top: 8px; }
+.btn-save {
+  flex: 1; padding: 12px;
+  background: #c9a96e; color: #111;
+  border: none; border-radius: 10px;
+  font-size: 15px; font-weight: bold; cursor: pointer;
 }
 .btn-cancel {
-  flex: 1;
-  padding: 12px;
-  background: #333;
-  color: #f0e6d3;
-  border: none;
-  border-radius: 10px;
-  font-size: 15px;
-  cursor: pointer;
-}
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  padding: 16px;
-}
-.card {
-  background: #222;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid #c9a96e22;
-}
-.card img {
-  width: 100%;
-  aspect-ratio: 3/4;
-  object-fit: cover;
-}
-.card-info {
-  padding: 10px;
-}
-.card-category {
-  font-size: 11px;
-  color: #c9a96e;
-  letter-spacing: 1px;
-}
-.card-season {
-  font-size: 11px;
-  color: #888;
-  margin-top: 2px;
-}
-.empty {
-  text-align: center;
-  padding: 60px 20px;
-  color: #555;
-  font-size: 14px;
+  flex: 1; padding: 12px;
+  background: #333; color: #f0e6d3;
+  border: none; border-radius: 10px;
+  font-size: 15px; cursor: pointer;
 }
 .filter-row {
   display: flex;
@@ -171,9 +174,46 @@ select, input[type="text"] {
   cursor: pointer;
   white-space: nowrap;
 }
-.filter-btn.active {
-  background: #c9a96e;
-  color: #111;
+.filter-btn.active { background: #c9a96e; color: #111; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 16px;
+}
+.card {
+  background: #222;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #c9a96e22;
+  position: relative;
+}
+.card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
+.card-info { padding: 10px; }
+.card-category { font-size: 11px; color: #c9a96e; letter-spacing: 1px; }
+.card-season { font-size: 11px; color: #888; margin-top: 2px; }
+.card-delete {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #555;
+  font-size: 14px;
+  grid-column: span 2;
 }
 </style>
 </head>
@@ -183,7 +223,7 @@ select, input[type="text"] {
   <h1>あなたクローゼット</h1>
 </header>
 
-<div class="filter-row">
+<div class="filter-row" id="filterRow">
   <button class="filter-btn active" onclick="filterItems('全て')">全て</button>
   <button class="filter-btn" onclick="filterItems('トップス')">トップス</button>
   <button class="filter-btn" onclick="filterItems('ボトムス')">ボトムス</button>
@@ -193,20 +233,25 @@ select, input[type="text"] {
   <button class="filter-btn" onclick="filterItems('バッグ')">バッグ</button>
 </div>
 
-<div class="grid" id="grid">
-  <div class="empty" id="empty">まだ服が登録されていません！<br>＋ボタンから追加してね</div>
-</div>
+<div class="grid" id="grid"></div>
 
 <button class="add-btn" onclick="openModal()">＋</button>
 
 <div class="modal" id="modal">
   <div class="modal-content">
     <h2>服を追加する</h2>
-    <div class="photo-area" id="photoArea" onclick="document.getElementById('fileInput').click()">
-      <span style="font-size:32px">📷</span>
-      <span>タップして写真を選ぶ</span>
+
+    <div class="photo-buttons">
+      <div class="photo-btn" onclick="document.getElementById('cameraInput').click()">📷 カメラで撮影</div>
+      <div class="photo-btn" onclick="document.getElementById('albumInput').click()">🖼️ アルバムから選ぶ</div>
     </div>
-    <input type="file" id="fileInput" accept="image/*" capture="environment" onchange="previewPhoto(event)">
+    <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="previewPhoto(event)">
+    <input type="file" id="albumInput" accept="image/*" onchange="previewPhoto(event)">
+
+    <div class="photo-preview" id="photoPreview">
+      <span>写真を選んでください</span>
+    </div>
+
     <select id="category">
       <option value="">カテゴリを選ぶ</option>
       <option>トップス</option>
@@ -216,22 +261,25 @@ select, input[type="text"] {
       <option>シューズ</option>
       <option>バッグ</option>
     </select>
+
     <select id="season">
       <option value="">季節を選ぶ</option>
       <option>春夏</option>
       <option>秋冬</option>
       <option>オールシーズン</option>
     </select>
-    <select id="style">
-      <option value="">テイストを選ぶ</option>
-      <option>カジュアル</option>
-      <option>フェミニン</option>
-      <option>ストリート</option>
-      <option>きれいめ</option>
-      <option>エキゾチック</option>
-      <option>モード</option>
-    </select>
+
+    <div class="taste-section">
+      <label>テイスト（複数選択OK）</label>
+      <div class="taste-tags" id="tasteTags"></div>
+      <div class="add-taste-row">
+        <input type="text" id="newTasteInput" placeholder="テイストを追加">
+        <button onclick="addTaste()">追加</button>
+      </div>
+    </div>
+
     <input type="text" id="memo" placeholder="メモ（任意）">
+
     <div class="btn-row">
       <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
       <button class="btn-save" onclick="saveItem()">保存する</button>
@@ -240,57 +288,142 @@ select, input[type="text"] {
 </div>
 
 <script>
-let items = JSON.parse(localStorage.getItem('closet') || '[]');
+let items = JSON.parse(localStorage.getItem('closet_items') || '[]');
+let tastes = JSON.parse(localStorage.getItem('closet_tastes') || '["カジュアル","フェミニン","ストリート","フォーマル"]');
+let selectedTastes = [];
 let currentFilter = '全て';
 let currentPhoto = null;
 
+function saveTastes() {
+  localStorage.setItem('closet_tastes', JSON.stringify(tastes));
+}
+
+function renderTasteTags() {
+  const container = document.getElementById('tasteTags');
+  container.innerHTML = tastes.map(t => `
+    <button class="taste-tag ${selectedTastes.includes(t) ? 'selected' : ''}" onclick="toggleTaste('${t}')">
+      ${t}
+      <span class="delete-taste" onclick="deleteTaste(event, '${t}')">×</span>
+    </button>
+  `).join('');
+}
+
+function toggleTaste(t) {
+  if (selectedTastes.includes(t)) {
+    selectedTastes = selectedTastes.filter(x => x !== t);
+  } else {
+    selectedTastes.push(t);
+  }
+  renderTasteTags();
+}
+
+function deleteTaste(e, t) {
+  e.stopPropagation();
+  if (confirm(`「${t}」を削除しますか？`)) {
+    tastes = tastes.filter(x => x !== t);
+    selectedTastes = selectedTastes.filter(x => x !== t);
+    saveTastes();
+    renderTasteTags();
+  }
+}
+
+function addTaste() {
+  const input = document.getElementById('newTasteInput');
+  const val = input.value.trim();
+  if (!val) return;
+  if (tastes.includes(val)) { alert('すでに存在します！'); return; }
+  tastes.push(val);
+  saveTastes();
+  input.value = '';
+  renderTasteTags();
+}
+
 function openModal() {
+  selectedTastes = [];
+  renderTasteTags();
   document.getElementById('modal').classList.add('show');
 }
 
 function closeModal() {
   document.getElementById('modal').classList.remove('show');
-  document.getElementById('fileInput').value = '';
+  document.getElementById('cameraInput').value = '';
+  document.getElementById('albumInput').value = '';
   document.getElementById('category').value = '';
   document.getElementById('season').value = '';
-  document.getElementById('style').value = '';
   document.getElementById('memo').value = '';
+  document.getElementById('newTasteInput').value = '';
+  selectedTastes = [];
   currentPhoto = null;
-  const area = document.getElementById('photoArea');
-  area.innerHTML = '<span style="font-size:32px">📷</span><span>タップして写真を選ぶ</span>';
+  document.getElementById('photoPreview').innerHTML = '<span>写真を選んでください</span>';
+}
+
+function compressImage(file, callback) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      const MAX = 600;
+      let w = img.width, h = img.height;
+      if (w > h) { if (w > MAX) { h = h * MAX / w; w = MAX; } }
+      else { if (h > MAX) { w = w * MAX / h; h = MAX; } }
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      callback(canvas.toDataURL('image/jpeg', 0.7));
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
 function previewPhoto(e) {
   const file = e.target.files[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev) {
-    currentPhoto = ev.target.result;
-    const area = document.getElementById('photoArea');
-    area.innerHTML = '<img src="' + currentPhoto + '">';
-  };
-  reader.readAsDataURL(file);
+  compressImage(file, function(compressed) {
+    currentPhoto = compressed;
+    document.getElementById('photoPreview').innerHTML = `<img src="${compressed}">`;
+  });
 }
 
 function saveItem() {
   const category = document.getElementById('category').value;
   const season = document.getElementById('season').value;
-  const style = document.getElementById('style').value;
   const memo = document.getElementById('memo').value;
   if (!currentPhoto) { alert('写真を選んでください！'); return; }
   if (!category) { alert('カテゴリを選んでください！'); return; }
   if (!season) { alert('季節を選んでください！'); return; }
-  const item = { id: Date.now(), photo: currentPhoto, category, season, style, memo };
+  const item = {
+    id: Date.now(),
+    photo: currentPhoto,
+    category,
+    season,
+    tastes: [...selectedTastes],
+    memo
+  };
   items.push(item);
-  localStorage.setItem('closet', JSON.stringify(items));
-  closeModal();
-  renderGrid();
+  try {
+    localStorage.setItem('closet_items', JSON.stringify(items));
+    closeModal();
+    renderGrid();
+  } catch(e) {
+    alert('保存できませんでした。写真が多すぎる可能性があります。');
+    items.pop();
+  }
+}
+
+function deleteItem(id) {
+  if (confirm('この服を削除しますか？')) {
+    items = items.filter(i => i.id !== id);
+    localStorage.setItem('closet_items', JSON.stringify(items));
+    renderGrid();
+  }
 }
 
 function filterItems(filter) {
   currentFilter = filter;
   document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent === filter);
+    btn.classList.toggle('active', btn.textContent.trim() === filter);
   });
   renderGrid();
 }
@@ -299,16 +432,17 @@ function renderGrid() {
   const grid = document.getElementById('grid');
   const filtered = currentFilter === '全て' ? items : items.filter(i => i.category === currentFilter);
   if (filtered.length === 0) {
-    grid.innerHTML = '<div class="empty" style="grid-column:span 2">まだ服が登録されていません！<br>＋ボタンから追加してね</div>';
+    grid.innerHTML = '<div class="empty">まだ服が登録されていません！<br>＋ボタンから追加してね</div>';
     return;
   }
   grid.innerHTML = filtered.map(item => `
     <div class="card">
       <img src="${item.photo}" alt="${item.category}">
+      <button class="card-delete" onclick="deleteItem(${item.id})">×</button>
       <div class="card-info">
         <div class="card-category">${item.category}</div>
-        <div class="card-season">${item.season}　${item.style || ''}</div>
-        ${item.memo ? '<div class="card-season">' + item.memo + '</div>' : ''}
+        <div class="card-season">${item.season}　${item.tastes ? item.tastes.join('・') : ''}</div>
+        ${item.memo ? `<div class="card-season">${item.memo}</div>` : ''}
       </div>
     </div>
   `).join('');
