@@ -59,11 +59,7 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   overflow-y: auto;
 }
 .modal-content h2 { color: #c9a96e; margin-bottom: 16px; font-size: 16px; letter-spacing: 2px; }
-.photo-buttons {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 16px;
-}
+.photo-buttons { display: flex; gap: 10px; margin-bottom: 16px; }
 .photo-btn {
   flex: 1;
   padding: 12px;
@@ -102,12 +98,7 @@ select, input[type="text"] {
 }
 .taste-section { margin-bottom: 12px; }
 .taste-section label { font-size: 12px; color: #c9a96e; display: block; margin-bottom: 8px; }
-.taste-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 8px;
-}
+.taste-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
 .taste-tag {
   padding: 6px 12px;
   border-radius: 20px;
@@ -121,21 +112,8 @@ select, input[type="text"] {
   gap: 6px;
 }
 .taste-tag.selected { background: #c9a96e; color: #111; }
-.taste-tag .delete-taste {
-  font-size: 14px;
-  line-height: 1;
-  color: inherit;
-}
-.add-taste-row {
-  display: flex;
-  gap: 8px;
-}
-.add-taste-row input {
-  flex: 1;
-  margin-bottom: 0;
-  padding: 8px 12px;
-  font-size: 13px;
-}
+.add-taste-row { display: flex; gap: 8px; }
+.add-taste-row input { flex: 1; margin-bottom: 0; padding: 8px 12px; font-size: 13px; }
 .add-taste-row button {
   padding: 8px 14px;
   background: #c9a96e;
@@ -192,6 +170,15 @@ select, input[type="text"] {
 .card-info { padding: 10px; }
 .card-category { font-size: 11px; color: #c9a96e; letter-spacing: 1px; }
 .card-season { font-size: 11px; color: #888; margin-top: 2px; }
+.card-color {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+  border: 1px solid #ffffff33;
+}
 .card-delete {
   position: absolute;
   top: 8px;
@@ -223,14 +210,13 @@ select, input[type="text"] {
   <h1>あなたクローゼット</h1>
 </header>
 
-<div class="filter-row" id="filterRow">
+<div class="filter-row">
   <button class="filter-btn active" onclick="filterItems('全て')">全て</button>
   <button class="filter-btn" onclick="filterItems('トップス')">トップス</button>
   <button class="filter-btn" onclick="filterItems('ボトムス')">ボトムス</button>
   <button class="filter-btn" onclick="filterItems('ワンピース')">ワンピース</button>
   <button class="filter-btn" onclick="filterItems('アウター')">アウター</button>
   <button class="filter-btn" onclick="filterItems('シューズ')">シューズ</button>
-  <button class="filter-btn" onclick="filterItems('バッグ')">バッグ</button>
 </div>
 
 <div class="grid" id="grid"></div>
@@ -259,7 +245,6 @@ select, input[type="text"] {
       <option>ワンピース</option>
       <option>アウター</option>
       <option>シューズ</option>
-      <option>バッグ</option>
     </select>
 
     <select id="season">
@@ -293,6 +278,7 @@ let tastes = JSON.parse(localStorage.getItem('closet_tastes') || '["カジュア
 let selectedTastes = [];
 let currentFilter = '全て';
 let currentPhoto = null;
+let currentColor = null;
 
 function saveTastes() {
   localStorage.setItem('closet_tastes', JSON.stringify(tastes));
@@ -303,17 +289,15 @@ function renderTasteTags() {
   container.innerHTML = tastes.map(t => `
     <button class="taste-tag ${selectedTastes.includes(t) ? 'selected' : ''}" onclick="toggleTaste('${t}')">
       ${t}
-      <span class="delete-taste" onclick="deleteTaste(event, '${t}')">×</span>
+      <span onclick="deleteTaste(event,'${t}')" style="font-size:14px">×</span>
     </button>
   `).join('');
 }
 
 function toggleTaste(t) {
-  if (selectedTastes.includes(t)) {
-    selectedTastes = selectedTastes.filter(x => x !== t);
-  } else {
-    selectedTastes.push(t);
-  }
+  selectedTastes.includes(t)
+    ? selectedTastes = selectedTastes.filter(x => x !== t)
+    : selectedTastes.push(t);
   renderTasteTags();
 }
 
@@ -338,23 +322,34 @@ function addTaste() {
   renderTasteTags();
 }
 
-function openModal() {
-  selectedTastes = [];
-  renderTasteTags();
-  document.getElementById('modal').classList.add('show');
-}
-
-function closeModal() {
-  document.getElementById('modal').classList.remove('show');
-  document.getElementById('cameraInput').value = '';
-  document.getElementById('albumInput').value = '';
-  document.getElementById('category').value = '';
-  document.getElementById('season').value = '';
-  document.getElementById('memo').value = '';
-  document.getElementById('newTasteInput').value = '';
-  selectedTastes = [];
-  currentPhoto = null;
-  document.getElementById('photoPreview').innerHTML = '<span>写真を選んでください</span>';
+function extractColor(dataUrl, callback) {
+  const img = new Image();
+  img.onload = function() {
+    const canvas = document.createElement('canvas');
+    const size = 100;
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    // 中央部分だけを切り取って色を分析
+    const cx = img.width * 0.25;
+    const cy = img.height * 0.25;
+    const cw = img.width * 0.5;
+    const ch = img.height * 0.5;
+    ctx.drawImage(img, cx, cy, cw, ch, 0, 0, size, size);
+    const data = ctx.getImageData(0, 0, size, size).data;
+    let r = 0, g = 0, b = 0, count = 0;
+    for (let i = 0; i < data.length; i += 16) {
+      r += data[i];
+      g += data[i+1];
+      b += data[i+2];
+      count++;
+    }
+    r = Math.round(r / count);
+    g = Math.round(g / count);
+    b = Math.round(b / count);
+    callback(`rgb(${r},${g},${b})`);
+  };
+  img.src = dataUrl;
 }
 
 function compressImage(file, callback) {
@@ -383,7 +378,32 @@ function previewPhoto(e) {
   compressImage(file, function(compressed) {
     currentPhoto = compressed;
     document.getElementById('photoPreview').innerHTML = `<img src="${compressed}">`;
+    extractColor(compressed, function(color) {
+      currentColor = color;
+    });
   });
+}
+
+function openModal() {
+  selectedTastes = [];
+  currentPhoto = null;
+  currentColor = null;
+  renderTasteTags();
+  document.getElementById('modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+  document.getElementById('cameraInput').value = '';
+  document.getElementById('albumInput').value = '';
+  document.getElementById('category').value = '';
+  document.getElementById('season').value = '';
+  document.getElementById('memo').value = '';
+  document.getElementById('newTasteInput').value = '';
+  document.getElementById('photoPreview').innerHTML = '<span>写真を選んでください</span>';
+  selectedTastes = [];
+  currentPhoto = null;
+  currentColor = null;
 }
 
 function saveItem() {
@@ -396,6 +416,7 @@ function saveItem() {
   const item = {
     id: Date.now(),
     photo: currentPhoto,
+    color: currentColor,
     category,
     season,
     tastes: [...selectedTastes],
@@ -440,7 +461,10 @@ function renderGrid() {
       <img src="${item.photo}" alt="${item.category}">
       <button class="card-delete" onclick="deleteItem(${item.id})">×</button>
       <div class="card-info">
-        <div class="card-category">${item.category}</div>
+        <div class="card-category">
+          ${item.color ? `<span class="card-color" style="background:${item.color}"></span>` : ''}
+          ${item.category}
+        </div>
         <div class="card-season">${item.season}　${item.tastes ? item.tastes.join('・') : ''}</div>
         ${item.memo ? `<div class="card-season">${item.memo}</div>` : ''}
       </div>
