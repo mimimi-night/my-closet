@@ -6,86 +6,19 @@
 <title>あなたクローゼット</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Hiragino Sans', sans-serif;
-  background: #1a1a1a;
-  color: #f0e6d3;
-  min-height: 100vh;
-  padding-bottom: 100px;
-}
-header {
-  background: #111;
-  padding: 16px 20px;
-  text-align: center;
-  border-bottom: 1px solid #c9a96e44;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-}
+body { font-family: 'Hiragino Sans', sans-serif; background: #1a1a1a; color: #f0e6d3; min-height: 100vh; padding-bottom: 100px; }
+header { background: #111; padding: 16px 20px; text-align: center; border-bottom: 1px solid #c9a96e44; position: sticky; top: 0; z-index: 50; }
 header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
-.header-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
-  flex-wrap: wrap;
-}
-.header-btn {
-  padding: 6px 16px;
-  border-radius: 20px;
-  border: 1px solid #c9a96e44;
-  background: transparent;
-  color: #c9a96e;
-  font-size: 12px;
-  cursor: pointer;
-}
+.header-buttons { display: flex; justify-content: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+.header-btn { padding: 6px 16px; border-radius: 20px; border: 1px solid #c9a96e44; background: transparent; color: #c9a96e; font-size: 12px; cursor: pointer; }
 .header-btn.active { background: #c9a96e; color: #111; }
 .header-btn.logout { border-color: #ff6b6b44; color: #ff6b6b; }
-.guest-banner {
-  background: #1e1a0e;
-  border-bottom: 1px solid #c9a96e33;
-  padding: 12px 16px;
-  font-size: 12px;
-  color: #c9a96e88;
-  text-align: center;
-  line-height: 1.8;
-}
+.guest-banner { background: #1e1a0e; border-bottom: 1px solid #c9a96e33; padding: 12px 16px; font-size: 12px; color: #c9a96e88; text-align: center; line-height: 1.8; }
 .guest-banner strong { color: #c9a96e; display: block; margin-bottom: 4px; }
-.guest-banner .login-link {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 6px 16px;
-  background: #c9a96e;
-  color: #111;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  border: none;
-}
-.login-modal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.85);
-  z-index: 300;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
+.guest-banner .login-link { display: inline-block; margin-top: 8px; padding: 6px 16px; background: #c9a96e; color: #111; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; border: none; }
+.login-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 300; justify-content: center; align-items: center; padding: 20px; }
 .login-modal.show { display: flex; }
-.login-box {
-  background: #222;
-  border-radius: 20px;
-  padding: 32px 24px;
-  width: 100%;
-  max-width: 360px;
-  border: 1px solid #c9a96e22;
-  position: relative;
-  max-height: 90vh;
-  overflow-y: auto;
-}
+.login-box { background: #222; border-radius: 20px; padding: 32px 24px; width: 100%; max-width: 360px; border: 1px solid #c9a96e22; position: relative; max-height: 90vh; overflow-y: auto; }
 .login-box h2 { color: #c9a96e; font-size: 18px; letter-spacing: 2px; text-align: center; margin-bottom: 20px; }
 .login-close { position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: #888; font-size: 20px; cursor: pointer; }
 .login-input { width: 100%; padding: 12px 14px; background: #333; border: 1px solid #c9a96e44; border-radius: 10px; color: #f0e6d3; font-size: 14px; margin-bottom: 12px; }
@@ -107,12 +40,16 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
 .modal-content h2 { color: #c9a96e; margin-bottom: 16px; font-size: 16px; letter-spacing: 2px; }
 .photo-buttons { display: flex; gap: 10px; margin-bottom: 12px; }
 .photo-btn { flex: 1; padding: 12px; background: #333; border: 1px solid #c9a96e44; border-radius: 10px; color: #f0e6d3; font-size: 13px; cursor: pointer; text-align: center; }
-.photo-hint { font-size: 11px; color: #888; text-align: center; margin-bottom: 12px; line-height: 1.5; }
-.photo-preview { width: 100%; height: 200px; background: #333; border: 2px dashed #c9a96e44; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-bottom: 16px; overflow: hidden; position: relative; }
-.photo-preview img { width: 100%; height: 100%; object-fit: cover; }
-.photo-preview span { color: #888; font-size: 14px; }
-.center-guide { position: absolute; top: 25%; left: 25%; width: 50%; height: 50%; border-radius: 8px; pointer-events: none; display: flex; justify-content: center; align-items: flex-end; padding-bottom: 6px; }
-.center-guide-label { font-size: 10px; white-space: nowrap; padding: 2px 6px; border-radius: 4px; }
+.photo-hint { font-size: 11px; color: #888; text-align: center; margin-bottom: 8px; line-height: 1.5; }
+.photo-preview-wrap { position: relative; width: 100%; height: 260px; background: #333; border: 2px dashed #c9a96e44; border-radius: 12px; margin-bottom: 8px; overflow: hidden; }
+.photo-preview-wrap img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; user-select: none; display: block; }
+.photo-preview-empty { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: #888; font-size: 14px; }
+.analysis-box { position: absolute; width: 60px; height: 60px; border: 2px solid rgba(255,255,255,0.95); border-radius: 8px; box-shadow: 0 0 0 1px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(0,0,0,0.3); cursor: move; display: flex; align-items: center; justify-content: center; transform: translate(-50%, -50%); }
+.analysis-box-label { font-size: 9px; color: white; text-shadow: 0 1px 3px rgba(0,0,0,1); white-space: nowrap; pointer-events: none; }
+.color-result-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding: 8px 12px; background: #2a2a2a; border-radius: 8px; }
+.color-result-chip { width: 30px; height: 30px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); flex-shrink: 0; }
+.color-result-info { font-size: 11px; color: #888; line-height: 1.5; }
+.color-result-info span { display: block; font-size: 10px; color: #666; }
 input[type="file"] { display: none; }
 select, input[type="text"], input[type="email"], input[type="password"] { width: 100%; padding: 10px 14px; background: #333; border: 1px solid #c9a96e44; border-radius: 10px; color: #f0e6d3; font-size: 14px; margin-bottom: 12px; }
 select option { background: #333; }
@@ -166,8 +103,7 @@ select option { background: #333; }
 .card-last-worn { font-size: 9px; color: #666; line-height: 1.4; }
 .card-wear-btn { display: flex; flex-direction: row; align-items: center; gap: 5px; background: transparent; border: 1px solid #c9a96e33; border-radius: 8px; padding: 4px 8px; cursor: pointer; transition: background 0.2s; min-width: 70px; justify-content: center; }
 .card-wear-btn:hover { background: #c9a96e11; }
-.card-wear-btn.disabled { opacity: 0.4; cursor: not-allowed; }
-.card-wear-btn.disabled:hover { background: transparent; }
+.card-wear-btn.worn-today { border-color: #c9a96e88; background: #c9a96e11; }
 .card-wear-count { font-size: 13px; font-weight: bold; color: #c9a96e; line-height: 1; }
 .card-wear-label { font-size: 8px; color: #888; letter-spacing: 1px; }
 .empty { text-align: center; padding: 60px 20px; color: #555; font-size: 14px; grid-column: span 2; }
@@ -180,7 +116,6 @@ select option { background: #333; }
 .menu-box h3 { color: #c9a96e; font-size: 14px; letter-spacing: 2px; margin-bottom: 16px; text-align: center; }
 .menu-item { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #c9a96e22; border-radius: 10px; color: #f0e6d3; font-size: 14px; cursor: pointer; margin-bottom: 10px; text-align: left; display: flex; align-items: center; gap: 10px; }
 .menu-item.danger { color: #ff6b6b; border-color: #ff6b6b22; }
-.menu-item.danger:hover { background: #2a1a1a; }
 .menu-close { width: 100%; padding: 10px; background: transparent; border: 1px solid #444; border-radius: 10px; color: #888; font-size: 13px; cursor: pointer; margin-top: 4px; }
 </style>
 </head>
@@ -245,9 +180,8 @@ select option { background: #333; }
     <strong>💡 アカウント登録でデータが消えなくなります！</strong>
     ログインなしでは約50枚まで保存できます。<br>
     アカウント登録すると約10,000枚まで保存でき、機種変更や<br>キャッシュ削除でもデータが消えません。<br>
-    このアカウントは服のデータ保存のためだけに使用され、<br>外部に漏れることはありません。
-    <br>
-    <button class="login-link" onclick="openLoginModal()">アカウント登録 / ログイン</button>
+    このアカウントは服のデータ保存のためだけに使用され、外部に漏れることはありません。
+    <br><button class="login-link" onclick="openLoginModal()">アカウント登録 / ログイン</button>
   </div>
 
   <div class="search-panel" id="searchPanel">
@@ -255,20 +189,16 @@ select option { background: #333; }
     <div class="search-row">
       <select class="search-select" id="searchCategory">
         <option value="">カテゴリ：全て</option>
-        <option>トップス</option><option>ボトムス</option>
-        <option>ワンピース</option><option>アウター</option><option>シューズ</option>
+        <option>トップス</option><option>ボトムス</option><option>ワンピース</option><option>アウター</option><option>シューズ</option>
       </select>
       <select class="search-select" id="searchSeason">
         <option value="">季節：全て</option>
         <option>春夏</option><option>秋冬</option><option>オールシーズン</option>
       </select>
     </div>
-    <select class="search-select" id="searchTaste" style="width:100%;margin-bottom:12px;">
-      <option value="">テイスト：全て</option>
-    </select>
+    <select class="search-select" id="searchTaste" style="width:100%;margin-bottom:12px;"><option value="">テイスト：全て</option></select>
     <label style="display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer;font-size:12px;color:#c9a96e88;letter-spacing:1px;">
-      <input type="checkbox" id="searchFav" style="width:14px;height:14px;accent-color:#c9a96e;">
-      お気に入りのみ
+      <input type="checkbox" id="searchFav" style="width:14px;height:14px;accent-color:#c9a96e;">お気に入りのみ
     </label>
     <div class="color-search-section">
       <div class="color-search-label">メインカラーで絞り込む</div>
@@ -283,13 +213,13 @@ select option { background: #333; }
   <div class="search-result-notice" id="searchResultNotice"></div>
 
   <div class="filter-row">
-   <select class="sort-select" id="sortSelect" onchange="renderGrid()">
-  <option value="new">デフォルト</option>
-  <option value="worn_desc">着用回数が多い順</option>
-  <option value="worn_asc">着用回数が少ない順</option>
-  <option value="date_desc">最後に着た日が新しい順</option>
-  <option value="date_asc">最後に着た日が古い順</option>
-</select>
+    <select class="sort-select" id="sortSelect" onchange="renderGrid()">
+      <option value="new">デフォルト</option>
+      <option value="worn_desc">着用回数が多い順</option>
+      <option value="worn_asc">着用回数が少ない順</option>
+      <option value="date_desc">最後に着た日が新しい順</option>
+      <option value="date_asc">最後に着た日が古い順</option>
+    </select>
     <button class="filter-btn active" onclick="filterItems('全て')">全て</button>
     <button class="filter-btn" onclick="filterItems('トップス')">トップス</button>
     <button class="filter-btn" onclick="filterItems('ボトムス')">ボトムス</button>
@@ -313,14 +243,21 @@ select option { background: #333; }
         <div class="photo-btn" onclick="document.getElementById('cameraInput').click()">📷 カメラで撮影</div>
         <div class="photo-btn" onclick="document.getElementById('albumInput').click()">🖼️ アルバムから選ぶ</div>
       </div>
-      <p class="photo-hint">⚠ 色の自動分析は写真中央のアイテムを基準にします。<br>アイテムが中央に映るように撮影してください。</p>
+      <p class="photo-hint">白いボックスをドラッグして色分析の範囲を調整できます</p>
       <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="previewPhoto(event)">
       <input type="file" id="albumInput" accept="image/*" onchange="previewPhoto(event)">
-      <div class="photo-preview" id="photoPreview"><span>写真を選んでください</span></div>
+      <div class="photo-preview-wrap" id="photoPreviewWrap">
+        <div class="photo-preview-empty">写真を選んでください</div>
+      </div>
+      <div class="color-result-row" id="colorResultRow" style="display:none;">
+        <div class="color-result-chip" id="colorResultChip"></div>
+        <div class="color-result-info">分析した色はこれです
+          <span>ボックスを動かして範囲を変更できます</span>
+        </div>
+      </div>
       <select id="category">
         <option value="">カテゴリを選ぶ</option>
-        <option>トップス</option><option>ボトムス</option>
-        <option>ワンピース</option><option>アウター</option><option>シューズ</option>
+        <option>トップス</option><option>ボトムス</option><option>ワンピース</option><option>アウター</option><option>シューズ</option>
       </select>
       <select id="season">
         <option value="">季節を選ぶ</option>
@@ -377,6 +314,11 @@ let isSearchMode = false;
 let searchResults = null;
 let selectedSearchColor = null;
 
+// 色分析ボックスの位置（%）
+let boxPctX = 50, boxPctY = 50;
+let isDragging = false, dragStartX, dragStartY, boxStartX, boxStartY;
+let currentImgEl = null;
+
 getRedirectResult(auth).then(result => {
   if (result && result.user) {
     const isNewUser = result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
@@ -432,12 +374,7 @@ window.registerWithEmail = async function() {
   if (!email || !password) { document.getElementById('loginError').textContent = 'メールアドレスとパスワードを入力してください'; return; }
   if (password.length < 6) { document.getElementById('loginError').textContent = 'パスワードは6文字以上にしてください'; return; }
   try { await createUserWithEmailAndPassword(auth, email, password); }
-  catch(e) { document.getElementById('loginError').textContent = e.code === 'auth/email-already-in-use' ? 'このメールアドレスは既に使われています' : '登録に失敗しました。もう一度お試しください'; }
-}
-window.loginWithGoogle = async function(isRegister) {
-  sessionStorage.setItem('googleFlow', isRegister ? 'register' : 'login');
-  try { await signInWithRedirect(auth, googleProvider); }
-  catch(e) { document.getElementById('loginError').textContent = 'Googleログインに失敗しました'; }
+  catch(e) { document.getElementById('loginError').textContent = e.code === 'auth/email-already-in-use' ? 'このメールアドレスは既に使われています' : '登録に失敗しました'; }
 }
 window.sendReset = async function() {
   const email = document.getElementById('resetEmail').value;
@@ -445,7 +382,7 @@ window.sendReset = async function() {
   try {
     await sendPasswordResetEmail(auth, email, { url: 'https://mimimi-night.github.io/my-closet/reset.html' });
     document.getElementById('loginError').textContent = '';
-    document.getElementById('resetSuccess').textContent = 'リセットメールを送信しました！メールをご確認ください';
+    document.getElementById('resetSuccess').textContent = 'リセットメールを送信しました！';
   } catch(e) { document.getElementById('loginError').textContent = 'メールアドレスが見つかりません'; }
 }
 window.logout = async function() { if (confirm('ログアウトしますか？')) await signOut(auth); }
@@ -496,72 +433,109 @@ function getUniqueColors() {
   colors.forEach(c => { if (!unique.find(u => colorDistance(u, c) < 40)) unique.push(c); });
   return unique;
 }
-window.renderTasteSelect = function() {
-  document.getElementById('tasteSelect').innerHTML = '<option value="">テイストを選ぶ</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
-  document.getElementById('searchTaste').innerHTML = '<option value="">テイスト：全て</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
-}
-window.renderTasteTags = function() {
-  document.getElementById('tasteTags').innerHTML = tastes.map(t => `<button class="taste-tag" onclick="deleteTaste(event,'${t}')">${t} <span style="font-size:14px">×</span></button>`).join('');
-}
-window.renderColorChips = function() {
-  const container = document.getElementById('colorChips');
-  const uniqueColors = getUniqueColors();
-  if (uniqueColors.length === 0) { container.innerHTML = '<span class="no-colors-msg">服を登録するとカラーが表示されます</span>'; return; }
-  container.innerHTML = uniqueColors.map(color => `
-    <div class="color-chip-wrap" onclick="selectSearchColor('${color}')">
-      <div class="color-chip ${selectedSearchColor && colorDistance(selectedSearchColor, color) < 40 ? 'selected' : ''}" style="background:${color};"></div>
-    </div>
-  `).join('') + `<button class="color-clear-btn" onclick="selectSearchColor(null)">指定なし</button>`;
-}
-window.selectSearchColor = function(color) { selectedSearchColor = color; renderColorChips(); }
-window.toggleSearch = function() {
-  const panel = document.getElementById('searchPanel');
-  const btn = document.getElementById('searchToggleBtn');
-  panel.classList.toggle('show');
-  btn.classList.toggle('active');
-  if (panel.classList.contains('show')) renderColorChips();
-}
-window.resetSearch = function() {
-  ['searchCategory','searchSeason','searchTaste'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('searchFav').checked = false;
-  selectedSearchColor = null; renderColorChips();
-  isSearchMode = false; searchResults = null;
-  document.getElementById('searchResultNotice').textContent = '';
-  renderGrid();
-}
-window.deleteTaste = async function(e, t) {
-  e.stopPropagation();
-  if (confirm(`「${t}」を削除しますか？`)) {
-    tastes = tastes.filter(x => x !== t);
-    await saveTastesToDB();
-    renderTasteSelect(); renderTasteTags();
+
+// 指定位置から色を抽出
+function extractColorAtPos(imgEl, pctX, pctY) {
+  if (!imgEl) return;
+  const wrap = imgEl.parentElement;
+  const wrapW = wrap.offsetWidth, wrapH = wrap.offsetHeight;
+  const natW = imgEl.naturalWidth, natH = imgEl.naturalHeight;
+  if (!natW || !natH) return;
+
+  // object-fit: contain の実際の描画サイズと位置
+  const imgAspect = natW / natH;
+  const wrapAspect = wrapW / wrapH;
+  let drawW, drawH, drawX, drawY;
+  if (imgAspect > wrapAspect) {
+    drawW = wrapW; drawH = wrapW / imgAspect;
+    drawX = 0; drawY = (wrapH - drawH) / 2;
+  } else {
+    drawH = wrapH; drawW = wrapH * imgAspect;
+    drawX = (wrapW - drawW) / 2; drawY = 0;
   }
+
+  // ボックス中心のwrap座標
+  const bx = (pctX / 100) * wrapW;
+  const by = (pctY / 100) * wrapH;
+
+  // 画像上の対応座標
+  const sampleSize = 40; // ボックス内サンプリングサイズ(px)
+  const natSampleSize = (sampleSize / drawW) * natW;
+  const natCX = ((bx - drawX) / drawW) * natW;
+  const natCY = ((by - drawY) / drawH) * natH;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = 40;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(imgEl, natCX - natSampleSize/2, natCY - natSampleSize/2, natSampleSize, natSampleSize, 0, 0, 40, 40);
+
+  const data = ctx.getImageData(0, 0, 40, 40).data;
+  let r=0, g=0, b=0, count=0;
+  for (let i=0; i<data.length; i+=4) {
+    if (data[i+3] < 10) continue;
+    r+=data[i]; g+=data[i+1]; b+=data[i+2]; count++;
+  }
+  if (count === 0) return;
+  r=Math.round(r/count); g=Math.round(g/count); b=Math.round(b/count);
+  const color = `rgb(${r},${g},${b})`;
+  currentColor = color;
+  document.getElementById('colorResultChip').style.background = color;
+  document.getElementById('colorResultRow').style.display = 'flex';
 }
-window.addTaste = async function() {
-  const input = document.getElementById('newTasteInput');
-  const val = input.value.trim();
-  if (!val) return;
-  if (tastes.includes(val)) { alert('すでに存在します！'); return; }
-  tastes.push(val);
-  await saveTastesToDB();
-  input.value = ''; renderTasteSelect(); renderTasteTags();
+
+function updateBoxPosition(box, wrap) {
+  box.style.left = boxPctX + '%';
+  box.style.top = boxPctY + '%';
+  extractColorAtPos(currentImgEl, boxPctX, boxPctY);
 }
-function getBrightness(r, g, b) { return (r*299 + g*587 + b*114) / 1000; }
-function extractColor(dataUrl, callback) {
-  const img = new Image();
-  img.onload = function() {
-    const canvas = document.createElement('canvas');
-    canvas.width = canvas.height = 100;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, img.width*0.25, img.height*0.25, img.width*0.5, img.height*0.5, 0, 0, 100, 100);
-    const data = ctx.getImageData(0, 0, 100, 100).data;
-    let r=0, g=0, b=0, count=0;
-    for (let i=0; i<data.length; i+=16) { r+=data[i]; g+=data[i+1]; b+=data[i+2]; count++; }
-    r=Math.round(r/count); g=Math.round(g/count); b=Math.round(b/count);
-    callback(`rgb(${r},${g},${b})`, r, g, b);
-  };
-  img.src = dataUrl;
+
+function setupAnalysisBox(wrap) {
+  // 既存のボックスを削除
+  const old = wrap.querySelector('.analysis-box');
+  if (old) old.remove();
+
+  const box = document.createElement('div');
+  box.className = 'analysis-box';
+  box.innerHTML = '<span class="analysis-box-label">色分析</span>';
+  wrap.appendChild(box);
+
+  boxPctX = 50; boxPctY = 50;
+  updateBoxPosition(box, wrap);
+
+  function getPos(e) {
+    const rect = wrap.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    return { x: clientX - rect.left, y: clientY - rect.top, w: rect.width, h: rect.height };
+  }
+
+  function onStart(e) {
+    e.preventDefault();
+    isDragging = true;
+    const p = getPos(e);
+    dragStartX = p.x; dragStartY = p.y;
+    boxStartX = boxPctX; boxStartY = boxPctY;
+  }
+  function onMove(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    const p = getPos(e);
+    const dx = ((p.x - dragStartX) / p.w) * 100;
+    const dy = ((p.y - dragStartY) / p.h) * 100;
+    boxPctX = Math.max(3, Math.min(97, boxStartX + dx));
+    boxPctY = Math.max(3, Math.min(97, boxStartY + dy));
+    updateBoxPosition(box, wrap);
+  }
+  function onEnd() { isDragging = false; }
+
+  box.addEventListener('touchstart', onStart, { passive: false });
+  box.addEventListener('touchmove', onMove, { passive: false });
+  box.addEventListener('touchend', onEnd);
+  box.addEventListener('mousedown', onStart);
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onEnd);
 }
+
 function compressImage(file, callback) {
   const reader = new FileReader();
   reader.onload = function(e) {
@@ -579,33 +553,41 @@ function compressImage(file, callback) {
   };
   reader.readAsDataURL(file);
 }
+
 window.previewPhoto = function(e) {
   const file = e.target.files[0];
   if (!file) return;
   compressImage(file, function(compressed) {
     currentPhoto = compressed;
-    extractColor(compressed, function(colorStr, r, g, b) {
-      currentColor = colorStr;
-      const brightness = getBrightness(r, g, b);
-      const guideColor = brightness > 128 ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)';
-      const bgColor = brightness > 128 ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)';
-      document.getElementById('photoPreview').innerHTML = `
-        <img src="${compressed}">
-        <div class="center-guide" style="border:2px dashed ${guideColor};">
-          <span class="center-guide-label" style="color:${guideColor};background:${bgColor};">この範囲で色を分析</span>
-        </div>`;
-    });
+    const wrap = document.getElementById('photoPreviewWrap');
+    wrap.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = compressed;
+    img.onload = function() {
+      wrap.appendChild(img);
+      currentImgEl = img;
+      setupAnalysisBox(wrap);
+    };
   });
 }
-window.openModal = function() { currentPhoto = null; currentColor = null; renderTasteSelect(); renderTasteTags(); document.getElementById('modal').classList.add('show'); }
+
+window.openModal = function() {
+  currentPhoto = null; currentColor = null; currentImgEl = null;
+  boxPctX = 50; boxPctY = 50;
+  document.getElementById('photoPreviewWrap').innerHTML = '<div class="photo-preview-empty">写真を選んでください</div>';
+  document.getElementById('colorResultRow').style.display = 'none';
+  renderTasteSelect(); renderTasteTags();
+  document.getElementById('modal').classList.add('show');
+}
 window.closeModal = function() {
   document.getElementById('modal').classList.remove('show');
   ['cameraInput','albumInput'].forEach(id => document.getElementById(id).value = '');
   ['category','season','tasteSelect'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('memo').value = '';
   document.getElementById('newTasteInput').value = '';
-  document.getElementById('photoPreview').innerHTML = '<span>写真を選んでください</span>';
-  currentPhoto = null; currentColor = null;
+  document.getElementById('photoPreviewWrap').innerHTML = '<div class="photo-preview-empty">写真を選んでください</div>';
+  document.getElementById('colorResultRow').style.display = 'none';
+  currentPhoto = null; currentColor = null; currentImgEl = null;
 }
 window.saveItem = async function() {
   const category = document.getElementById('category').value;
@@ -658,13 +640,20 @@ window.toggleFav = async function(id) {
   }
   if (isSearchMode) doSearch(); else renderGrid();
 }
+
+// 着用カウンター（当日中は再タップでキャンセル）
 window.wearItem = async function(id) {
   const item = items.find(i => i.id === id);
   if (!item) return;
   const today = new Date().toISOString().slice(0, 10);
-  if (item.lastWornDate === today) return;
-  item.wornCount = Math.min((item.wornCount || 0) + 1, 99);
-  item.lastWornDate = today;
+  if (item.lastWornDate === today) {
+    // キャンセル
+    item.wornCount = Math.max((item.wornCount || 1) - 1, 0);
+    item.lastWornDate = null;
+  } else {
+    item.wornCount = Math.min((item.wornCount || 0) + 1, 99);
+    item.lastWornDate = today;
+  }
   if (currentUser) {
     const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js");
     await updateDoc(doc(db, 'users', currentUser.uid, 'items', id), { wornCount: item.wornCount, lastWornDate: item.lastWornDate });
@@ -674,6 +663,57 @@ window.wearItem = async function(id) {
     localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
   }
   if (isSearchMode) doSearch(); else renderGrid();
+}
+
+window.renderTasteSelect = function() {
+  document.getElementById('tasteSelect').innerHTML = '<option value="">テイストを選ぶ</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
+  document.getElementById('searchTaste').innerHTML = '<option value="">テイスト：全て</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
+}
+window.renderTasteTags = function() {
+  document.getElementById('tasteTags').innerHTML = tastes.map(t => `<button class="taste-tag" onclick="deleteTaste(event,'${t}')">${t} <span style="font-size:14px">×</span></button>`).join('');
+}
+window.renderColorChips = function() {
+  const container = document.getElementById('colorChips');
+  const uniqueColors = getUniqueColors();
+  if (uniqueColors.length === 0) { container.innerHTML = '<span class="no-colors-msg">服を登録するとカラーが表示されます</span>'; return; }
+  container.innerHTML = uniqueColors.map(color => `
+    <div class="color-chip-wrap" onclick="selectSearchColor('${color}')">
+      <div class="color-chip ${selectedSearchColor && colorDistance(selectedSearchColor, color) < 40 ? 'selected' : ''}" style="background:${color};"></div>
+    </div>
+  `).join('') + `<button class="color-clear-btn" onclick="selectSearchColor(null)">指定なし</button>`;
+}
+window.selectSearchColor = function(color) { selectedSearchColor = color; renderColorChips(); }
+window.toggleSearch = function() {
+  const panel = document.getElementById('searchPanel');
+  const btn = document.getElementById('searchToggleBtn');
+  panel.classList.toggle('show');
+  btn.classList.toggle('active');
+  if (panel.classList.contains('show')) renderColorChips();
+}
+window.resetSearch = function() {
+  ['searchCategory','searchSeason','searchTaste'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('searchFav').checked = false;
+  selectedSearchColor = null; renderColorChips();
+  isSearchMode = false; searchResults = null;
+  document.getElementById('searchResultNotice').textContent = '';
+  renderGrid();
+}
+window.deleteTaste = async function(e, t) {
+  e.stopPropagation();
+  if (confirm(`「${t}」を削除しますか？`)) {
+    tastes = tastes.filter(x => x !== t);
+    await saveTastesToDB();
+    renderTasteSelect(); renderTasteTags();
+  }
+}
+window.addTaste = async function() {
+  const input = document.getElementById('newTasteInput');
+  const val = input.value.trim();
+  if (!val) return;
+  if (tastes.includes(val)) { alert('すでに存在します！'); return; }
+  tastes.push(val);
+  await saveTastesToDB();
+  input.value = ''; renderTasteSelect(); renderTasteTags();
 }
 window.filterItems = function(filter) {
   currentFilter = filter;
@@ -689,14 +729,12 @@ function sortItems(arr) {
   else if (sort === 'worn_asc') copy.sort((a, b) => (a.wornCount || 0) - (b.wornCount || 0));
   else if (sort === 'date_desc') copy.sort((a, b) => {
     if (!a.lastWornDate && !b.lastWornDate) return 0;
-    if (!a.lastWornDate) return 1;
-    if (!b.lastWornDate) return -1;
+    if (!a.lastWornDate) return 1; if (!b.lastWornDate) return -1;
     return b.lastWornDate.localeCompare(a.lastWornDate);
   });
   else if (sort === 'date_asc') copy.sort((a, b) => {
     if (!a.lastWornDate && !b.lastWornDate) return 0;
-    if (!a.lastWornDate) return -1;
-    if (!b.lastWornDate) return 1;
+    if (!a.lastWornDate) return -1; if (!b.lastWornDate) return 1;
     return a.lastWornDate.localeCompare(b.lastWornDate);
   });
   return copy;
@@ -755,11 +793,10 @@ window.renderGrid = function() {
       </div>
       <div class="card-bottom">
         <div class="card-last-worn">最後に着た日<br>${lastDate}</div>
-        <button class="card-wear-btn ${wornToday ? 'disabled' : ''}"
-          onclick="${wornToday ? '' : `wearItem('${item.id}')`}"
-          title="${wornToday ? '今日はもう記録済みです' : '今日着たら押してね'}">
+        <button class="card-wear-btn ${wornToday ? 'worn-today' : ''}" onclick="wearItem('${item.id}')"
+          title="${wornToday ? 'もう一度タップで取消' : '今日着たら押してね'}">
           <span class="card-wear-count">${wornDisplay}</span>
-          <span class="card-wear-label">着用回数</span>
+          <span class="card-wear-label">${wornToday ? '取消可' : '着用回数'}</span>
         </button>
       </div>
     </div>`;
