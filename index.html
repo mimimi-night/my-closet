@@ -39,18 +39,114 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   cursor: pointer;
 }
 .header-btn.active { background: #c9a96e; color: #111; }
-.add-btn {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
+.header-btn.logout {
+  border-color: #ff6b6b44;
+  color: #ff6b6b;
+}
+
+/* ログイン画面 */
+.login-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 24px;
+}
+.login-box {
+  background: #222;
+  border-radius: 20px;
+  padding: 32px 24px;
+  width: 100%;
+  max-width: 360px;
+  border: 1px solid #c9a96e22;
+}
+.login-box h2 {
+  color: #c9a96e;
+  font-size: 18px;
+  letter-spacing: 2px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+.login-input {
+  width: 100%;
+  padding: 12px 14px;
+  background: #333;
+  border: 1px solid #c9a96e44;
+  border-radius: 10px;
+  color: #f0e6d3;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.login-btn.email {
   background: #c9a96e;
   color: #111;
-  border: none;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 28px;
+}
+.login-btn.google {
+  background: #fff;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.login-divider {
+  text-align: center;
+  color: #555;
+  font-size: 12px;
+  margin: 12px 0;
+}
+.login-switch {
+  text-align: center;
+  font-size: 12px;
+  color: #888;
+  margin-top: 16px;
   cursor: pointer;
+}
+.login-switch span { color: #c9a96e; text-decoration: underline; }
+.login-error {
+  color: #ff6b6b;
+  font-size: 12px;
+  text-align: center;
+  margin-bottom: 10px;
+  min-height: 18px;
+}
+
+/* ローディング */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  flex-direction: column;
+  gap: 16px;
+}
+.loading-spinner {
+  width: 40px; height: 40px;
+  border: 3px solid #c9a96e44;
+  border-top: 3px solid #c9a96e;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.add-btn {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  background: #c9a96e; color: #111;
+  border: none; border-radius: 50%;
+  width: 60px; height: 60px;
+  font-size: 28px; cursor: pointer;
   box-shadow: 0 4px 16px rgba(0,0,0,0.4);
   z-index: 100;
 }
@@ -67,8 +163,7 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
 .modal.show { display: flex; }
 .modal-content {
   background: #222;
-  width: 100%;
-  max-width: 500px;
+  width: 100%; max-width: 500px;
   border-radius: 20px 20px 0 0;
   padding: 24px;
   max-height: 90vh;
@@ -78,10 +173,8 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
 .photo-buttons { display: flex; gap: 10px; margin-bottom: 12px; }
 .photo-btn {
   flex: 1; padding: 12px;
-  background: #333;
-  border: 1px solid #c9a96e44;
-  border-radius: 10px;
-  color: #f0e6d3;
+  background: #333; border: 1px solid #c9a96e44;
+  border-radius: 10px; color: #f0e6d3;
   font-size: 13px; cursor: pointer; text-align: center;
 }
 .photo-hint {
@@ -90,8 +183,7 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
 }
 .photo-preview {
   width: 100%; height: 200px;
-  background: #333;
-  border: 2px dashed #c9a96e44;
+  background: #333; border: 2px dashed #c9a96e44;
   border-radius: 12px;
   display: flex; justify-content: center; align-items: center;
   margin-bottom: 16px; overflow: hidden; position: relative;
@@ -109,7 +201,7 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   font-size: 10px; white-space: nowrap; padding: 2px 6px; border-radius: 4px;
 }
 input[type="file"] { display: none; }
-select, input[type="text"] {
+select, input[type="text"], input[type="email"], input[type="password"] {
   width: 100%; padding: 10px 14px;
   background: #333; border: 1px solid #c9a96e44;
   border-radius: 10px; color: #f0e6d3;
@@ -173,14 +265,12 @@ select option { background: #333; }
   width: 32px; height: 32px; border-radius: 50%;
   border: 2px solid transparent;
   transition: transform 0.15s, border 0.15s;
-  flex-shrink: 0;
 }
 .color-chip.selected {
   border: 2px solid #fff;
   transform: scale(1.2);
   box-shadow: 0 0 6px rgba(255,255,255,0.4);
 }
-.color-chip-name { font-size: 9px; color: #888; }
 .color-clear-btn {
   padding: 4px 10px; background: transparent;
   border: 1px solid #c9a96e44; border-radius: 12px;
@@ -204,10 +294,8 @@ select option { background: #333; }
   display: flex; align-items: center; gap: 6px;
 }
 .color-notice-bar {
-  display: inline-block; width: 18px; height: 4px;
-  border-radius: 2px;
-  background: linear-gradient(to right, #e74c3c, #3498db, #2ecc71);
-  flex-shrink: 0;
+  display: inline-block; width: 18px; height: 4px; border-radius: 2px;
+  background: linear-gradient(to right, #e74c3c, #3498db, #2ecc71); flex-shrink: 0;
 }
 .grid {
   display: grid; grid-template-columns: repeat(2, 1fr);
@@ -218,7 +306,7 @@ select option { background: #333; }
   overflow: hidden; border: 1px solid #c9a96e22; position: relative;
 }
 .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
-.card-info { display: flex; padding: 0; position: relative; }
+.card-info { display: flex; padding: 0; }
 .card-color-bar { width: 3px; flex-shrink: 0; }
 .card-info-inner { padding: 10px; flex: 1; }
 .card-category { font-size: 11px; color: #c9a96e; letter-spacing: 1px; margin-bottom: 2px; }
@@ -234,126 +322,292 @@ select option { background: #333; }
   text-align: center; padding: 60px 20px;
   color: #555; font-size: 14px; grid-column: span 2;
 }
+.user-info {
+  font-size: 11px; color: #888; text-align: center; margin-top: 6px;
+}
+.saving-indicator {
+  position: fixed; top: 80px; right: 16px;
+  background: #c9a96e; color: #111;
+  padding: 6px 12px; border-radius: 20px;
+  font-size: 11px; font-weight: bold;
+  z-index: 300; display: none;
+}
 </style>
 </head>
 <body>
 
-<header>
-  <h1>あなたクローゼット</h1>
-  <div class="header-buttons">
-    <button class="header-btn" id="searchToggleBtn" onclick="toggleSearch()">🔍 詳細検索</button>
-  </div>
-</header>
+<div class="saving-indicator" id="savingIndicator">保存中...</div>
 
-<div class="search-panel" id="searchPanel">
-  <h3>詳細検索</h3>
-  <div class="search-row">
-    <select class="search-select" id="searchCategory">
-      <option value="">カテゴリ：全て</option>
-      <option>トップス</option>
-      <option>ボトムス</option>
-      <option>ワンピース</option>
-      <option>アウター</option>
-      <option>シューズ</option>
-    </select>
-    <select class="search-select" id="searchSeason">
-      <option value="">季節：全て</option>
-      <option>春夏</option>
-      <option>秋冬</option>
-      <option>オールシーズン</option>
-    </select>
-  </div>
-  <select class="search-select" id="searchTaste" style="width:100%;margin-bottom:12px;">
-    <option value="">テイスト：全て</option>
-  </select>
-
-  <div class="color-search-section">
-    <div class="color-search-label">メインカラーで絞り込む（タップして選択）</div>
-    <div class="color-chips-row" id="colorChips"></div>
-  </div>
-
-  <div class="search-btns">
-    <button class="btn-search-reset" onclick="resetSearch()">リセット</button>
-    <button class="btn-search" onclick="doSearch()">検索する</button>
-  </div>
+<!-- ローディング画面 -->
+<div class="loading" id="loadingScreen">
+  <div class="loading-spinner"></div>
+  <div style="color:#888;font-size:13px;">読み込み中...</div>
 </div>
 
-<div class="search-result-notice" id="searchResultNotice"></div>
+<!-- ログイン画面 -->
+<div class="login-screen" id="loginScreen" style="display:none;">
+  <div class="login-box">
+    <h2>あなたクローゼット</h2>
+    <div class="login-error" id="loginError"></div>
 
-<div class="filter-row">
-  <button class="filter-btn active" onclick="filterItems('全て')">全て</button>
-  <button class="filter-btn" onclick="filterItems('トップス')">トップス</button>
-  <button class="filter-btn" onclick="filterItems('ボトムス')">ボトムス</button>
-  <button class="filter-btn" onclick="filterItems('ワンピース')">ワンピース</button>
-  <button class="filter-btn" onclick="filterItems('アウター')">アウター</button>
-  <button class="filter-btn" onclick="filterItems('シューズ')">シューズ</button>
-</div>
-
-<div class="color-notice">
-  <span class="color-notice-bar"></span>
-  カード左端のバーは、写真から自動診断したメインカラーです
-</div>
-
-<div class="grid" id="grid"></div>
-<button class="add-btn" onclick="openModal()">＋</button>
-
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <h2>服を追加する</h2>
-    <div class="photo-buttons">
-      <div class="photo-btn" onclick="document.getElementById('cameraInput').click()">📷 カメラで撮影</div>
-      <div class="photo-btn" onclick="document.getElementById('albumInput').click()">🖼️ アルバムから選ぶ</div>
+    <div id="loginForm">
+      <input type="email" class="login-input" id="loginEmail" placeholder="メールアドレス">
+      <input type="password" class="login-input" id="loginPassword" placeholder="パスワード">
+      <button class="login-btn email" onclick="loginWithEmail()">ログイン</button>
+      <div class="login-divider">または</div>
+      <button class="login-btn google" onclick="loginWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A353" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
+        Googleでログイン
+      </button>
+      <div class="login-switch">アカウントがない方は<span onclick="showRegister()">新規登録</span></div>
     </div>
-    <p class="photo-hint">⚠ 色の自動分析は写真中央のアイテムを基準にします。<br>アイテムが中央に映るように撮影してください。</p>
-    <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="previewPhoto(event)">
-    <input type="file" id="albumInput" accept="image/*" onchange="previewPhoto(event)">
-    <div class="photo-preview" id="photoPreview">
-      <span>写真を選んでください</span>
+
+    <div id="registerForm" style="display:none;">
+      <input type="email" class="login-input" id="registerEmail" placeholder="メールアドレス">
+      <input type="password" class="login-input" id="registerPassword" placeholder="パスワード（6文字以上）">
+      <button class="login-btn email" onclick="registerWithEmail()">新規登録</button>
+      <div class="login-divider">または</div>
+      <button class="login-btn google" onclick="loginWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A353" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
+        Googleで登録
+      </button>
+      <div class="login-switch">すでにアカウントをお持ちの方は<span onclick="showLogin()">ログイン</span></div>
     </div>
-    <select id="category">
-      <option value="">カテゴリを選ぶ</option>
-      <option>トップス</option>
-      <option>ボトムス</option>
-      <option>ワンピース</option>
-      <option>アウター</option>
-      <option>シューズ</option>
+  </div>
+</div>
+
+<!-- メイン画面 -->
+<div id="mainScreen" style="display:none;">
+  <header>
+    <h1>あなたクローゼット</h1>
+    <div class="user-info" id="userInfo"></div>
+    <div class="header-buttons">
+      <button class="header-btn" id="searchToggleBtn" onclick="toggleSearch()">🔍 詳細検索</button>
+      <button class="header-btn logout" onclick="logout()">ログアウト</button>
+    </div>
+  </header>
+
+  <div class="search-panel" id="searchPanel">
+    <h3>詳細検索</h3>
+    <div class="search-row">
+      <select class="search-select" id="searchCategory">
+        <option value="">カテゴリ：全て</option>
+        <option>トップス</option><option>ボトムス</option>
+        <option>ワンピース</option><option>アウター</option><option>シューズ</option>
+      </select>
+      <select class="search-select" id="searchSeason">
+        <option value="">季節：全て</option>
+        <option>春夏</option><option>秋冬</option><option>オールシーズン</option>
+      </select>
+    </div>
+    <select class="search-select" id="searchTaste" style="width:100%;margin-bottom:12px;">
+      <option value="">テイスト：全て</option>
     </select>
-    <select id="season">
-      <option value="">季節を選ぶ</option>
-      <option>春夏</option>
-      <option>秋冬</option>
-      <option>オールシーズン</option>
-    </select>
-    <select id="tasteSelect">
-      <option value="">テイストを選ぶ</option>
-    </select>
-    <div class="taste-section">
-      <label>テイストを追加・削除</label>
-      <div class="taste-tags" id="tasteTags"></div>
-      <div class="add-taste-row">
-        <input type="text" id="newTasteInput" placeholder="テイストを追加">
-        <button onclick="addTaste()">追加</button>
+    <div class="color-search-section">
+      <div class="color-search-label">メインカラーで絞り込む</div>
+      <div class="color-chips-row" id="colorChips"></div>
+    </div>
+    <div class="search-btns">
+      <button class="btn-search-reset" onclick="resetSearch()">リセット</button>
+      <button class="btn-search" onclick="doSearch()">検索する</button>
+    </div>
+  </div>
+
+  <div class="search-result-notice" id="searchResultNotice"></div>
+
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filterItems('全て')">全て</button>
+    <button class="filter-btn" onclick="filterItems('トップス')">トップス</button>
+    <button class="filter-btn" onclick="filterItems('ボトムス')">ボトムス</button>
+    <button class="filter-btn" onclick="filterItems('ワンピース')">ワンピース</button>
+    <button class="filter-btn" onclick="filterItems('アウター')">アウター</button>
+    <button class="filter-btn" onclick="filterItems('シューズ')">シューズ</button>
+  </div>
+
+  <div class="color-notice">
+    <span class="color-notice-bar"></span>
+    カード左端のバーは、写真から自動診断したメインカラーです
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <button class="add-btn" onclick="openModal()">＋</button>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h2>服を追加する</h2>
+      <div class="photo-buttons">
+        <div class="photo-btn" onclick="document.getElementById('cameraInput').click()">📷 カメラで撮影</div>
+        <div class="photo-btn" onclick="document.getElementById('albumInput').click()">🖼️ アルバムから選ぶ</div>
+      </div>
+      <p class="photo-hint">⚠ 色の自動分析は写真中央のアイテムを基準にします。<br>アイテムが中央に映るように撮影してください。</p>
+      <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="previewPhoto(event)">
+      <input type="file" id="albumInput" accept="image/*" onchange="previewPhoto(event)">
+      <div class="photo-preview" id="photoPreview"><span>写真を選んでください</span></div>
+      <select id="category">
+        <option value="">カテゴリを選ぶ</option>
+        <option>トップス</option><option>ボトムス</option>
+        <option>ワンピース</option><option>アウター</option><option>シューズ</option>
+      </select>
+      <select id="season">
+        <option value="">季節を選ぶ</option>
+        <option>春夏</option><option>秋冬</option><option>オールシーズン</option>
+      </select>
+      <select id="tasteSelect"><option value="">テイストを選ぶ</option></select>
+      <div class="taste-section">
+        <label>テイストを追加・削除</label>
+        <div class="taste-tags" id="tasteTags"></div>
+        <div class="add-taste-row">
+          <input type="text" id="newTasteInput" placeholder="テイストを追加">
+          <button onclick="addTaste()">追加</button>
+        </div>
+      </div>
+      <input type="text" id="memo" placeholder="メモ（任意）">
+      <div class="btn-row">
+        <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
+        <button class="btn-save" onclick="saveItem()">保存する</button>
       </div>
     </div>
-    <input type="text" id="memo" placeholder="メモ（任意）">
-    <div class="btn-row">
-      <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
-      <button class="btn-save" onclick="saveItem()">保存する</button>
-    </div>
   </div>
 </div>
 
-<script>
-let items = JSON.parse(localStorage.getItem('closet_items') || '[]');
-let tastes = JSON.parse(localStorage.getItem('closet_tastes') || '["カジュアル","フェミニン","ストリート","フォーマル"]');
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDoQlri0Yl5CWOWROVz3lcpV-m5RZtWEn4",
+  authDomain: "my-closet-21d11.firebaseapp.com",
+  projectId: "my-closet-21d11",
+  storageBucket: "my-closet-21d11.firebasestorage.app",
+  messagingSenderId: "709312024370",
+  appId: "1:709312024370:web:2a9cca87b06a2344e2112b",
+  measurementId: "G-S43KFSX7LH"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
+
+let currentUser = null;
+let items = [];
+let tastes = ["カジュアル","フェミニン","ストリート","フォーマル"];
 let currentFilter = '全て';
 let currentPhoto = null;
 let currentColor = null;
 let isSearchMode = false;
 let searchResults = null;
-let selectedSearchColor = null; // rgb文字列
+let selectedSearchColor = null;
 
-// 2つのrgb値が「似てるか」を判定（色差が閾値以内なら同じ色とみなす）
+// 画面切替
+function showLoading() {
+  document.getElementById('loadingScreen').style.display = 'flex';
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('mainScreen').style.display = 'none';
+}
+function showLogin() {
+  document.getElementById('loadingScreen').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('mainScreen').style.display = 'none';
+  document.getElementById('loginForm').style.display = 'block';
+  document.getElementById('registerForm').style.display = 'none';
+}
+function showMain() {
+  document.getElementById('loadingScreen').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('mainScreen').style.display = 'block';
+}
+
+window.showRegister = function() {
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('registerForm').style.display = 'block';
+  document.getElementById('loginError').textContent = '';
+}
+window.showLogin = function() {
+  document.getElementById('loginForm').style.display = 'block';
+  document.getElementById('registerForm').style.display = 'none';
+  document.getElementById('loginError').textContent = '';
+}
+
+// 認証
+window.loginWithEmail = async function() {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch(e) {
+    document.getElementById('loginError').textContent = 'メールアドレスまたはパスワードが違います';
+  }
+}
+
+window.registerWithEmail = async function() {
+  const email = document.getElementById('registerEmail').value;
+  const password = document.getElementById('registerPassword').value;
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+  } catch(e) {
+    document.getElementById('loginError').textContent = e.code === 'auth/email-already-in-use' ? 'このメールアドレスは既に使われています' : 'パスワードは6文字以上にしてください';
+  }
+}
+
+window.loginWithGoogle = async function() {
+  try {
+    await signInWithPopup(auth, googleProvider);
+  } catch(e) {
+    document.getElementById('loginError').textContent = 'Googleログインに失敗しました';
+  }
+}
+
+window.logout = async function() {
+  if (confirm('ログアウトしますか？')) {
+    await signOut(auth);
+  }
+}
+
+// ログイン状態監視
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+    document.getElementById('userInfo').textContent = user.displayName || user.email;
+    showMain();
+    await loadItems();
+    await loadTastes();
+    renderTasteSelect();
+    renderTasteTags();
+    renderGrid();
+  } else {
+    currentUser = null;
+    items = [];
+    showLogin();
+  }
+});
+
+// Firestoreからデータ読み込み
+async function loadItems() {
+  if (!currentUser) return;
+  const q = query(collection(db, 'users', currentUser.uid, 'items'), orderBy('createdAt', 'desc'));
+  const snap = await getDocs(q);
+  items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+async function loadTastes() {
+  if (!currentUser) return;
+  const snap = await getDocs(collection(db, 'users', currentUser.uid, 'tastes'));
+  if (!snap.empty) {
+    tastes = snap.docs.map(d => d.data().name);
+  }
+}
+
+async function saveTastesToDB() {
+  if (!currentUser) return;
+  // テイストを全削除して再保存
+  const snap = await getDocs(collection(db, 'users', currentUser.uid, 'tastes'));
+  for (const d of snap.docs) await deleteDoc(doc(db, 'users', currentUser.uid, 'tastes', d.id));
+  for (const t of tastes) await addDoc(collection(db, 'users', currentUser.uid, 'tastes'), { name: t });
+}
+
+// カラー距離
 function colorDistance(c1, c2) {
   const parse = s => { const m = s.match(/rgb\((\d+),(\d+),(\d+)\)/); return m ? [+m[1],+m[2],+m[3]] : null; };
   const a = parse(c1), b = parse(c2);
@@ -361,61 +615,44 @@ function colorDistance(c1, c2) {
   return Math.sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2 + (a[2]-b[2])**2);
 }
 
-// 保存済みアイテムからユニークな代表色を抽出（似てる色はまとめる）
 function getUniqueColors() {
   const colors = items.filter(i => i.color).map(i => i.color);
   const unique = [];
-  colors.forEach(c => {
-    const near = unique.find(u => colorDistance(u, c) < 40);
-    if (!near) unique.push(c);
-  });
+  colors.forEach(c => { if (!unique.find(u => colorDistance(u, c) < 40)) unique.push(c); });
   return unique;
 }
 
-function saveTastes() {
-  localStorage.setItem('closet_tastes', JSON.stringify(tastes));
-}
-
-function renderTasteSelect() {
+window.renderTasteSelect = function() {
   const sel = document.getElementById('tasteSelect');
-  sel.innerHTML = '<option value="">テイストを選ぶ</option>' +
-    tastes.map(t => `<option value="${t}">${t}</option>`).join('');
+  sel.innerHTML = '<option value="">テイストを選ぶ</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
   const searchSel = document.getElementById('searchTaste');
-  searchSel.innerHTML = '<option value="">テイスト：全て</option>' +
-    tastes.map(t => `<option value="${t}">${t}</option>`).join('');
+  searchSel.innerHTML = '<option value="">テイスト：全て</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
 }
 
-function renderTasteTags() {
+window.renderTasteTags = function() {
   const container = document.getElementById('tasteTags');
   container.innerHTML = tastes.map(t => `
-    <button class="taste-tag" onclick="deleteTaste(event,'${t}')">
-      ${t} <span style="font-size:14px">×</span>
-    </button>
+    <button class="taste-tag" onclick="deleteTaste(event,'${t}')">${t} <span style="font-size:14px">×</span></button>
   `).join('');
 }
 
-function renderColorChips() {
+window.renderColorChips = function() {
   const container = document.getElementById('colorChips');
   const uniqueColors = getUniqueColors();
   if (uniqueColors.length === 0) {
     container.innerHTML = '<span class="no-colors-msg">服を登録するとカラーが表示されます</span>';
     return;
   }
-  container.innerHTML = uniqueColors.map((color, i) => `
+  container.innerHTML = uniqueColors.map(color => `
     <div class="color-chip-wrap" onclick="selectSearchColor('${color}')">
-      <div class="color-chip ${selectedSearchColor && colorDistance(selectedSearchColor, color) < 40 ? 'selected' : ''}"
-        style="background:${color};">
-      </div>
+      <div class="color-chip ${selectedSearchColor && colorDistance(selectedSearchColor, color) < 40 ? 'selected' : ''}" style="background:${color};"></div>
     </div>
   `).join('') + `<button class="color-clear-btn" onclick="selectSearchColor(null)">指定なし</button>`;
 }
 
-function selectSearchColor(color) {
-  selectedSearchColor = color;
-  renderColorChips();
-}
+window.selectSearchColor = function(color) { selectedSearchColor = color; renderColorChips(); }
 
-function toggleSearch() {
+window.toggleSearch = function() {
   const panel = document.getElementById('searchPanel');
   const btn = document.getElementById('searchToggleBtn');
   panel.classList.toggle('show');
@@ -423,7 +660,7 @@ function toggleSearch() {
   if (panel.classList.contains('show')) renderColorChips();
 }
 
-function doSearch() {
+window.doSearch = function() {
   const category = document.getElementById('searchCategory').value;
   const season = document.getElementById('searchSeason').value;
   const taste = document.getElementById('searchTaste').value;
@@ -431,9 +668,7 @@ function doSearch() {
     if (category && item.category !== category) return false;
     if (season && item.season !== season) return false;
     if (taste && item.taste !== taste) return false;
-    if (selectedSearchColor) {
-      if (!item.color || colorDistance(item.color, selectedSearchColor) >= 40) return false;
-    }
+    if (selectedSearchColor && (!item.color || colorDistance(item.color, selectedSearchColor) >= 40)) return false;
     return true;
   });
   isSearchMode = true;
@@ -441,49 +676,43 @@ function doSearch() {
   renderGrid();
 }
 
-function resetSearch() {
-  document.getElementById('searchCategory').value = '';
-  document.getElementById('searchSeason').value = '';
-  document.getElementById('searchTaste').value = '';
-  selectedSearchColor = null;
-  renderColorChips();
-  isSearchMode = false;
-  searchResults = null;
+window.resetSearch = function() {
+  ['searchCategory','searchSeason','searchTaste'].forEach(id => document.getElementById(id).value = '');
+  selectedSearchColor = null; renderColorChips();
+  isSearchMode = false; searchResults = null;
   document.getElementById('searchResultNotice').textContent = '';
   renderGrid();
 }
 
-function deleteTaste(e, t) {
+window.deleteTaste = async function(e, t) {
   e.stopPropagation();
   if (confirm(`「${t}」を削除しますか？`)) {
     tastes = tastes.filter(x => x !== t);
-    saveTastes(); renderTasteSelect(); renderTasteTags();
+    await saveTastesToDB();
+    renderTasteSelect(); renderTasteTags();
   }
 }
 
-function addTaste() {
+window.addTaste = async function() {
   const input = document.getElementById('newTasteInput');
   const val = input.value.trim();
   if (!val) return;
   if (tastes.includes(val)) { alert('すでに存在します！'); return; }
   tastes.push(val);
-  saveTastes(); input.value = '';
-  renderTasteSelect(); renderTasteTags();
+  await saveTastesToDB();
+  input.value = ''; renderTasteSelect(); renderTasteTags();
 }
 
-function getBrightness(r, g, b) {
-  return (r * 299 + g * 587 + b * 114) / 1000;
-}
+function getBrightness(r, g, b) { return (r*299 + g*587 + b*114) / 1000; }
 
 function extractColor(dataUrl, callback) {
   const img = new Image();
   img.onload = function() {
     const canvas = document.createElement('canvas');
-    const size = 100;
-    canvas.width = size; canvas.height = size;
+    canvas.width = canvas.height = 100;
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, img.width*0.25, img.height*0.25, img.width*0.5, img.height*0.5, 0, 0, size, size);
-    const data = ctx.getImageData(0, 0, size, size).data;
+    ctx.drawImage(img, img.width*0.25, img.height*0.25, img.width*0.5, img.height*0.5, 0, 0, 100, 100);
+    const data = ctx.getImageData(0, 0, 100, 100).data;
     let r=0, g=0, b=0, count=0;
     for (let i=0; i<data.length; i+=16) { r+=data[i]; g+=data[i+1]; b+=data[i+2]; count++; }
     r=Math.round(r/count); g=Math.round(g/count); b=Math.round(b/count);
@@ -510,7 +739,7 @@ function compressImage(file, callback) {
   reader.readAsDataURL(file);
 }
 
-function previewPhoto(e) {
+window.previewPhoto = function(e) {
   const file = e.target.files[0];
   if (!file) return;
   compressImage(file, function(compressed) {
@@ -524,19 +753,18 @@ function previewPhoto(e) {
         <img src="${compressed}">
         <div class="center-guide" style="border:2px dashed ${guideColor};">
           <span class="center-guide-label" style="color:${guideColor};background:${bgColor};">この範囲で色を分析</span>
-        </div>
-      `;
+        </div>`;
     });
   });
 }
 
-function openModal() {
+window.openModal = function() {
   currentPhoto = null; currentColor = null;
   renderTasteSelect(); renderTasteTags();
   document.getElementById('modal').classList.add('show');
 }
 
-function closeModal() {
+window.closeModal = function() {
   document.getElementById('modal').classList.remove('show');
   ['cameraInput','albumInput'].forEach(id => document.getElementById(id).value = '');
   ['category','season','tasteSelect'].forEach(id => document.getElementById(id).value = '');
@@ -546,7 +774,7 @@ function closeModal() {
   currentPhoto = null; currentColor = null;
 }
 
-function saveItem() {
+window.saveItem = async function() {
   const category = document.getElementById('category').value;
   const season = document.getElementById('season').value;
   const taste = document.getElementById('tasteSelect').value;
@@ -554,26 +782,37 @@ function saveItem() {
   if (!currentPhoto) { alert('写真を選んでください！'); return; }
   if (!category) { alert('カテゴリを選んでください！'); return; }
   if (!season) { alert('季節を選んでください！'); return; }
-  const item = { id: Date.now(), photo: currentPhoto, color: currentColor, category, season, taste, memo };
-  items.push(item);
+
+  const indicator = document.getElementById('savingIndicator');
+  indicator.style.display = 'block';
+
+  const item = {
+    photo: currentPhoto, color: currentColor,
+    category, season, taste, memo,
+    createdAt: new Date().toISOString()
+  };
+
   try {
-    localStorage.setItem('closet_items', JSON.stringify(items));
-    closeModal(); renderGrid();
+    const docRef = await addDoc(collection(db, 'users', currentUser.uid, 'items'), item);
+    items.unshift({ id: docRef.id, ...item });
+    closeModal();
+    renderGrid();
   } catch(e) {
-    alert('保存できませんでした。写真が多すぎる可能性があります。');
-    items.pop();
+    alert('保存に失敗しました。ネット接続を確認してください。');
+  } finally {
+    indicator.style.display = 'none';
   }
 }
 
-function deleteItem(id) {
+window.deleteItem = async function(id) {
   if (confirm('この服を削除しますか？')) {
+    await deleteDoc(doc(db, 'users', currentUser.uid, 'items', id));
     items = items.filter(i => i.id !== id);
-    localStorage.setItem('closet_items', JSON.stringify(items));
     if (isSearchMode) doSearch(); else renderGrid();
   }
 }
 
-function filterItems(filter) {
+window.filterItems = function(filter) {
   currentFilter = filter;
   isSearchMode = false; searchResults = null;
   document.getElementById('searchResultNotice').textContent = '';
@@ -583,7 +822,7 @@ function filterItems(filter) {
   renderGrid();
 }
 
-function renderGrid() {
+window.renderGrid = function() {
   const grid = document.getElementById('grid');
   let source = isSearchMode ? searchResults : (currentFilter === '全て' ? items : items.filter(i => i.category === currentFilter));
   if (!source || source.length === 0) {
@@ -593,7 +832,7 @@ function renderGrid() {
   grid.innerHTML = source.map(item => `
     <div class="card">
       <img src="${item.photo}" alt="${item.category}">
-      <button class="card-delete" onclick="deleteItem(${item.id})">×</button>
+      <button class="card-delete" onclick="deleteItem('${item.id}')">×</button>
       <div class="card-info">
         ${item.color ? `<div class="card-color-bar" style="background:${item.color};"></div>` : ''}
         <div class="card-info-inner">
@@ -606,9 +845,6 @@ function renderGrid() {
     </div>
   `).join('');
 }
-
-renderTasteSelect();
-renderGrid();
 </script>
 </body>
 </html>
