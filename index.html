@@ -446,7 +446,7 @@ function colorDistance(c1, c2) {
 function getUniqueColors() {
   const colors = items.filter(i => i.color).map(i => i.color);
   const unique = [];
-  colors.forEach(c => { if (!unique.find(u => colorDistance(u, c) < 120)) unique.push(c); });
+  colors.forEach(c => { if (!unique.find(u => colorDistance(u, c) < 150)) unique.push(c); });
   return unique;
 }
 
