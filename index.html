@@ -164,7 +164,7 @@ select option { background: #333; }
 .card-fav.active { background: rgba(180,80,100,0.7); border-color: rgba(255,150,170,0.4); }
 .card-bottom { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px 8px; border-top: 1px solid #c9a96e11; }
 .card-last-worn { font-size: 9px; color: #666; line-height: 1.4; }
-.card-wear-btn { display: flex; flex-direction: column; align-items: center; gap: 2px; background: transparent; border: 1px solid #c9a96e33; border-radius: 8px; padding: 4px 8px; cursor: pointer; transition: all 0.2s; }
+.card-wear-btn { display: flex; flex-direction: row; align-items: center; gap: 5px; background: transparent; border: 1px solid #c9a96e33; border-radius: 8px; padding: 4px 8px; cursor: pointer; transition: all 0.2s; }
 .card-wear-btn:hover { background: #c9a96e11; }
 .card-wear-btn.disabled { opacity: 0.4; cursor: not-allowed; }
 .card-wear-btn.disabled:hover { background: transparent; }
@@ -728,7 +728,7 @@ window.renderGrid = function() {
   grid.innerHTML = source.map(item => {
     const worn = item.wornCount || 0;
     const wornToday = item.lastWornDate === today;
-    const wornDisplay = worn === 0 ? '－' : `${worn}`;
+    const wornDisplay = worn === 0 ? '０' : `${worn}`;
     const lastDate = item.lastWornDate ? item.lastWornDate.replace(/-/g, '/') : '未着用';
     return `
     <div class="card">
