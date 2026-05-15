@@ -101,7 +101,7 @@ select option { background: #333; }
 .card-fav.active { background: rgba(180,80,100,0.7); border-color: rgba(255,150,170,0.4); }
 .card-bottom { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px 8px; border-top: 1px solid #c9a96e11; }
 .card-last-worn { font-size: 9px; color: #666; line-height: 1.4; }
-.card-wear-btn { display: flex; flex-direction: row; align-items: center; gap: 5px; background: transparent; border: 1px solid #c9a96e33; border-radius: 8px; padding: 4px 8px; cursor: pointer; transition: background 0.2s; min-width: 70px; justify-content: center; }
+.card-wear-btn { display: flex; flex-direction: row; align-items: center; gap: 5px; background: transparent; border: 1px solid #c9a96e33; border-radius: 8px; padding: 4px 8px; cursor: pointer; transition: background 0.2s; min-width: 80px; width: 80px; justify-content: center; }
 .card-wear-btn:hover { background: #c9a96e11; }
 .card-wear-btn.worn-today { border-color: #c9a96e88; background: #c9a96e11; }
 .card-wear-count { font-size: 13px; font-weight: bold; color: #c9a96e; line-height: 1; }
@@ -796,8 +796,8 @@ window.renderGrid = function() {
         <button class="card-wear-btn ${wornToday ? 'worn-today' : ''}" onclick="wearItem('${item.id}')"
           title="${wornToday ? 'もう一度タップで取消' : '今日着たら押してね'}">
           <span class="card-wear-count">${wornDisplay}</span>
-          <span class="card-wear-label">${wornToday ? '取消可' : '着用回数'}</span>
-        </button>
+<span class="card-wear-label">着用回数</span>
+</button>
       </div>
     </div>`;
   }).join('');
