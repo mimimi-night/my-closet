@@ -28,6 +28,7 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   justify-content: center;
   gap: 10px;
   margin-top: 10px;
+  flex-wrap: wrap;
 }
 .header-btn {
   padding: 6px 16px;
@@ -39,20 +40,34 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   cursor: pointer;
 }
 .header-btn.active { background: #c9a96e; color: #111; }
-.header-btn.logout {
-  border-color: #ff6b6b44;
-  color: #ff6b6b;
-}
+.header-btn.logout { border-color: #ff6b6b44; color: #ff6b6b; }
+.header-btn.login-btn-header { border-color: #c9a96e; color: #c9a96e; }
 
-/* ログイン画面 */
-.login-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 80vh;
-  padding: 24px;
+/* ゲストバナー */
+.guest-banner {
+  background: #1e1a0e;
+  border-bottom: 1px solid #c9a96e33;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: #c9a96e88;
+  text-align: center;
+  line-height: 1.6;
 }
+.guest-banner strong { color: #c9a96e; }
+
+/* ログインモーダル */
+.login-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.85);
+  z-index: 300;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.login-modal.show { display: flex; }
 .login-box {
   background: #222;
   border-radius: 20px;
@@ -60,6 +75,7 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   width: 100%;
   max-width: 360px;
   border: 1px solid #c9a96e22;
+  position: relative;
 }
 .login-box h2 {
   color: #c9a96e;
@@ -67,6 +83,15 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   letter-spacing: 2px;
   text-align: center;
   margin-bottom: 24px;
+}
+.login-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 20px;
+  cursor: pointer;
 }
 .login-input {
   width: 100%;
@@ -88,48 +113,24 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   cursor: pointer;
   margin-bottom: 10px;
 }
-.login-btn.email {
-  background: #c9a96e;
-  color: #111;
-}
+.login-btn.email { background: #c9a96e; color: #111; }
 .login-btn.google {
-  background: #fff;
-  color: #333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+  background: #fff; color: #333;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
 }
-.login-divider {
-  text-align: center;
-  color: #555;
-  font-size: 12px;
-  margin: 12px 0;
-}
-.login-switch {
-  text-align: center;
-  font-size: 12px;
-  color: #888;
-  margin-top: 16px;
-  cursor: pointer;
-}
-.login-switch span { color: #c9a96e; text-decoration: underline; }
-.login-error {
-  color: #ff6b6b;
-  font-size: 12px;
-  text-align: center;
-  margin-bottom: 10px;
-  min-height: 18px;
-}
+.login-divider { text-align: center; color: #555; font-size: 12px; margin: 12px 0; }
+.login-switch { text-align: center; font-size: 12px; color: #888; margin-top: 12px; }
+.login-switch span { color: #c9a96e; text-decoration: underline; cursor: pointer; }
+.login-error { color: #ff6b6b; font-size: 12px; text-align: center; margin-bottom: 10px; min-height: 18px; }
+.forgot-password { text-align: center; font-size: 11px; color: #888; margin-top: 8px; cursor: pointer; }
+.forgot-password span { color: #c9a96e; text-decoration: underline; }
+.private-mode-notice { font-size: 10px; color: #666; text-align: center; margin-top: 6px; }
+.reset-success { color: #2ecc71; font-size: 12px; text-align: center; margin-bottom: 10px; }
 
 /* ローディング */
 .loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 80vh;
-  flex-direction: column;
-  gap: 16px;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 80vh; flex-direction: column; gap: 16px;
 }
 .loading-spinner {
   width: 40px; height: 40px;
@@ -141,71 +142,52 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .add-btn {
-  position: fixed;
-  bottom: 24px; right: 24px;
+  position: fixed; bottom: 24px; right: 24px;
   background: #c9a96e; color: #111;
   border: none; border-radius: 50%;
   width: 60px; height: 60px;
   font-size: 28px; cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-  z-index: 100;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4); z-index: 100;
 }
 .modal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.8);
-  z-index: 200;
-  justify-content: center;
-  align-items: flex-end;
+  display: none; position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.8); z-index: 200;
+  justify-content: center; align-items: flex-end;
 }
 .modal.show { display: flex; }
 .modal-content {
-  background: #222;
-  width: 100%; max-width: 500px;
-  border-radius: 20px 20px 0 0;
-  padding: 24px;
-  max-height: 90vh;
-  overflow-y: auto;
+  background: #222; width: 100%; max-width: 500px;
+  border-radius: 20px 20px 0 0; padding: 24px;
+  max-height: 90vh; overflow-y: auto;
 }
 .modal-content h2 { color: #c9a96e; margin-bottom: 16px; font-size: 16px; letter-spacing: 2px; }
 .photo-buttons { display: flex; gap: 10px; margin-bottom: 12px; }
 .photo-btn {
-  flex: 1; padding: 12px;
-  background: #333; border: 1px solid #c9a96e44;
-  border-radius: 10px; color: #f0e6d3;
-  font-size: 13px; cursor: pointer; text-align: center;
+  flex: 1; padding: 12px; background: #333;
+  border: 1px solid #c9a96e44; border-radius: 10px;
+  color: #f0e6d3; font-size: 13px; cursor: pointer; text-align: center;
 }
-.photo-hint {
-  font-size: 11px; color: #888;
-  text-align: center; margin-bottom: 12px; line-height: 1.5;
-}
+.photo-hint { font-size: 11px; color: #888; text-align: center; margin-bottom: 12px; line-height: 1.5; }
 .photo-preview {
-  width: 100%; height: 200px;
-  background: #333; border: 2px dashed #c9a96e44;
-  border-radius: 12px;
+  width: 100%; height: 200px; background: #333;
+  border: 2px dashed #c9a96e44; border-radius: 12px;
   display: flex; justify-content: center; align-items: center;
   margin-bottom: 16px; overflow: hidden; position: relative;
 }
 .photo-preview img { width: 100%; height: 100%; object-fit: cover; }
 .photo-preview span { color: #888; font-size: 14px; }
 .center-guide {
-  position: absolute;
-  top: 25%; left: 25%;
-  width: 50%; height: 50%;
+  position: absolute; top: 25%; left: 25%; width: 50%; height: 50%;
   border-radius: 8px; pointer-events: none;
   display: flex; justify-content: center; align-items: flex-end; padding-bottom: 6px;
 }
-.center-guide-label {
-  font-size: 10px; white-space: nowrap; padding: 2px 6px; border-radius: 4px;
-}
+.center-guide-label { font-size: 10px; white-space: nowrap; padding: 2px 6px; border-radius: 4px; }
 input[type="file"] { display: none; }
 select, input[type="text"], input[type="email"], input[type="password"] {
-  width: 100%; padding: 10px 14px;
-  background: #333; border: 1px solid #c9a96e44;
-  border-radius: 10px; color: #f0e6d3;
-  font-size: 14px; margin-bottom: 12px;
+  width: 100%; padding: 10px 14px; background: #333;
+  border: 1px solid #c9a96e44; border-radius: 10px;
+  color: #f0e6d3; font-size: 14px; margin-bottom: 12px;
 }
 select option { background: #333; }
 .taste-section { margin-bottom: 12px; }
@@ -232,9 +214,7 @@ select option { background: #333; }
   flex: 1; padding: 12px; background: #333; color: #f0e6d3;
   border: none; border-radius: 10px; font-size: 15px; cursor: pointer;
 }
-.filter-row {
-  display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto;
-}
+.filter-row { display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; }
 .filter-btn {
   padding: 6px 14px; border-radius: 20px;
   border: 1px solid #c9a96e44; background: transparent;
@@ -255,22 +235,13 @@ select option { background: #333; }
 }
 .color-search-section { margin-bottom: 12px; }
 .color-search-label { font-size: 11px; color: #c9a96e; margin-bottom: 10px; }
-.color-chips-row {
-  display: flex; gap: 10px; flex-wrap: wrap; align-items: center; padding-bottom: 8px;
-}
-.color-chip-wrap {
-  display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer;
-}
+.color-chips-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; padding-bottom: 8px; }
+.color-chip-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
 .color-chip {
   width: 32px; height: 32px; border-radius: 50%;
-  border: 2px solid transparent;
-  transition: transform 0.15s, border 0.15s;
+  border: 2px solid transparent; transition: transform 0.15s, border 0.15s;
 }
-.color-chip.selected {
-  border: 2px solid #fff;
-  transform: scale(1.2);
-  box-shadow: 0 0 6px rgba(255,255,255,0.4);
-}
+.color-chip.selected { border: 2px solid #fff; transform: scale(1.2); box-shadow: 0 0 6px rgba(255,255,255,0.4); }
 .color-clear-btn {
   padding: 4px 10px; background: transparent;
   border: 1px solid #c9a96e44; border-radius: 12px;
@@ -286,9 +257,7 @@ select option { background: #333; }
   flex: 1; padding: 10px; background: #333; color: #888;
   border: none; border-radius: 8px; font-size: 13px; cursor: pointer;
 }
-.search-result-notice {
-  font-size: 11px; color: #c9a96e88; padding: 6px 16px 0;
-}
+.search-result-notice { font-size: 11px; color: #c9a96e88; padding: 6px 16px 0; }
 .color-notice {
   font-size: 11px; color: #888; padding: 0 16px 10px;
   display: flex; align-items: center; gap: 6px;
@@ -297,10 +266,7 @@ select option { background: #333; }
   display: inline-block; width: 18px; height: 4px; border-radius: 2px;
   background: linear-gradient(to right, #e74c3c, #3498db, #2ecc71); flex-shrink: 0;
 }
-.grid {
-  display: grid; grid-template-columns: repeat(2, 1fr);
-  gap: 12px; padding: 16px;
-}
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; }
 .card {
   background: #222; border-radius: 12px;
   overflow: hidden; border: 1px solid #c9a96e22; position: relative;
@@ -318,19 +284,13 @@ select option { background: #333; }
   width: 28px; height: 28px; color: white; font-size: 14px;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
 }
-.empty {
-  text-align: center; padding: 60px 20px;
-  color: #555; font-size: 14px; grid-column: span 2;
-}
-.user-info {
-  font-size: 11px; color: #888; text-align: center; margin-top: 6px;
-}
+.empty { text-align: center; padding: 60px 20px; color: #555; font-size: 14px; grid-column: span 2; }
+.user-info { font-size: 11px; color: #888; text-align: center; margin-top: 4px; }
 .saving-indicator {
   position: fixed; top: 80px; right: 16px;
   background: #c9a96e; color: #111;
   padding: 6px 12px; border-radius: 20px;
-  font-size: 11px; font-weight: bold;
-  z-index: 300; display: none;
+  font-size: 11px; font-weight: bold; z-index: 300; display: none;
 }
 </style>
 </head>
@@ -338,30 +298,36 @@ select option { background: #333; }
 
 <div class="saving-indicator" id="savingIndicator">保存中...</div>
 
-<!-- ローディング画面 -->
+<!-- ローディング -->
 <div class="loading" id="loadingScreen">
   <div class="loading-spinner"></div>
   <div style="color:#888;font-size:13px;">読み込み中...</div>
 </div>
 
-<!-- ログイン画面 -->
-<div class="login-screen" id="loginScreen" style="display:none;">
+<!-- ログインモーダル -->
+<div class="login-modal" id="loginModal">
   <div class="login-box">
+    <button class="login-close" onclick="closeLoginModal()">×</button>
     <h2>あなたクローゼット</h2>
     <div class="login-error" id="loginError"></div>
+    <div class="reset-success" id="resetSuccess"></div>
 
+    <!-- ログインフォーム -->
     <div id="loginForm">
       <input type="email" class="login-input" id="loginEmail" placeholder="メールアドレス">
       <input type="password" class="login-input" id="loginPassword" placeholder="パスワード">
       <button class="login-btn email" onclick="loginWithEmail()">ログイン</button>
+      <div class="forgot-password" onclick="showReset()">パスワードを忘れた方は<span>こちら</span></div>
       <div class="login-divider">または</div>
       <button class="login-btn google" onclick="loginWithGoogle()">
         <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A353" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
         Googleでログイン
       </button>
+      <div class="private-mode-notice">⚠ プライベートモードではGoogleログインがうまくいかない場合があります</div>
       <div class="login-switch">アカウントがない方は<span onclick="showRegister()">新規登録</span></div>
     </div>
 
+    <!-- 新規登録フォーム -->
     <div id="registerForm" style="display:none;">
       <input type="email" class="login-input" id="registerEmail" placeholder="メールアドレス">
       <input type="password" class="login-input" id="registerPassword" placeholder="パスワード（6文字以上）">
@@ -369,9 +335,18 @@ select option { background: #333; }
       <div class="login-divider">または</div>
       <button class="login-btn google" onclick="loginWithGoogle()">
         <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A353" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
-        Googleで登録
+        Googleで新規登録
       </button>
-      <div class="login-switch">すでにアカウントをお持ちの方は<span onclick="showLogin()">ログイン</span></div>
+      <div class="private-mode-notice">⚠ プライベートモードではGoogleログインがうまくいかない場合があります</div>
+      <div class="login-switch">すでにアカウントをお持ちの方は<span onclick="showLoginForm()">ログイン</span></div>
+    </div>
+
+    <!-- パスワードリセット -->
+    <div id="resetForm" style="display:none;">
+      <p style="font-size:13px;color:#888;margin-bottom:12px;">登録済みのメールアドレスにパスワードリセットのリンクを送ります</p>
+      <input type="email" class="login-input" id="resetEmail" placeholder="メールアドレス">
+      <button class="login-btn email" onclick="sendReset()">リセットメールを送る</button>
+      <div class="login-switch"><span onclick="showLoginForm()">ログインに戻る</span></div>
     </div>
   </div>
 </div>
@@ -383,9 +358,16 @@ select option { background: #333; }
     <div class="user-info" id="userInfo"></div>
     <div class="header-buttons">
       <button class="header-btn" id="searchToggleBtn" onclick="toggleSearch()">🔍 詳細検索</button>
-      <button class="header-btn logout" onclick="logout()">ログアウト</button>
+      <button class="header-btn login-btn-header" id="loginHeaderBtn" onclick="openLoginModal()" style="display:none;">ログイン / 登録</button>
+      <button class="header-btn logout" id="logoutBtn" onclick="logout()" style="display:none;">ログアウト</button>
     </div>
   </header>
+
+  <!-- ゲスト用バナー -->
+  <div class="guest-banner" id="guestBanner" style="display:none;">
+    <strong>💡 アカウント登録でデータが消えなくなります！</strong><br>
+    このアカウントは服のデータを保存するためだけに使用され、外部に漏れることはありません。
+  </div>
 
   <div class="search-panel" id="searchPanel">
     <h3>詳細検索</h3>
@@ -472,7 +454,7 @@ select option { background: #333; }
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithRedirect, getRedirectResult, sendPasswordResetEmail, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -493,6 +475,8 @@ const googleProvider = new GoogleAuthProvider();
 let currentUser = null;
 let items = [];
 let tastes = ["カジュアル","フェミニン","ストリート","フォーマル"];
+let localItems = JSON.parse(localStorage.getItem('closet_items_guest') || '[]');
+let localTastes = JSON.parse(localStorage.getItem('closet_tastes_guest') || '["カジュアル","フェミニン","ストリート","フォーマル"]');
 let currentFilter = '全て';
 let currentPhoto = null;
 let currentColor = null;
@@ -500,33 +484,63 @@ let isSearchMode = false;
 let searchResults = null;
 let selectedSearchColor = null;
 
-// 画面切替
-function showLoading() {
-  document.getElementById('loadingScreen').style.display = 'flex';
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('mainScreen').style.display = 'none';
-}
-function showLogin() {
-  document.getElementById('loadingScreen').style.display = 'none';
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('mainScreen').style.display = 'none';
-  document.getElementById('loginForm').style.display = 'block';
-  document.getElementById('registerForm').style.display = 'none';
-}
-function showMain() {
-  document.getElementById('loadingScreen').style.display = 'none';
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('mainScreen').style.display = 'block';
-}
+// リダイレクト結果の処理
+getRedirectResult(auth).catch(e => console.error('Redirect error:', e));
 
+// ログイン状態監視
+onAuthStateChanged(auth, async (user) => {
+  document.getElementById('loadingScreen').style.display = 'none';
+  document.getElementById('mainScreen').style.display = 'block';
+
+  if (user) {
+    currentUser = user;
+    document.getElementById('userInfo').textContent = user.displayName || user.email;
+    document.getElementById('loginHeaderBtn').style.display = 'none';
+    document.getElementById('logoutBtn').style.display = 'inline-block';
+    document.getElementById('guestBanner').style.display = 'none';
+    closeLoginModal();
+    await loadItems();
+    await loadTastes();
+  } else {
+    currentUser = null;
+    items = [...localItems];
+    tastes = [...localTastes];
+    document.getElementById('userInfo').textContent = '';
+    document.getElementById('loginHeaderBtn').style.display = 'inline-block';
+    document.getElementById('logoutBtn').style.display = 'none';
+    document.getElementById('guestBanner').style.display = 'block';
+  }
+  renderTasteSelect();
+  renderTasteTags();
+  renderGrid();
+});
+
+// ログインモーダル
+window.openLoginModal = function() {
+  document.getElementById('loginModal').classList.add('show');
+  showLoginForm();
+}
+window.closeLoginModal = function() {
+  document.getElementById('loginModal').classList.remove('show');
+  document.getElementById('loginError').textContent = '';
+  document.getElementById('resetSuccess').textContent = '';
+}
 window.showRegister = function() {
   document.getElementById('loginForm').style.display = 'none';
   document.getElementById('registerForm').style.display = 'block';
+  document.getElementById('resetForm').style.display = 'none';
   document.getElementById('loginError').textContent = '';
 }
-window.showLogin = function() {
+window.showLoginForm = function() {
   document.getElementById('loginForm').style.display = 'block';
   document.getElementById('registerForm').style.display = 'none';
+  document.getElementById('resetForm').style.display = 'none';
+  document.getElementById('loginError').textContent = '';
+}
+window.showReset = function() {
+  document.getElementById('loginForm').style.display = 'none';
+  document.getElementById('registerForm').style.display = 'none';
+  document.getElementById('resetForm').style.display = 'block';
   document.getElementById('loginError').textContent = '';
 }
 
@@ -534,6 +548,7 @@ window.showLogin = function() {
 window.loginWithEmail = async function() {
   const email = document.getElementById('loginEmail').value;
   const password = document.getElementById('loginPassword').value;
+  if (!email || !password) { document.getElementById('loginError').textContent = 'メールアドレスとパスワードを入力してください'; return; }
   try {
     await signInWithEmailAndPassword(auth, email, password);
   } catch(e) {
@@ -544,10 +559,12 @@ window.loginWithEmail = async function() {
 window.registerWithEmail = async function() {
   const email = document.getElementById('registerEmail').value;
   const password = document.getElementById('registerPassword').value;
+  if (!email || !password) { document.getElementById('loginError').textContent = 'メールアドレスとパスワードを入力してください'; return; }
+  if (password.length < 6) { document.getElementById('loginError').textContent = 'パスワードは6文字以上にしてください'; return; }
   try {
     await createUserWithEmailAndPassword(auth, email, password);
   } catch(e) {
-    document.getElementById('loginError').textContent = e.code === 'auth/email-already-in-use' ? 'このメールアドレスは既に使われています' : 'パスワードは6文字以上にしてください';
+    document.getElementById('loginError').textContent = e.code === 'auth/email-already-in-use' ? 'このメールアドレスは既に使われています' : '登録に失敗しました。もう一度お試しください';
   }
 }
 
@@ -559,36 +576,23 @@ window.loginWithGoogle = async function() {
   }
 }
 
-// リダイレクト後の結果を処理
-getRedirectResult(auth).catch(e => {
-  console.error('Redirect result error:', e);
-});
-
-window.logout = async function() {
-  if (confirm('ログアウトしますか？')) {
-    await signOut(auth);
+window.sendReset = async function() {
+  const email = document.getElementById('resetEmail').value;
+  if (!email) { document.getElementById('loginError').textContent = 'メールアドレスを入力してください'; return; }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    document.getElementById('loginError').textContent = '';
+    document.getElementById('resetSuccess').textContent = 'リセットメールを送信しました！メールをご確認ください';
+  } catch(e) {
+    document.getElementById('loginError').textContent = 'メールアドレスが見つかりません';
   }
 }
 
-// ログイン状態監視
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    currentUser = user;
-    document.getElementById('userInfo').textContent = user.displayName || user.email;
-    showMain();
-    await loadItems();
-    await loadTastes();
-    renderTasteSelect();
-    renderTasteTags();
-    renderGrid();
-  } else {
-    currentUser = null;
-    items = [];
-    showLogin();
-  }
-});
+window.logout = async function() {
+  if (confirm('ログアウトしますか？')) await signOut(auth);
+}
 
-// Firestoreからデータ読み込み
+// データ読み込み
 async function loadItems() {
   if (!currentUser) return;
   const q = query(collection(db, 'users', currentUser.uid, 'items'), orderBy('createdAt', 'desc'));
@@ -599,20 +603,19 @@ async function loadItems() {
 async function loadTastes() {
   if (!currentUser) return;
   const snap = await getDocs(collection(db, 'users', currentUser.uid, 'tastes'));
-  if (!snap.empty) {
-    tastes = snap.docs.map(d => d.data().name);
-  }
+  if (!snap.empty) tastes = snap.docs.map(d => d.data().name);
 }
 
 async function saveTastesToDB() {
-  if (!currentUser) return;
-  // テイストを全削除して再保存
+  if (!currentUser) {
+    localStorage.setItem('closet_tastes_guest', JSON.stringify(tastes));
+    return;
+  }
   const snap = await getDocs(collection(db, 'users', currentUser.uid, 'tastes'));
   for (const d of snap.docs) await deleteDoc(doc(db, 'users', currentUser.uid, 'tastes', d.id));
   for (const t of tastes) await addDoc(collection(db, 'users', currentUser.uid, 'tastes'), { name: t });
 }
 
-// カラー距離
 function colorDistance(c1, c2) {
   const parse = s => { const m = s.match(/rgb\((\d+),(\d+),(\d+)\)/); return m ? [+m[1],+m[2],+m[3]] : null; };
   const a = parse(c1), b = parse(c2);
@@ -628,15 +631,12 @@ function getUniqueColors() {
 }
 
 window.renderTasteSelect = function() {
-  const sel = document.getElementById('tasteSelect');
-  sel.innerHTML = '<option value="">テイストを選ぶ</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
-  const searchSel = document.getElementById('searchTaste');
-  searchSel.innerHTML = '<option value="">テイスト：全て</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
+  document.getElementById('tasteSelect').innerHTML = '<option value="">テイストを選ぶ</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
+  document.getElementById('searchTaste').innerHTML = '<option value="">テイスト：全て</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
 }
 
 window.renderTasteTags = function() {
-  const container = document.getElementById('tasteTags');
-  container.innerHTML = tastes.map(t => `
+  document.getElementById('tasteTags').innerHTML = tastes.map(t => `
     <button class="taste-tag" onclick="deleteTaste(event,'${t}')">${t} <span style="font-size:14px">×</span></button>
   `).join('');
 }
@@ -644,10 +644,7 @@ window.renderTasteTags = function() {
 window.renderColorChips = function() {
   const container = document.getElementById('colorChips');
   const uniqueColors = getUniqueColors();
-  if (uniqueColors.length === 0) {
-    container.innerHTML = '<span class="no-colors-msg">服を登録するとカラーが表示されます</span>';
-    return;
-  }
+  if (uniqueColors.length === 0) { container.innerHTML = '<span class="no-colors-msg">服を登録するとカラーが表示されます</span>'; return; }
   container.innerHTML = uniqueColors.map(color => `
     <div class="color-chip-wrap" onclick="selectSearchColor('${color}')">
       <div class="color-chip ${selectedSearchColor && colorDistance(selectedSearchColor, color) < 40 ? 'selected' : ''}" style="background:${color};"></div>
@@ -791,17 +788,19 @@ window.saveItem = async function() {
   const indicator = document.getElementById('savingIndicator');
   indicator.style.display = 'block';
 
-  const item = {
-    photo: currentPhoto, color: currentColor,
-    category, season, taste, memo,
-    createdAt: new Date().toISOString()
-  };
+  const item = { photo: currentPhoto, color: currentColor, category, season, taste, memo, createdAt: new Date().toISOString() };
 
   try {
-    const docRef = await addDoc(collection(db, 'users', currentUser.uid, 'items'), item);
-    items.unshift({ id: docRef.id, ...item });
-    closeModal();
-    renderGrid();
+    if (currentUser) {
+      const docRef = await addDoc(collection(db, 'users', currentUser.uid, 'items'), item);
+      items.unshift({ id: docRef.id, ...item });
+    } else {
+      const localItem = { id: Date.now().toString(), ...item };
+      localItems.unshift(localItem);
+      items = [...localItems];
+      localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
+    }
+    closeModal(); renderGrid();
   } catch(e) {
     alert('保存に失敗しました。ネット接続を確認してください。');
   } finally {
@@ -811,7 +810,12 @@ window.saveItem = async function() {
 
 window.deleteItem = async function(id) {
   if (confirm('この服を削除しますか？')) {
-    await deleteDoc(doc(db, 'users', currentUser.uid, 'items', id));
+    if (currentUser) {
+      await deleteDoc(doc(db, 'users', currentUser.uid, 'items', id));
+    } else {
+      localItems = localItems.filter(i => i.id !== id);
+      localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
+    }
     items = items.filter(i => i.id !== id);
     if (isSearchMode) doSearch(); else renderGrid();
   }
