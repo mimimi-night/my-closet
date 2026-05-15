@@ -248,12 +248,14 @@ select option { background: #333; }
 }
 .color-search-section { margin-bottom: 12px; }
 .color-search-label { font-size: 11px; color: #c9a96e; margin-bottom: 10px; }
-.color-chips-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; padding: 8px 4px 12px; overflow: visible; }.color-chip-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+.color-chips-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; padding: 8px 6px 14px; }
+.color-chip-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 4px; }
 .color-chip {
-  width: 32px; height: 32px; border-radius: 50%;
+  width: 30px; height: 30px; border-radius: 50%;
   border: 2px solid transparent; transition: transform 0.15s, border 0.15s;
+  flex-shrink: 0;
 }
-.color-chip.selected { border: 2px solid #fff; transform: scale(1.2); box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+.color-chip.selected { border: 2px solid #fff; transform: scale(1.15); box-shadow: 0 0 8px rgba(255,255,255,0.5); }
 .color-clear-btn {
   padding: 4px 10px; background: transparent;
   border: 1px solid #c9a96e44; border-radius: 12px;
@@ -296,6 +298,14 @@ select option { background: #333; }
   width: 28px; height: 28px; color: white; font-size: 14px;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
 }
+.card-fav {
+  position: absolute; top: 8px; left: 8px;
+  background: rgba(0,0,0,0.6); border: none; border-radius: 50%;
+  width: 28px; height: 28px; font-size: 15px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: transform 0.15s;
+}
+.card-fav:active { transform: scale(1.3); }
 .empty { text-align: center; padding: 60px 20px; color: #555; font-size: 14px; grid-column: span 2; }
 .user-info { font-size: 11px; color: #888; text-align: center; margin-top: 4px; }
 .saving-indicator {
@@ -330,6 +340,12 @@ select option { background: #333; }
       <input type="password" class="login-input" id="loginPassword" placeholder="パスワード">
       <button class="login-btn-modal email" onclick="loginWithEmail()">ログイン</button>
       <div class="forgot-pw" onclick="showReset()">パスワードを忘れた方は<span>こちら</span></div>
+      <div class="login-divider">または</div>
+      <button class="login-btn-modal google" onclick="loginWithGoogle(false)">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A353" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
+        Googleでログイン
+      </button>
+      <div class="private-mode-notice">⚠ プライベートモードではGoogleログインが<br>うまくいかない場合があります</div>
       <div class="login-switch">アカウントがない方は<span onclick="showRegister()">新規登録</span></div>
     </div>
 
@@ -338,6 +354,12 @@ select option { background: #333; }
       <input type="email" class="login-input" id="registerEmail" placeholder="メールアドレス">
       <input type="password" class="login-input" id="registerPassword" placeholder="パスワード（6文字以上）">
       <button class="login-btn-modal email" onclick="registerWithEmail()">新規登録</button>
+      <div class="login-divider">または</div>
+      <button class="login-btn-modal google" onclick="loginWithGoogle(true)">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A353" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
+        Googleで新規登録
+      </button>
+      <div class="private-mode-notice">⚠ プライベートモードではGoogleログインが<br>うまくいかない場合があります</div>
       <div class="login-switch">すでにアカウントをお持ちの方は<span onclick="showLoginForm()">ログイン</span></div>
     </div>
 
@@ -370,6 +392,7 @@ select option { background: #333; }
     アカウント登録すると約10,000枚まで保存でき、機種変更や<br>キャッシュ削除でもデータが消えません。<br>
     このアカウントは服のデータ保存のためだけに使用され、<br>外部に漏れることはありません。
     <br>
+    <button class="login-link" onclick="openLoginModal()">アカウント登録 / ログイン</button>
   </div>
 
   <div class="search-panel" id="searchPanel">
@@ -388,6 +411,10 @@ select option { background: #333; }
     <select class="search-select" id="searchTaste" style="width:100%;margin-bottom:12px;">
       <option value="">テイスト：全て</option>
     </select>
+    <label style="display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer;font-size:13px;color:#f0e6d3;">
+      <input type="checkbox" id="searchFav" style="width:16px;height:16px;accent-color:#ff6b9d;">
+      ❤️ お気に入りだけ表示
+    </label>
     <div class="color-search-section">
       <div class="color-search-label">メインカラーで絞り込む</div>
       <div class="color-chips-row" id="colorChips"></div>
@@ -678,23 +705,9 @@ window.toggleSearch = function() {
   btn.classList.toggle('active');
   if (panel.classList.contains('show')) renderColorChips();
 }
-window.doSearch = function() {
-  const category = document.getElementById('searchCategory').value;
-  const season = document.getElementById('searchSeason').value;
-  const taste = document.getElementById('searchTaste').value;
-  searchResults = items.filter(item => {
-    if (category && item.category !== category) return false;
-    if (season && item.season !== season) return false;
-    if (taste && item.taste !== taste) return false;
-    if (selectedSearchColor && (!item.color || colorDistance(item.color, selectedSearchColor) >= 40)) return false;
-    return true;
-  });
-  isSearchMode = true;
-  document.getElementById('searchResultNotice').textContent = `検索結果：${searchResults.length}件`;
-  renderGrid();
-}
 window.resetSearch = function() {
   ['searchCategory','searchSeason','searchTaste'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('searchFav').checked = false;
   selectedSearchColor = null; renderColorChips();
   isSearchMode = false; searchResults = null;
   document.getElementById('searchResultNotice').textContent = '';
@@ -824,6 +837,22 @@ window.deleteItem = async function(id) {
     if (isSearchMode) doSearch(); else renderGrid();
   }
 }
+
+window.toggleFav = async function(id) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  item.fav = !item.fav;
+  if (currentUser) {
+    const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js");
+    await updateDoc(doc(db, 'users', currentUser.uid, 'items', id), { fav: item.fav });
+  } else {
+    const li = localItems.find(i => i.id === id);
+    if (li) li.fav = item.fav;
+    localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
+  }
+  if (isSearchMode) doSearch(); else renderGrid();
+}
+
 window.filterItems = function(filter) {
   currentFilter = filter;
   isSearchMode = false; searchResults = null;
@@ -833,9 +862,35 @@ window.filterItems = function(filter) {
   });
   renderGrid();
 }
+
+window.doSearch = function() {
+  const category = document.getElementById('searchCategory').value;
+  const season = document.getElementById('searchSeason').value;
+  const taste = document.getElementById('searchTaste').value;
+  const favOnly = document.getElementById('searchFav').checked;
+  searchResults = items.filter(item => {
+    if (category && item.category !== category) return false;
+    if (season && item.season !== season) return false;
+    if (taste && item.taste !== taste) return false;
+    if (favOnly && !item.fav) return false;
+    if (selectedSearchColor && (!item.color || colorDistance(item.color, selectedSearchColor) >= 40)) return false;
+    return true;
+  });
+  isSearchMode = true;
+  document.getElementById('searchResultNotice').textContent = `検索結果：${searchResults.length}件`;
+  renderGrid();
+}
+
 window.renderGrid = function() {
   const grid = document.getElementById('grid');
-  let source = isSearchMode ? searchResults : (currentFilter === '全て' ? items : items.filter(i => i.category === currentFilter));
+  let source;
+  if (isSearchMode) {
+    source = searchResults;
+  } else {
+    let base = currentFilter === '全て' ? items : items.filter(i => i.category === currentFilter);
+    // お気に入りを先頭に
+    source = [...base.filter(i => i.fav), ...base.filter(i => !i.fav)];
+  }
   if (!source || source.length === 0) {
     grid.innerHTML = `<div class="empty">${isSearchMode ? '条件に一致する服が見つかりませんでした' : 'まだ服が登録されていません！<br>＋ボタンから追加してね'}</div>`;
     return;
@@ -843,6 +898,9 @@ window.renderGrid = function() {
   grid.innerHTML = source.map(item => `
     <div class="card">
       <img src="${item.photo}" alt="${item.category}">
+      <button class="card-fav" onclick="toggleFav('${item.id}')" style="background:rgba(0,0,0,0.6);">
+        ${item.fav ? '❤️' : '🤍'}
+      </button>
       <button class="card-delete" onclick="deleteItem('${item.id}')">×</button>
       <div class="card-info">
         ${item.color ? `<div class="card-color-bar" style="background:${item.color};"></div>` : ''}
