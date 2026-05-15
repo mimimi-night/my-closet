@@ -300,12 +300,16 @@ select option { background: #333; }
 }
 .card-fav {
   position: absolute; top: 8px; right: 8px;
-  background: rgba(0,0,0,0.6); border: none; border-radius: 50%;
-  width: 28px; height: 28px; font-size: 15px;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: transform 0.15s;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  width: 28px; height: 28px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
 }
-.card-fav:active { transform: scale(1.3); }
+.card-fav svg { width: 13px; height: 13px; transition: all 0.2s; }
+.card-fav.active { background: rgba(180,80,100,0.7); border-color: rgba(255,150,170,0.4); }
 .empty { text-align: center; padding: 60px 20px; color: #555; font-size: 14px; grid-column: span 2; }
 .user-info { font-size: 11px; color: #888; text-align: center; margin-top: 4px; }
 .saving-indicator {
@@ -411,10 +415,10 @@ select option { background: #333; }
     <select class="search-select" id="searchTaste" style="width:100%;margin-bottom:12px;">
       <option value="">テイスト：全て</option>
     </select>
-    <label style="display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer;font-size:13px;color:#f0e6d3;">
-      <input type="checkbox" id="searchFav" style="width:16px;height:16px;accent-color:#ff6b9d;">
-      ❤️ お気に入りだけ表示
-    </label>
+   <label style="display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer;font-size:12px;color:#c9a96e88;letter-spacing:1px;">
+  <input type="checkbox" id="searchFav" style="width:14px;height:14px;accent-color:#c9a96e;">
+  お気に入りのみ
+</label>
     <div class="color-search-section">
       <div class="color-search-label">メインカラーで絞り込む</div>
       <div class="color-chips-row" id="colorChips"></div>
@@ -899,9 +903,9 @@ window.renderGrid = function() {
     <div class="card">
       <img src="${item.photo}" alt="${item.category}">
      <button class="card-delete" onclick="deleteItem('${item.id}')">×</button>
-      <button class="card-fav" onclick="toggleFav('${item.id}')" style="background:rgba(0,0,0,0.6);">
-        ${item.fav ? '❤️' : '🤍'}
-      </button>
+      <button class="card-fav ${item.fav ? 'active' : ''}" onclick="toggleFav('${item.id}')">
+  <svg viewBox="0 0 24 24" fill="${item.fav ? '#ffb3c1' : 'none'}" stroke="${item.fav ? '#ffb3c1' : 'rgba(255,255,255,0.7)'}" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+</button>
       <div class="card-info">
         ${item.color ? `<div class="card-color-bar" style="background:${item.color};"></div>` : ''}
         <div class="card-info-inner">
