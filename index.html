@@ -41,8 +41,6 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
 }
 .header-btn.active { background: #c9a96e; color: #111; }
 .header-btn.logout { border-color: #ff6b6b44; color: #ff6b6b; }
-
-/* ゲストバナー */
 .guest-banner {
   background: #1e1a0e;
   border-bottom: 1px solid #c9a96e33;
@@ -65,8 +63,6 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   cursor: pointer;
   border: none;
 }
-
-/* ログインモーダル */
 .login-modal {
   display: none;
   position: fixed;
@@ -90,201 +86,71 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   max-height: 90vh;
   overflow-y: auto;
 }
-.login-box h2 {
-  color: #c9a96e;
-  font-size: 18px;
-  letter-spacing: 2px;
-  text-align: center;
-  margin-bottom: 20px;
-}
-.login-close {
-  position: absolute;
-  top: 16px; right: 16px;
-  background: transparent;
-  border: none;
-  color: #888;
-  font-size: 20px;
-  cursor: pointer;
-}
-.login-input {
-  width: 100%;
-  padding: 12px 14px;
-  background: #333;
-  border: 1px solid #c9a96e44;
-  border-radius: 10px;
-  color: #f0e6d3;
-  font-size: 14px;
-  margin-bottom: 12px;
-}
-.login-btn-modal {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
+.login-box h2 { color: #c9a96e; font-size: 18px; letter-spacing: 2px; text-align: center; margin-bottom: 20px; }
+.login-close { position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: #888; font-size: 20px; cursor: pointer; }
+.login-input { width: 100%; padding: 12px 14px; background: #333; border: 1px solid #c9a96e44; border-radius: 10px; color: #f0e6d3; font-size: 14px; margin-bottom: 12px; }
+.login-btn-modal { width: 100%; padding: 12px; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
 .login-btn-modal.email { background: #c9a96e; color: #111; }
-.login-btn-modal.google {
-  background: #fff; color: #333;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.login-divider { text-align: center; color: #555; font-size: 12px; margin: 12px 0; }
 .login-switch { text-align: center; font-size: 12px; color: #888; margin-top: 12px; }
 .login-switch span { color: #c9a96e; text-decoration: underline; cursor: pointer; }
 .login-error { color: #ff6b6b; font-size: 12px; text-align: center; margin-bottom: 10px; min-height: 18px; }
 .forgot-pw { text-align: center; font-size: 11px; color: #888; margin-top: 6px; cursor: pointer; }
 .forgot-pw span { color: #c9a96e; text-decoration: underline; }
-.private-mode-notice { font-size: 10px; color: #666; text-align: center; margin-top: 6px; line-height: 1.4; }
 .reset-success { color: #2ecc71; font-size: 12px; text-align: center; margin-bottom: 10px; }
-
-/* ローディング */
-.loading {
-  display: flex; align-items: center; justify-content: center;
-  min-height: 80vh; flex-direction: column; gap: 16px;
-}
-.loading-spinner {
-  width: 40px; height: 40px;
-  border: 3px solid #c9a96e44;
-  border-top: 3px solid #c9a96e;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
+.loading { display: flex; align-items: center; justify-content: center; min-height: 80vh; flex-direction: column; gap: 16px; }
+.loading-spinner { width: 40px; height: 40px; border: 3px solid #c9a96e44; border-top: 3px solid #c9a96e; border-radius: 50%; animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-.add-btn {
-  position: fixed; bottom: 24px; right: 24px;
-  background: #c9a96e; color: #111;
-  border: none; border-radius: 50%;
-  width: 60px; height: 60px;
-  font-size: 28px; cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4); z-index: 100;
-}
-.modal {
-  display: none; position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.8); z-index: 200;
-  justify-content: center; align-items: flex-end;
-}
+.add-btn { position: fixed; bottom: 24px; right: 24px; background: #c9a96e; color: #111; border: none; border-radius: 50%; width: 60px; height: 60px; font-size: 28px; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.4); z-index: 100; }
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 200; justify-content: center; align-items: flex-end; }
 .modal.show { display: flex; }
-.modal-content {
-  background: #222; width: 100%; max-width: 500px;
-  border-radius: 20px 20px 0 0; padding: 24px;
-  max-height: 90vh; overflow-y: auto;
-}
+.modal-content { background: #222; width: 100%; max-width: 500px; border-radius: 20px 20px 0 0; padding: 24px; max-height: 90vh; overflow-y: auto; }
 .modal-content h2 { color: #c9a96e; margin-bottom: 16px; font-size: 16px; letter-spacing: 2px; }
 .photo-buttons { display: flex; gap: 10px; margin-bottom: 12px; }
-.photo-btn {
-  flex: 1; padding: 12px; background: #333;
-  border: 1px solid #c9a96e44; border-radius: 10px;
-  color: #f0e6d3; font-size: 13px; cursor: pointer; text-align: center;
-}
+.photo-btn { flex: 1; padding: 12px; background: #333; border: 1px solid #c9a96e44; border-radius: 10px; color: #f0e6d3; font-size: 13px; cursor: pointer; text-align: center; }
 .photo-hint { font-size: 11px; color: #888; text-align: center; margin-bottom: 12px; line-height: 1.5; }
-.photo-preview {
-  width: 100%; height: 200px; background: #333;
-  border: 2px dashed #c9a96e44; border-radius: 12px;
-  display: flex; justify-content: center; align-items: center;
-  margin-bottom: 16px; overflow: hidden; position: relative;
-}
+.photo-preview { width: 100%; height: 200px; background: #333; border: 2px dashed #c9a96e44; border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-bottom: 16px; overflow: hidden; position: relative; }
 .photo-preview img { width: 100%; height: 100%; object-fit: cover; }
 .photo-preview span { color: #888; font-size: 14px; }
-.center-guide {
-  position: absolute; top: 25%; left: 25%; width: 50%; height: 50%;
-  border-radius: 8px; pointer-events: none;
-  display: flex; justify-content: center; align-items: flex-end; padding-bottom: 6px;
-}
+.center-guide { position: absolute; top: 25%; left: 25%; width: 50%; height: 50%; border-radius: 8px; pointer-events: none; display: flex; justify-content: center; align-items: flex-end; padding-bottom: 6px; }
 .center-guide-label { font-size: 10px; white-space: nowrap; padding: 2px 6px; border-radius: 4px; }
 input[type="file"] { display: none; }
-select, input[type="text"], input[type="email"], input[type="password"] {
-  width: 100%; padding: 10px 14px; background: #333;
-  border: 1px solid #c9a96e44; border-radius: 10px;
-  color: #f0e6d3; font-size: 14px; margin-bottom: 12px;
-}
+select, input[type="text"], input[type="email"], input[type="password"] { width: 100%; padding: 10px 14px; background: #333; border: 1px solid #c9a96e44; border-radius: 10px; color: #f0e6d3; font-size: 14px; margin-bottom: 12px; }
 select option { background: #333; }
 .taste-section { margin-bottom: 12px; }
 .taste-section label { font-size: 12px; color: #c9a96e; display: block; margin-bottom: 8px; }
 .taste-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
-.taste-tag {
-  padding: 6px 12px; border-radius: 20px;
-  border: 1px solid #c9a96e44; background: transparent;
-  color: #c9a96e; font-size: 12px; cursor: pointer;
-  display: flex; align-items: center; gap: 6px;
-}
+.taste-tag { padding: 6px 12px; border-radius: 20px; border: 1px solid #c9a96e44; background: transparent; color: #c9a96e; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
 .add-taste-row { display: flex; gap: 8px; }
 .add-taste-row input { flex: 1; margin-bottom: 0; padding: 8px 12px; font-size: 13px; }
-.add-taste-row button {
-  padding: 8px 14px; background: #c9a96e; color: #111;
-  border: none; border-radius: 10px; font-size: 13px; cursor: pointer;
-}
+.add-taste-row button { padding: 8px 14px; background: #c9a96e; color: #111; border: none; border-radius: 10px; font-size: 13px; cursor: pointer; }
 .btn-row { display: flex; gap: 10px; margin-top: 16px; }
-.btn-save {
-  flex: 1; padding: 12px; background: #c9a96e; color: #111;
-  border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer;
-}
-.btn-cancel {
-  flex: 1; padding: 12px; background: #333; color: #f0e6d3;
-  border: none; border-radius: 10px; font-size: 15px; cursor: pointer;
-}
-.filter-row { display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; }
-.filter-btn {
-  padding: 6px 14px; border-radius: 20px;
-  border: 1px solid #c9a96e44; background: transparent;
-  color: #c9a96e; font-size: 12px; cursor: pointer; white-space: nowrap;
-}
+.btn-save { flex: 1; padding: 12px; background: #c9a96e; color: #111; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; }
+.btn-cancel { flex: 1; padding: 12px; background: #333; color: #f0e6d3; border: none; border-radius: 10px; font-size: 15px; cursor: pointer; }
+.filter-row { display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; align-items: center; }
+.filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid #c9a96e44; background: transparent; color: #c9a96e; font-size: 12px; cursor: pointer; white-space: nowrap; }
 .filter-btn.active { background: #c9a96e; color: #111; }
-.search-panel {
-  display: none; background: #1e1e1e;
-  border-bottom: 1px solid #c9a96e22; padding: 16px;
-}
+.sort-select { padding: 6px 10px; border-radius: 20px; border: 1px solid #c9a96e44; background: #1a1a1a; color: #c9a96e; font-size: 11px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.search-panel { display: none; background: #1e1e1e; border-bottom: 1px solid #c9a96e22; padding: 16px; }
 .search-panel.show { display: block; }
 .search-panel h3 { font-size: 13px; color: #c9a96e; margin-bottom: 12px; letter-spacing: 2px; }
 .search-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-.search-select {
-  flex: 1; min-width: 120px; padding: 8px 10px;
-  background: #2a2a2a; border: 1px solid #c9a96e33;
-  border-radius: 8px; color: #f0e6d3; font-size: 12px; margin-bottom: 0;
-}
+.search-select { flex: 1; min-width: 120px; padding: 8px 10px; background: #2a2a2a; border: 1px solid #c9a96e33; border-radius: 8px; color: #f0e6d3; font-size: 12px; margin-bottom: 0; }
 .color-search-section { margin-bottom: 12px; }
 .color-search-label { font-size: 11px; color: #c9a96e; margin-bottom: 10px; }
 .color-chips-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; padding: 8px 6px 14px; }
 .color-chip-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 4px; }
-.color-chip {
-  width: 30px; height: 30px; border-radius: 50%;
-  border: 2px solid transparent; transition: transform 0.15s, border 0.15s;
-  flex-shrink: 0;
-}
+.color-chip { width: 30px; height: 30px; border-radius: 50%; border: 2px solid transparent; transition: transform 0.15s, border 0.15s; flex-shrink: 0; }
 .color-chip.selected { border: 2px solid #fff; transform: scale(1.15); box-shadow: 0 0 8px rgba(255,255,255,0.5); }
-.color-clear-btn {
-  padding: 4px 10px; background: transparent;
-  border: 1px solid #c9a96e44; border-radius: 12px;
-  color: #888; font-size: 11px; cursor: pointer; align-self: center;
-}
+.color-clear-btn { padding: 4px 10px; background: transparent; border: 1px solid #c9a96e44; border-radius: 12px; color: #888; font-size: 11px; cursor: pointer; align-self: center; }
 .no-colors-msg { font-size: 11px; color: #666; padding: 4px 0; }
 .search-btns { display: flex; gap: 8px; }
-.btn-search {
-  flex: 1; padding: 10px; background: #c9a96e; color: #111;
-  border: none; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer;
-}
-.btn-search-reset {
-  flex: 1; padding: 10px; background: #333; color: #888;
-  border: none; border-radius: 8px; font-size: 13px; cursor: pointer;
-}
+.btn-search { flex: 1; padding: 10px; background: #c9a96e; color: #111; border: none; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; }
+.btn-search-reset { flex: 1; padding: 10px; background: #333; color: #888; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; }
 .search-result-notice { font-size: 11px; color: #c9a96e88; padding: 6px 16px 0; }
-.color-notice {
-  font-size: 11px; color: #888; padding: 0 16px 10px;
-  display: flex; align-items: center; gap: 6px;
-}
-.color-notice-bar {
-  display: inline-block; width: 18px; height: 4px; border-radius: 2px;
-  background: linear-gradient(to right, #e74c3c, #3498db, #2ecc71); flex-shrink: 0;
-}
+.color-notice { font-size: 11px; color: #888; padding: 0 16px 10px; display: flex; align-items: center; gap: 6px; }
+.color-notice-bar { display: inline-block; width: 18px; height: 4px; border-radius: 2px; background: linear-gradient(to right, #e74c3c, #3498db, #2ecc71); flex-shrink: 0; }
 .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; }
-.card {
-  background: #222; border-radius: 12px;
-  overflow: hidden; border: 1px solid #c9a96e22; position: relative;
-}
+.card { background: #222; border-radius: 12px; overflow: hidden; border: 1px solid #c9a96e22; position: relative; }
 .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
 .card-info { display: flex; padding: 0; }
 .card-color-bar { width: 3px; flex-shrink: 0; }
@@ -292,137 +158,69 @@ select option { background: #333; }
 .card-category { font-size: 11px; color: #c9a96e; letter-spacing: 1px; margin-bottom: 2px; }
 .card-season { font-size: 11px; color: #888; margin-top: 2px; }
 .card-taste { font-size: 11px; color: #c9a96e88; margin-top: 2px; }
-.card-delete {
-  position: absolute; top: 8px; left: 8px;
-  background: rgba(0,0,0,0.6); border: none; border-radius: 50%;
-  width: 28px; height: 28px; color: white; font-size: 14px;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-}
-.card-fav {
-  position: absolute; top: 8px; right: 8px;
-  background: rgba(0,0,0,0.5);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 50%;
-  width: 28px; height: 28px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s;
-}
+.card-delete { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.6); border: none; border-radius: 50%; width: 28px; height: 28px; color: white; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.card-fav { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
 .card-fav svg { width: 13px; height: 13px; transition: all 0.2s; }
 .card-fav.active { background: rgba(180,80,100,0.7); border-color: rgba(255,150,170,0.4); }
+.card-bottom { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px 8px; border-top: 1px solid #c9a96e11; }
+.card-last-worn { font-size: 9px; color: #666; line-height: 1.4; }
+.card-wear-btn { display: flex; flex-direction: column; align-items: center; gap: 2px; background: transparent; border: 1px solid #c9a96e33; border-radius: 8px; padding: 4px 8px; cursor: pointer; transition: all 0.2s; }
+.card-wear-btn:hover { background: #c9a96e11; }
+.card-wear-btn.disabled { opacity: 0.4; cursor: not-allowed; }
+.card-wear-btn.disabled:hover { background: transparent; }
+.card-wear-count { font-size: 13px; font-weight: bold; color: #c9a96e; line-height: 1; }
+.card-wear-label { font-size: 8px; color: #888; letter-spacing: 1px; }
 .empty { text-align: center; padding: 60px 20px; color: #555; font-size: 14px; grid-column: span 2; }
 .user-info { font-size: 11px; color: #888; text-align: center; margin-top: 4px; }
-.saving-indicator {
-  position: fixed; top: 80px; right: 16px;
-  background: #c9a96e; color: #111;
-  padding: 6px 12px; border-radius: 20px;
-  font-size: 11px; font-weight: bold; z-index: 300; display: none;
-}
-
-.menu-btn {
-  position: fixed; top: 16px; right: 16px;
-  background: rgba(201,169,110,0.15);
-  border: 1px solid #c9a96e44;
-  border-radius: 50%;
-  width: 32px; height: 32px;
-  color: #c9a96e; font-size: 16px;
-  cursor: pointer; z-index: 150;
-  display: flex; align-items: center; justify-content: center;
-}
-.menu-modal {
-  display: none; position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.7); z-index: 400;
-  justify-content: center; align-items: center; padding: 20px;
-}
+.saving-indicator { position: fixed; top: 80px; right: 16px; background: #c9a96e; color: #111; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; z-index: 300; display: none; }
+.menu-btn { position: fixed; top: 16px; right: 16px; background: rgba(201,169,110,0.15); border: 1px solid #c9a96e44; border-radius: 50%; width: 32px; height: 32px; color: #c9a96e; font-size: 16px; cursor: pointer; z-index: 150; display: flex; align-items: center; justify-content: center; }
+.menu-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 400; justify-content: center; align-items: center; padding: 20px; }
 .menu-modal.show { display: flex; }
-.menu-box {
-  background: #222; border-radius: 20px;
-  padding: 24px; width: 100%; max-width: 300px;
-  border: 1px solid #c9a96e22;
-}
+.menu-box { background: #222; border-radius: 20px; padding: 24px; width: 100%; max-width: 300px; border: 1px solid #c9a96e22; }
 .menu-box h3 { color: #c9a96e; font-size: 14px; letter-spacing: 2px; margin-bottom: 16px; text-align: center; }
-.menu-item {
-  width: 100%; padding: 12px;
-  background: #2a2a2a; border: 1px solid #c9a96e22;
-  border-radius: 10px; color: #f0e6d3;
-  font-size: 14px; cursor: pointer; margin-bottom: 10px;
-  text-align: left; display: flex; align-items: center; gap: 10px;
-}
+.menu-item { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #c9a96e22; border-radius: 10px; color: #f0e6d3; font-size: 14px; cursor: pointer; margin-bottom: 10px; text-align: left; display: flex; align-items: center; gap: 10px; }
 .menu-item.danger { color: #ff6b6b; border-color: #ff6b6b22; }
 .menu-item.danger:hover { background: #2a1a1a; }
-.menu-close {
-  width: 100%; padding: 10px;
-  background: transparent; border: 1px solid #444;
-  border-radius: 10px; color: #888;
-  font-size: 13px; cursor: pointer; margin-top: 4px;
-}
-  
+.menu-close { width: 100%; padding: 10px; background: transparent; border: 1px solid #444; border-radius: 10px; color: #888; font-size: 13px; cursor: pointer; margin-top: 4px; }
 </style>
 </head>
 <body>
 
 <div class="saving-indicator" id="savingIndicator">保存中...</div>
-
 <button class="menu-btn" onclick="openMenu()">?</button>
-
 <div class="menu-modal" id="menuModal">
   <div class="menu-box">
     <h3>メニュー</h3>
-    <button class="menu-item" onclick="openContact()">
-      ✉️ お問い合わせ
-    </button>
-    <button class="menu-item danger" onclick="deleteAccount()">
-      🗑️ アカウントを削除する
-    </button>
+    <button class="menu-item" onclick="openContact()">✉️ お問い合わせ</button>
+    <button class="menu-item danger" onclick="deleteAccount()">🗑️ アカウントを削除する</button>
     <button class="menu-close" onclick="closeMenu()">閉じる</button>
   </div>
 </div>
-  
-<!-- ローディング -->
+
 <div class="loading" id="loadingScreen">
   <div class="loading-spinner"></div>
   <div style="color:#888;font-size:13px;">読み込み中...</div>
 </div>
 
-<!-- ログインモーダル -->
 <div class="login-modal" id="loginModal">
   <div class="login-box">
     <button class="login-close" onclick="closeLoginModal()">×</button>
     <h2>あなたクローゼット</h2>
     <div class="login-error" id="loginError"></div>
     <div class="reset-success" id="resetSuccess"></div>
-
-    <!-- ログインフォーム -->
     <div id="loginForm">
       <input type="email" class="login-input" id="loginEmail" placeholder="メールアドレス">
       <input type="password" class="login-input" id="loginPassword" placeholder="パスワード">
       <button class="login-btn-modal email" onclick="loginWithEmail()">ログイン</button>
       <div class="forgot-pw" onclick="showReset()">パスワードを忘れた方は<span>こちら</span></div>
-      <div class="login-divider">または</div>
-      <button class="login-btn-modal google" onclick="loginWithGoogle(false)">
-        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A353" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
-        Googleでログイン
-      </button>
-      <div class="private-mode-notice">⚠ プライベートモードではGoogleログインが<br>うまくいかない場合があります</div>
       <div class="login-switch">アカウントがない方は<span onclick="showRegister()">新規登録</span></div>
     </div>
-
-    <!-- 新規登録フォーム -->
     <div id="registerForm" style="display:none;">
       <input type="email" class="login-input" id="registerEmail" placeholder="メールアドレス">
       <input type="password" class="login-input" id="registerPassword" placeholder="パスワード（6文字以上）">
       <button class="login-btn-modal email" onclick="registerWithEmail()">新規登録</button>
-      <div class="login-divider">または</div>
-      <button class="login-btn-modal google" onclick="loginWithGoogle(true)">
-        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A353" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
-        Googleで新規登録
-      </button>
-      <div class="private-mode-notice">⚠ プライベートモードではGoogleログインが<br>うまくいかない場合があります</div>
       <div class="login-switch">すでにアカウントをお持ちの方は<span onclick="showLoginForm()">ログイン</span></div>
     </div>
-
-    <!-- パスワードリセット -->
     <div id="resetForm" style="display:none;">
       <p style="font-size:13px;color:#888;margin-bottom:12px;line-height:1.6;">登録済みのメールアドレスにパスワードリセットのリンクを送ります</p>
       <input type="email" class="login-input" id="resetEmail" placeholder="メールアドレス">
@@ -432,7 +230,6 @@ select option { background: #333; }
   </div>
 </div>
 
-<!-- メイン画面 -->
 <div id="mainScreen" style="display:none;">
   <header>
     <h1>あなたクローゼット</h1>
@@ -444,7 +241,6 @@ select option { background: #333; }
     </div>
   </header>
 
-  <!-- ゲスト用バナー -->
   <div class="guest-banner" id="guestBanner" style="display:none;">
     <strong>💡 アカウント登録でデータが消えなくなります！</strong>
     ログインなしでは約50枚まで保存できます。<br>
@@ -470,10 +266,10 @@ select option { background: #333; }
     <select class="search-select" id="searchTaste" style="width:100%;margin-bottom:12px;">
       <option value="">テイスト：全て</option>
     </select>
-   <label style="display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer;font-size:12px;color:#c9a96e88;letter-spacing:1px;">
-  <input type="checkbox" id="searchFav" style="width:14px;height:14px;accent-color:#c9a96e;">
-  お気に入りのみ
-</label>
+    <label style="display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer;font-size:12px;color:#c9a96e88;letter-spacing:1px;">
+      <input type="checkbox" id="searchFav" style="width:14px;height:14px;accent-color:#c9a96e;">
+      お気に入りのみ
+    </label>
     <div class="color-search-section">
       <div class="color-search-label">メインカラーで絞り込む</div>
       <div class="color-chips-row" id="colorChips"></div>
@@ -487,6 +283,11 @@ select option { background: #333; }
   <div class="search-result-notice" id="searchResultNotice"></div>
 
   <div class="filter-row">
+    <select class="sort-select" id="sortSelect" onchange="renderGrid()">
+      <option value="new">登録が新しい順</option>
+      <option value="worn">着用回数が多い順</option>
+      <option value="date">最後に着た日が新しい順</option>
+    </select>
     <button class="filter-btn active" onclick="filterItems('全て')">全て</button>
     <button class="filter-btn" onclick="filterItems('トップス')">トップス</button>
     <button class="filter-btn" onclick="filterItems('ボトムス')">ボトムス</button>
@@ -558,7 +359,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-auth.languageCode = 'ja'; // メールを日本語で送る
+auth.languageCode = 'ja';
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
@@ -573,31 +374,22 @@ let currentColor = null;
 let isSearchMode = false;
 let searchResults = null;
 let selectedSearchColor = null;
-let isRegisterFlow = false; // Googleでの新規登録かログインか
 
-// リダイレクト結果の処理
 getRedirectResult(auth).then(result => {
   if (result && result.user) {
-    // 新規ユーザーかどうかチェック
     const isNewUser = result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
     const savedFlow = sessionStorage.getItem('googleFlow');
     if (savedFlow === 'login' && isNewUser) {
-      // ログインフローなのに新規ユーザー → アカウントなし
       signOut(auth);
-      setTimeout(() => {
-        openLoginModal();
-        document.getElementById('loginError').textContent = 'アカウントが見つかりません。新規登録してください';
-      }, 500);
+      setTimeout(() => { openLoginModal(); document.getElementById('loginError').textContent = 'アカウントが見つかりません。新規登録してください'; }, 500);
     }
     sessionStorage.removeItem('googleFlow');
   }
 }).catch(e => console.error('Redirect error:', e));
 
-// ログイン状態監視
 onAuthStateChanged(auth, async (user) => {
   document.getElementById('loadingScreen').style.display = 'none';
   document.getElementById('mainScreen').style.display = 'block';
-
   if (user) {
     currentUser = user;
     document.getElementById('userInfo').textContent = user.displayName || user.email;
@@ -616,105 +408,50 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('logoutBtn').style.display = 'none';
     document.getElementById('guestBanner').style.display = 'block';
   }
-  renderTasteSelect();
-  renderTasteTags();
-  renderGrid();
+  renderTasteSelect(); renderTasteTags(); renderGrid();
 });
 
-window.openLoginModal = function() {
-  document.getElementById('loginModal').classList.add('show');
-  showLoginForm();
-}
-window.closeLoginModal = function() {
-  document.getElementById('loginModal').classList.remove('show');
-  document.getElementById('loginError').textContent = '';
-  document.getElementById('resetSuccess').textContent = '';
-}
-window.showRegister = function() {
-  document.getElementById('loginForm').style.display = 'none';
-  document.getElementById('registerForm').style.display = 'block';
-  document.getElementById('resetForm').style.display = 'none';
-  document.getElementById('loginError').textContent = '';
-}
-window.showLoginForm = function() {
-  document.getElementById('loginForm').style.display = 'block';
-  document.getElementById('registerForm').style.display = 'none';
-  document.getElementById('resetForm').style.display = 'none';
-  document.getElementById('loginError').textContent = '';
-}
-window.showReset = function() {
-  document.getElementById('loginForm').style.display = 'none';
-  document.getElementById('registerForm').style.display = 'none';
-  document.getElementById('resetForm').style.display = 'block';
-  document.getElementById('loginError').textContent = '';
-}
+window.openLoginModal = function() { document.getElementById('loginModal').classList.add('show'); showLoginForm(); }
+window.closeLoginModal = function() { document.getElementById('loginModal').classList.remove('show'); document.getElementById('loginError').textContent = ''; document.getElementById('resetSuccess').textContent = ''; }
+window.showRegister = function() { document.getElementById('loginForm').style.display = 'none'; document.getElementById('registerForm').style.display = 'block'; document.getElementById('resetForm').style.display = 'none'; document.getElementById('loginError').textContent = ''; }
+window.showLoginForm = function() { document.getElementById('loginForm').style.display = 'block'; document.getElementById('registerForm').style.display = 'none'; document.getElementById('resetForm').style.display = 'none'; document.getElementById('loginError').textContent = ''; }
+window.showReset = function() { document.getElementById('loginForm').style.display = 'none'; document.getElementById('registerForm').style.display = 'none'; document.getElementById('resetForm').style.display = 'block'; document.getElementById('loginError').textContent = ''; }
 
 window.loginWithEmail = async function() {
   const email = document.getElementById('loginEmail').value;
   const password = document.getElementById('loginPassword').value;
   if (!email || !password) { document.getElementById('loginError').textContent = 'メールアドレスとパスワードを入力してください'; return; }
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-  } catch(e) {
-    document.getElementById('loginError').textContent = 'メールアドレスまたはパスワードが違います';
-  }
+  try { await signInWithEmailAndPassword(auth, email, password); }
+  catch(e) { document.getElementById('loginError').textContent = 'メールアドレスまたはパスワードが違います'; }
 }
-
 window.registerWithEmail = async function() {
   const email = document.getElementById('registerEmail').value;
   const password = document.getElementById('registerPassword').value;
   if (!email || !password) { document.getElementById('loginError').textContent = 'メールアドレスとパスワードを入力してください'; return; }
   if (password.length < 6) { document.getElementById('loginError').textContent = 'パスワードは6文字以上にしてください'; return; }
-  try {
-    await createUserWithEmailAndPassword(auth, email, password);
-  } catch(e) {
-    document.getElementById('loginError').textContent = e.code === 'auth/email-already-in-use' ? 'このメールアドレスは既に使われています' : '登録に失敗しました。もう一度お試しください';
-  }
+  try { await createUserWithEmailAndPassword(auth, email, password); }
+  catch(e) { document.getElementById('loginError').textContent = e.code === 'auth/email-already-in-use' ? 'このメールアドレスは既に使われています' : '登録に失敗しました。もう一度お試しください'; }
 }
-
-// isRegister=trueなら新規登録フロー、falseならログインフロー
 window.loginWithGoogle = async function(isRegister) {
   sessionStorage.setItem('googleFlow', isRegister ? 'register' : 'login');
-  try {
-    await signInWithRedirect(auth, googleProvider);
-  } catch(e) {
-    document.getElementById('loginError').textContent = 'Googleログインに失敗しました';
-  }
+  try { await signInWithRedirect(auth, googleProvider); }
+  catch(e) { document.getElementById('loginError').textContent = 'Googleログインに失敗しました'; }
 }
-
 window.sendReset = async function() {
   const email = document.getElementById('resetEmail').value;
   if (!email) { document.getElementById('loginError').textContent = 'メールアドレスを入力してください'; return; }
   try {
-    await sendPasswordResetEmail(auth, email, {
-      url: 'https://mimimi-night.github.io/my-closet/reset.html'
-    });
+    await sendPasswordResetEmail(auth, email, { url: 'https://mimimi-night.github.io/my-closet/reset.html' });
     document.getElementById('loginError').textContent = '';
     document.getElementById('resetSuccess').textContent = 'リセットメールを送信しました！メールをご確認ください';
-  } catch(e) {
-    document.getElementById('loginError').textContent = 'メールアドレスが見つかりません';
-  }
+  } catch(e) { document.getElementById('loginError').textContent = 'メールアドレスが見つかりません'; }
 }
-
-window.logout = async function() {
-  if (confirm('ログアウトしますか？')) await signOut(auth);
-}
-window.openMenu = function() {
-  document.getElementById('menuModal').classList.add('show');
-}
-window.closeMenu = function() {
-  document.getElementById('menuModal').classList.remove('show');
-}
-window.openContact = function() {
-  closeMenu();
-  window.open('mailto:nightmimimi@gmail.com?subject=あなたクローゼット お問い合わせ', '_blank');
-}
+window.logout = async function() { if (confirm('ログアウトしますか？')) await signOut(auth); }
+window.openMenu = function() { document.getElementById('menuModal').classList.add('show'); }
+window.closeMenu = function() { document.getElementById('menuModal').classList.remove('show'); }
+window.openContact = function() { closeMenu(); window.open('mailto:nightmimimi@gmail.com?subject=あなたクローゼット お問い合わせ', '_blank'); }
 window.deleteAccount = async function() {
-  if (!currentUser) {
-    alert('ログインしていないためアカウント削除はできません');
-    closeMenu();
-    return;
-  }
+  if (!currentUser) { alert('ログインしていないためアカウント削除はできません'); closeMenu(); return; }
   if (!confirm('アカウントを削除すると、登録した服のデータがすべて消えます。本当に削除しますか？')) return;
   if (!confirm('本当に削除しますか？この操作は取り消せません。')) return;
   try {
@@ -724,29 +461,22 @@ window.deleteAccount = async function() {
     for (const d of tSnap.docs) await deleteDoc(doc(db, 'users', currentUser.uid, 'tastes', d.id));
     await currentUser.delete();
     alert('アカウントを削除しました');
-  } catch(e) {
-    alert('削除に失敗しました。一度ログアウトして再ログインしてから試してください');
-  }
+  } catch(e) { alert('削除に失敗しました。一度ログアウトして再ログインしてから試してください'); }
 }
-  
+
 async function loadItems() {
   if (!currentUser) return;
   const q = query(collection(db, 'users', currentUser.uid, 'items'), orderBy('createdAt', 'desc'));
   const snap = await getDocs(q);
   items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
-
 async function loadTastes() {
   if (!currentUser) return;
   const snap = await getDocs(collection(db, 'users', currentUser.uid, 'tastes'));
   if (!snap.empty) tastes = snap.docs.map(d => d.data().name);
 }
-
 async function saveTastesToDB() {
-  if (!currentUser) {
-    localStorage.setItem('closet_tastes_guest', JSON.stringify(tastes));
-    return;
-  }
+  if (!currentUser) { localStorage.setItem('closet_tastes_guest', JSON.stringify(tastes)); return; }
   const snap = await getDocs(collection(db, 'users', currentUser.uid, 'tastes'));
   for (const d of snap.docs) await deleteDoc(doc(db, 'users', currentUser.uid, 'tastes', d.id));
   for (const t of tastes) await addDoc(collection(db, 'users', currentUser.uid, 'tastes'), { name: t });
@@ -758,22 +488,18 @@ function colorDistance(c1, c2) {
   if (!a || !b) return 999;
   return Math.sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2 + (a[2]-b[2])**2);
 }
-
 function getUniqueColors() {
   const colors = items.filter(i => i.color).map(i => i.color);
   const unique = [];
   colors.forEach(c => { if (!unique.find(u => colorDistance(u, c) < 40)) unique.push(c); });
   return unique;
 }
-
 window.renderTasteSelect = function() {
   document.getElementById('tasteSelect').innerHTML = '<option value="">テイストを選ぶ</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
   document.getElementById('searchTaste').innerHTML = '<option value="">テイスト：全て</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
 }
 window.renderTasteTags = function() {
-  document.getElementById('tasteTags').innerHTML = tastes.map(t => `
-    <button class="taste-tag" onclick="deleteTaste(event,'${t}')">${t} <span style="font-size:14px">×</span></button>
-  `).join('');
+  document.getElementById('tasteTags').innerHTML = tastes.map(t => `<button class="taste-tag" onclick="deleteTaste(event,'${t}')">${t} <span style="font-size:14px">×</span></button>`).join('');
 }
 window.renderColorChips = function() {
   const container = document.getElementById('colorChips');
@@ -818,7 +544,6 @@ window.addTaste = async function() {
   await saveTastesToDB();
   input.value = ''; renderTasteSelect(); renderTasteTags();
 }
-
 function getBrightness(r, g, b) { return (r*299 + g*587 + b*114) / 1000; }
 function extractColor(dataUrl, callback) {
   const img = new Image();
@@ -852,7 +577,6 @@ function compressImage(file, callback) {
   };
   reader.readAsDataURL(file);
 }
-
 window.previewPhoto = function(e) {
   const file = e.target.files[0];
   if (!file) return;
@@ -871,11 +595,7 @@ window.previewPhoto = function(e) {
     });
   });
 }
-window.openModal = function() {
-  currentPhoto = null; currentColor = null;
-  renderTasteSelect(); renderTasteTags();
-  document.getElementById('modal').classList.add('show');
-}
+window.openModal = function() { currentPhoto = null; currentColor = null; renderTasteSelect(); renderTasteTags(); document.getElementById('modal').classList.add('show'); }
 window.closeModal = function() {
   document.getElementById('modal').classList.remove('show');
   ['cameraInput','albumInput'].forEach(id => document.getElementById(id).value = '');
@@ -907,11 +627,8 @@ window.saveItem = async function() {
       localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
     }
     closeModal(); renderGrid();
-  } catch(e) {
-    alert('保存に失敗しました。ネット接続を確認してください。');
-  } finally {
-    indicator.style.display = 'none';
-  }
+  } catch(e) { alert('保存に失敗しました。ネット接続を確認してください。'); }
+  finally { indicator.style.display = 'none'; }
 }
 window.deleteItem = async function(id) {
   if (confirm('この服を削除しますか？')) {
@@ -925,7 +642,6 @@ window.deleteItem = async function(id) {
     if (isSearchMode) doSearch(); else renderGrid();
   }
 }
-
 window.toggleFav = async function(id) {
   const item = items.find(i => i.id === id);
   if (!item) return;
@@ -940,17 +656,44 @@ window.toggleFav = async function(id) {
   }
   if (isSearchMode) doSearch(); else renderGrid();
 }
-
+window.wearItem = async function(id) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  const today = new Date().toISOString().slice(0, 10);
+  if (item.lastWornDate === today) return;
+  item.wornCount = Math.min((item.wornCount || 0) + 1, 99);
+  item.lastWornDate = today;
+  if (currentUser) {
+    const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js");
+    await updateDoc(doc(db, 'users', currentUser.uid, 'items', id), { wornCount: item.wornCount, lastWornDate: item.lastWornDate });
+  } else {
+    const li = localItems.find(i => i.id === id);
+    if (li) { li.wornCount = item.wornCount; li.lastWornDate = item.lastWornDate; }
+    localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
+  }
+  if (isSearchMode) doSearch(); else renderGrid();
+}
 window.filterItems = function(filter) {
   currentFilter = filter;
   isSearchMode = false; searchResults = null;
   document.getElementById('searchResultNotice').textContent = '';
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent.trim() === filter);
-  });
+  document.querySelectorAll('.filter-btn').forEach(btn => { btn.classList.toggle('active', btn.textContent.trim() === filter); });
   renderGrid();
 }
-
+function sortItems(arr) {
+  const sort = document.getElementById('sortSelect')?.value || 'new';
+  const copy = [...arr];
+  if (sort === 'worn') { copy.sort((a, b) => (b.wornCount || 0) - (a.wornCount || 0)); }
+  else if (sort === 'date') {
+    copy.sort((a, b) => {
+      if (!a.lastWornDate && !b.lastWornDate) return 0;
+      if (!a.lastWornDate) return 1;
+      if (!b.lastWornDate) return -1;
+      return b.lastWornDate.localeCompare(a.lastWornDate);
+    });
+  }
+  return copy;
+}
 window.doSearch = function() {
   const category = document.getElementById('searchCategory').value;
   const season = document.getElementById('searchSeason').value;
@@ -968,28 +711,32 @@ window.doSearch = function() {
   document.getElementById('searchResultNotice').textContent = `検索結果：${searchResults.length}件`;
   renderGrid();
 }
-
 window.renderGrid = function() {
   const grid = document.getElementById('grid');
+  const today = new Date().toISOString().slice(0, 10);
   let source;
   if (isSearchMode) {
-    source = searchResults;
+    source = sortItems(searchResults);
   } else {
     let base = currentFilter === '全て' ? items : items.filter(i => i.category === currentFilter);
-    // お気に入りを先頭に
-    source = [...base.filter(i => i.fav), ...base.filter(i => !i.fav)];
+    source = sortItems([...base.filter(i => i.fav), ...base.filter(i => !i.fav)]);
   }
   if (!source || source.length === 0) {
     grid.innerHTML = `<div class="empty">${isSearchMode ? '条件に一致する服が見つかりませんでした' : 'まだ服が登録されていません！<br>＋ボタンから追加してね'}</div>`;
     return;
   }
-  grid.innerHTML = source.map(item => `
+  grid.innerHTML = source.map(item => {
+    const worn = item.wornCount || 0;
+    const wornToday = item.lastWornDate === today;
+    const wornDisplay = worn === 0 ? '－' : `${worn}`;
+    const lastDate = item.lastWornDate ? item.lastWornDate.replace(/-/g, '/') : '未着用';
+    return `
     <div class="card">
       <img src="${item.photo}" alt="${item.category}">
-     <button class="card-delete" onclick="deleteItem('${item.id}')">×</button>
+      <button class="card-delete" onclick="deleteItem('${item.id}')">×</button>
       <button class="card-fav ${item.fav ? 'active' : ''}" onclick="toggleFav('${item.id}')">
-  <svg viewBox="0 0 24 24" fill="${item.fav ? '#ffb3c1' : 'none'}" stroke="${item.fav ? '#ffb3c1' : 'rgba(255,255,255,0.7)'}" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-</button>
+        <svg viewBox="0 0 24 24" fill="${item.fav ? '#ffb3c1' : 'none'}" stroke="${item.fav ? '#ffb3c1' : 'rgba(255,255,255,0.7)'}" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
       <div class="card-info">
         ${item.color ? `<div class="card-color-bar" style="background:${item.color};"></div>` : ''}
         <div class="card-info-inner">
@@ -999,8 +746,17 @@ window.renderGrid = function() {
           ${item.memo ? `<div class="card-season">${item.memo}</div>` : ''}
         </div>
       </div>
-    </div>
-  `).join('');
+      <div class="card-bottom">
+        <div class="card-last-worn">最後に着た日<br>${lastDate}</div>
+        <button class="card-wear-btn ${wornToday ? 'disabled' : ''}"
+          onclick="${wornToday ? '' : `wearItem('${item.id}')`}"
+          title="${wornToday ? '今日はもう記録済みです' : '今日着たら押してね'}">
+          <span class="card-wear-count">${wornDisplay}</span>
+          <span class="card-wear-label">着用回数</span>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
 }
 </script>
 </body>
