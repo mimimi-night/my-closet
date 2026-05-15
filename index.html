@@ -41,7 +41,6 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
 }
 .header-btn.active { background: #c9a96e; color: #111; }
 .header-btn.logout { border-color: #ff6b6b44; color: #ff6b6b; }
-.header-btn.login-btn-header { border-color: #c9a96e; color: #c9a96e; }
 
 /* ゲストバナー */
 .guest-banner {
@@ -51,9 +50,21 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   font-size: 12px;
   color: #c9a96e88;
   text-align: center;
-  line-height: 1.6;
+  line-height: 1.8;
 }
-.guest-banner strong { color: #c9a96e; }
+.guest-banner strong { color: #c9a96e; display: block; margin-bottom: 4px; }
+.guest-banner .login-link {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 16px;
+  background: #c9a96e;
+  color: #111;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}
 
 /* ログインモーダル */
 .login-modal {
@@ -76,13 +87,15 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   max-width: 360px;
   border: 1px solid #c9a96e22;
   position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 .login-box h2 {
   color: #c9a96e;
   font-size: 18px;
   letter-spacing: 2px;
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 .login-close {
   position: absolute;
@@ -103,7 +116,7 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   font-size: 14px;
   margin-bottom: 12px;
 }
-.login-btn {
+.login-btn-modal {
   width: 100%;
   padding: 12px;
   border: none;
@@ -113,8 +126,8 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
   cursor: pointer;
   margin-bottom: 10px;
 }
-.login-btn.email { background: #c9a96e; color: #111; }
-.login-btn.google {
+.login-btn-modal.email { background: #c9a96e; color: #111; }
+.login-btn-modal.google {
   background: #fff; color: #333;
   display: flex; align-items: center; justify-content: center; gap: 8px;
 }
@@ -122,9 +135,9 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
 .login-switch { text-align: center; font-size: 12px; color: #888; margin-top: 12px; }
 .login-switch span { color: #c9a96e; text-decoration: underline; cursor: pointer; }
 .login-error { color: #ff6b6b; font-size: 12px; text-align: center; margin-bottom: 10px; min-height: 18px; }
-.forgot-password { text-align: center; font-size: 11px; color: #888; margin-top: 8px; cursor: pointer; }
-.forgot-password span { color: #c9a96e; text-decoration: underline; }
-.private-mode-notice { font-size: 10px; color: #666; text-align: center; margin-top: 6px; }
+.forgot-pw { text-align: center; font-size: 11px; color: #888; margin-top: 6px; cursor: pointer; }
+.forgot-pw span { color: #c9a96e; text-decoration: underline; }
+.private-mode-notice { font-size: 10px; color: #666; text-align: center; margin-top: 6px; line-height: 1.4; }
 .reset-success { color: #2ecc71; font-size: 12px; text-align: center; margin-bottom: 10px; }
 
 /* ローディング */
@@ -316,14 +329,14 @@ select option { background: #333; }
     <div id="loginForm">
       <input type="email" class="login-input" id="loginEmail" placeholder="メールアドレス">
       <input type="password" class="login-input" id="loginPassword" placeholder="パスワード">
-      <button class="login-btn email" onclick="loginWithEmail()">ログイン</button>
-      <div class="forgot-password" onclick="showReset()">パスワードを忘れた方は<span>こちら</span></div>
+      <button class="login-btn-modal email" onclick="loginWithEmail()">ログイン</button>
+      <div class="forgot-pw" onclick="showReset()">パスワードを忘れた方は<span>こちら</span></div>
       <div class="login-divider">または</div>
-      <button class="login-btn google" onclick="loginWithGoogle()">
+      <button class="login-btn-modal google" onclick="loginWithGoogle(false)">
         <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A353" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
         Googleでログイン
       </button>
-      <div class="private-mode-notice">⚠ プライベートモードではGoogleログインがうまくいかない場合があります</div>
+      <div class="private-mode-notice">⚠ プライベートモードではGoogleログインが<br>うまくいかない場合があります</div>
       <div class="login-switch">アカウントがない方は<span onclick="showRegister()">新規登録</span></div>
     </div>
 
@@ -331,21 +344,21 @@ select option { background: #333; }
     <div id="registerForm" style="display:none;">
       <input type="email" class="login-input" id="registerEmail" placeholder="メールアドレス">
       <input type="password" class="login-input" id="registerPassword" placeholder="パスワード（6文字以上）">
-      <button class="login-btn email" onclick="registerWithEmail()">新規登録</button>
+      <button class="login-btn-modal email" onclick="registerWithEmail()">新規登録</button>
       <div class="login-divider">または</div>
-      <button class="login-btn google" onclick="loginWithGoogle()">
+      <button class="login-btn-modal google" onclick="loginWithGoogle(true)">
         <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A353" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3z"/></svg>
         Googleで新規登録
       </button>
-      <div class="private-mode-notice">⚠ プライベートモードではGoogleログインがうまくいかない場合があります</div>
+      <div class="private-mode-notice">⚠ プライベートモードではGoogleログインが<br>うまくいかない場合があります</div>
       <div class="login-switch">すでにアカウントをお持ちの方は<span onclick="showLoginForm()">ログイン</span></div>
     </div>
 
     <!-- パスワードリセット -->
     <div id="resetForm" style="display:none;">
-      <p style="font-size:13px;color:#888;margin-bottom:12px;">登録済みのメールアドレスにパスワードリセットのリンクを送ります</p>
+      <p style="font-size:13px;color:#888;margin-bottom:12px;line-height:1.6;">登録済みのメールアドレスにパスワードリセットのリンクを送ります</p>
       <input type="email" class="login-input" id="resetEmail" placeholder="メールアドレス">
-      <button class="login-btn email" onclick="sendReset()">リセットメールを送る</button>
+      <button class="login-btn-modal email" onclick="sendReset()">リセットメールを送る</button>
       <div class="login-switch"><span onclick="showLoginForm()">ログインに戻る</span></div>
     </div>
   </div>
@@ -358,15 +371,19 @@ select option { background: #333; }
     <div class="user-info" id="userInfo"></div>
     <div class="header-buttons">
       <button class="header-btn" id="searchToggleBtn" onclick="toggleSearch()">🔍 詳細検索</button>
-      <button class="header-btn login-btn-header" id="loginHeaderBtn" onclick="openLoginModal()" style="display:none;">ログイン / 登録</button>
+      <button class="header-btn" id="loginHeaderBtn" onclick="openLoginModal()" style="display:none;">ログイン / 登録</button>
       <button class="header-btn logout" id="logoutBtn" onclick="logout()" style="display:none;">ログアウト</button>
     </div>
   </header>
 
   <!-- ゲスト用バナー -->
   <div class="guest-banner" id="guestBanner" style="display:none;">
-    <strong>💡 アカウント登録でデータが消えなくなります！</strong><br>
-    このアカウントは服のデータを保存するためだけに使用され、外部に漏れることはありません。
+    <strong>💡 アカウント登録でデータが消えなくなります！</strong>
+    ログインなしでは約50枚まで保存できます。<br>
+    アカウント登録すると約10,000枚まで保存でき、機種変更や<br>キャッシュ削除でもデータが消えません。<br>
+    このアカウントは服のデータ保存のためだけに使用され、<br>外部に漏れることはありません。
+    <br>
+    <button class="login-link" onclick="openLoginModal()">アカウント登録 / ログイン</button>
   </div>
 
   <div class="search-panel" id="searchPanel">
@@ -469,6 +486,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+auth.languageCode = 'ja'; // メールを日本語で送る
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
@@ -483,9 +501,25 @@ let currentColor = null;
 let isSearchMode = false;
 let searchResults = null;
 let selectedSearchColor = null;
+let isRegisterFlow = false; // Googleでの新規登録かログインか
 
 // リダイレクト結果の処理
-getRedirectResult(auth).catch(e => console.error('Redirect error:', e));
+getRedirectResult(auth).then(result => {
+  if (result && result.user) {
+    // 新規ユーザーかどうかチェック
+    const isNewUser = result.user.metadata.creationTime === result.user.metadata.lastSignInTime;
+    const savedFlow = sessionStorage.getItem('googleFlow');
+    if (savedFlow === 'login' && isNewUser) {
+      // ログインフローなのに新規ユーザー → アカウントなし
+      signOut(auth);
+      setTimeout(() => {
+        openLoginModal();
+        document.getElementById('loginError').textContent = 'アカウントが見つかりません。新規登録してください';
+      }, 500);
+    }
+    sessionStorage.removeItem('googleFlow');
+  }
+}).catch(e => console.error('Redirect error:', e));
 
 // ログイン状態監視
 onAuthStateChanged(auth, async (user) => {
@@ -515,7 +549,6 @@ onAuthStateChanged(auth, async (user) => {
   renderGrid();
 });
 
-// ログインモーダル
 window.openLoginModal = function() {
   document.getElementById('loginModal').classList.add('show');
   showLoginForm();
@@ -544,7 +577,6 @@ window.showReset = function() {
   document.getElementById('loginError').textContent = '';
 }
 
-// 認証
 window.loginWithEmail = async function() {
   const email = document.getElementById('loginEmail').value;
   const password = document.getElementById('loginPassword').value;
@@ -568,7 +600,9 @@ window.registerWithEmail = async function() {
   }
 }
 
-window.loginWithGoogle = async function() {
+// isRegister=trueなら新規登録フロー、falseならログインフロー
+window.loginWithGoogle = async function(isRegister) {
+  sessionStorage.setItem('googleFlow', isRegister ? 'register' : 'login');
   try {
     await signInWithRedirect(auth, googleProvider);
   } catch(e) {
@@ -580,7 +614,9 @@ window.sendReset = async function() {
   const email = document.getElementById('resetEmail').value;
   if (!email) { document.getElementById('loginError').textContent = 'メールアドレスを入力してください'; return; }
   try {
-    await sendPasswordResetEmail(auth, email);
+    await sendPasswordResetEmail(auth, email, {
+      url: 'https://mimimi-night.github.io/my-closet/reset.html'
+    });
     document.getElementById('loginError').textContent = '';
     document.getElementById('resetSuccess').textContent = 'リセットメールを送信しました！メールをご確認ください';
   } catch(e) {
@@ -592,7 +628,6 @@ window.logout = async function() {
   if (confirm('ログアウトしますか？')) await signOut(auth);
 }
 
-// データ読み込み
 async function loadItems() {
   if (!currentUser) return;
   const q = query(collection(db, 'users', currentUser.uid, 'items'), orderBy('createdAt', 'desc'));
@@ -634,13 +669,11 @@ window.renderTasteSelect = function() {
   document.getElementById('tasteSelect').innerHTML = '<option value="">テイストを選ぶ</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
   document.getElementById('searchTaste').innerHTML = '<option value="">テイスト：全て</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
 }
-
 window.renderTasteTags = function() {
   document.getElementById('tasteTags').innerHTML = tastes.map(t => `
     <button class="taste-tag" onclick="deleteTaste(event,'${t}')">${t} <span style="font-size:14px">×</span></button>
   `).join('');
 }
-
 window.renderColorChips = function() {
   const container = document.getElementById('colorChips');
   const uniqueColors = getUniqueColors();
@@ -651,9 +684,7 @@ window.renderColorChips = function() {
     </div>
   `).join('') + `<button class="color-clear-btn" onclick="selectSearchColor(null)">指定なし</button>`;
 }
-
 window.selectSearchColor = function(color) { selectedSearchColor = color; renderColorChips(); }
-
 window.toggleSearch = function() {
   const panel = document.getElementById('searchPanel');
   const btn = document.getElementById('searchToggleBtn');
@@ -661,7 +692,6 @@ window.toggleSearch = function() {
   btn.classList.toggle('active');
   if (panel.classList.contains('show')) renderColorChips();
 }
-
 window.doSearch = function() {
   const category = document.getElementById('searchCategory').value;
   const season = document.getElementById('searchSeason').value;
@@ -677,7 +707,6 @@ window.doSearch = function() {
   document.getElementById('searchResultNotice').textContent = `検索結果：${searchResults.length}件`;
   renderGrid();
 }
-
 window.resetSearch = function() {
   ['searchCategory','searchSeason','searchTaste'].forEach(id => document.getElementById(id).value = '');
   selectedSearchColor = null; renderColorChips();
@@ -685,7 +714,6 @@ window.resetSearch = function() {
   document.getElementById('searchResultNotice').textContent = '';
   renderGrid();
 }
-
 window.deleteTaste = async function(e, t) {
   e.stopPropagation();
   if (confirm(`「${t}」を削除しますか？`)) {
@@ -694,7 +722,6 @@ window.deleteTaste = async function(e, t) {
     renderTasteSelect(); renderTasteTags();
   }
 }
-
 window.addTaste = async function() {
   const input = document.getElementById('newTasteInput');
   const val = input.value.trim();
@@ -706,7 +733,6 @@ window.addTaste = async function() {
 }
 
 function getBrightness(r, g, b) { return (r*299 + g*587 + b*114) / 1000; }
-
 function extractColor(dataUrl, callback) {
   const img = new Image();
   img.onload = function() {
@@ -722,7 +748,6 @@ function extractColor(dataUrl, callback) {
   };
   img.src = dataUrl;
 }
-
 function compressImage(file, callback) {
   const reader = new FileReader();
   reader.onload = function(e) {
@@ -759,13 +784,11 @@ window.previewPhoto = function(e) {
     });
   });
 }
-
 window.openModal = function() {
   currentPhoto = null; currentColor = null;
   renderTasteSelect(); renderTasteTags();
   document.getElementById('modal').classList.add('show');
 }
-
 window.closeModal = function() {
   document.getElementById('modal').classList.remove('show');
   ['cameraInput','albumInput'].forEach(id => document.getElementById(id).value = '');
@@ -775,7 +798,6 @@ window.closeModal = function() {
   document.getElementById('photoPreview').innerHTML = '<span>写真を選んでください</span>';
   currentPhoto = null; currentColor = null;
 }
-
 window.saveItem = async function() {
   const category = document.getElementById('category').value;
   const season = document.getElementById('season').value;
@@ -784,12 +806,9 @@ window.saveItem = async function() {
   if (!currentPhoto) { alert('写真を選んでください！'); return; }
   if (!category) { alert('カテゴリを選んでください！'); return; }
   if (!season) { alert('季節を選んでください！'); return; }
-
   const indicator = document.getElementById('savingIndicator');
   indicator.style.display = 'block';
-
   const item = { photo: currentPhoto, color: currentColor, category, season, taste, memo, createdAt: new Date().toISOString() };
-
   try {
     if (currentUser) {
       const docRef = await addDoc(collection(db, 'users', currentUser.uid, 'items'), item);
@@ -807,7 +826,6 @@ window.saveItem = async function() {
     indicator.style.display = 'none';
   }
 }
-
 window.deleteItem = async function(id) {
   if (confirm('この服を削除しますか？')) {
     if (currentUser) {
@@ -820,7 +838,6 @@ window.deleteItem = async function(id) {
     if (isSearchMode) doSearch(); else renderGrid();
   }
 }
-
 window.filterItems = function(filter) {
   currentFilter = filter;
   isSearchMode = false; searchResults = null;
@@ -830,7 +847,6 @@ window.filterItems = function(filter) {
   });
   renderGrid();
 }
-
 window.renderGrid = function() {
   const grid = document.getElementById('grid');
   let source = isSearchMode ? searchResults : (currentFilter === '全て' ? items : items.filter(i => i.category === currentFilter));
