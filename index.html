@@ -293,13 +293,13 @@ select option { background: #333; }
 .card-season { font-size: 11px; color: #888; margin-top: 2px; }
 .card-taste { font-size: 11px; color: #c9a96e88; margin-top: 2px; }
 .card-delete {
-  position: absolute; top: 8px; right: 8px;
+  position: absolute; top: 8px; left: 8px;
   background: rgba(0,0,0,0.6); border: none; border-radius: 50%;
   width: 28px; height: 28px; color: white; font-size: 14px;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
 }
 .card-fav {
-  position: absolute; top: 8px; left: 8px;
+  position: absolute; top: 8px; right: 8px;
   background: rgba(0,0,0,0.6); border: none; border-radius: 50%;
   width: 28px; height: 28px; font-size: 15px;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
@@ -898,10 +898,10 @@ window.renderGrid = function() {
   grid.innerHTML = source.map(item => `
     <div class="card">
       <img src="${item.photo}" alt="${item.category}">
+     <button class="card-delete" onclick="deleteItem('${item.id}')">×</button>
       <button class="card-fav" onclick="toggleFav('${item.id}')" style="background:rgba(0,0,0,0.6);">
         ${item.fav ? '❤️' : '🤍'}
       </button>
-      <button class="card-delete" onclick="deleteItem('${item.id}')">×</button>
       <div class="card-info">
         ${item.color ? `<div class="card-color-bar" style="background:${item.color};"></div>` : ''}
         <div class="card-info-inner">
