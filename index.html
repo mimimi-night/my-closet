@@ -340,7 +340,28 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('loginHeaderBtn').style.display = 'none';
     document.getElementById('logoutBtn').style.display = 'inline-block';
     document.getElementById('guestBanner').style.display = 'none';
-    closeLoginModal();
+        closeLoginModal();
+    // ゲストデータの引き継ぎ
+    const guestItems = JSON.parse(localStorage.getItem('closet_items_guest') || '[]');
+    const guestTastes = JSON.parse(localStorage.getItem('closet_tastes_guest') || '[]');
+    if (guestItems.length > 0) {
+      if (confirm(`ゲストとして登録した${guestItems.length}件の服データをアカウントに引き継ぎますか？`)) {
+        for (const item of guestItems) {
+          const { id, ...data } = item;
+          await addDoc(collection(db, 'users', user.uid, 'items'), data);
+        }
+        localStorage.removeItem('closet_items_guest');
+      }
+    }
+    if (guestTastes.length > 0) {
+      const existingSnap = await getDocs(collection(db, 'users', user.uid, 'tastes'));
+      if (existingSnap.empty) {
+        for (const t of guestTastes) {
+          await addDoc(collection(db, 'users', user.uid, 'tastes'), { name: t });
+        }
+      }
+      localStorage.removeItem('closet_tastes_guest');
+    }
     await loadItems();
     await loadTastes();
   } else {
