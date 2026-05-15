@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>パスワードリセット - あなたクローゼット</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Hiragino Sans', sans-serif;
+  background: #1a1a1a;
+  color: #f0e6d3;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; margin-bottom: 32px; }
+.box {
+  background: #222;
+  border-radius: 20px;
+  padding: 32px 24px;
+  width: 100%;
+  max-width: 360px;
+  border: 1px solid #c9a96e22;
+  text-align: center;
+}
+.box h2 { color: #c9a96e; font-size: 16px; letter-spacing: 2px; margin-bottom: 16px; }
+.box p { font-size: 13px; color: #888; margin-bottom: 20px; line-height: 1.6; }
+.input {
+  width: 100%; padding: 12px 14px;
+  background: #333; border: 1px solid #c9a96e44;
+  border-radius: 10px; color: #f0e6d3;
+  font-size: 14px; margin-bottom: 12px;
+}
+.btn {
+  width: 100%; padding: 12px;
+  background: #c9a96e; color: #111;
+  border: none; border-radius: 10px;
+  font-size: 15px; font-weight: bold; cursor: pointer;
+  margin-bottom: 10px;
+}
+.error { color: #ff6b6b; font-size: 12px; margin-bottom: 10px; min-height: 18px; }
+.success { color: #2ecc71; font-size: 13px; margin-bottom: 16px; }
+.back { font-size: 12px; color: #888; margin-top: 12px; }
+.back a { color: #c9a96e; text-decoration: none; }
+.loading-spinner {
+  width: 32px; height: 32px;
+  border: 3px solid #c9a96e44;
+  border-top: 3px solid #c9a96e;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<h1>あなたクローゼット</h1>
+
+<div class="box" id="loadingBox">
+  <div class="loading-spinner"></div>
+  <p>処理中...</p>
+</div>
+
+<div class="box" id="resetBox" style="display:none;">
+  <h2>新しいパスワードを設定</h2>
+  <p>新しいパスワードを入力してください（6文字以上）</p>
+  <div class="error" id="errorMsg"></div>
+  <input type="password" class="input" id="newPassword" placeholder="新しいパスワード（6文字以上）">
+  <input type="password" class="input" id="confirmPassword" placeholder="パスワードの確認">
+  <button class="btn" onclick="doReset()">パスワードを変更する</button>
+  <div class="back"><a href="index.html">← ログイン画面に戻る</a></div>
+</div>
+
+<div class="box" id="successBox" style="display:none;">
+  <div style="font-size:40px;margin-bottom:16px;">✅</div>
+  <h2>パスワードの変更完了！</h2>
+  <div class="success">新しいパスワードで<br>ログインできるようになりました</div>
+  <p id="countdown" style="font-size:12px;color:#888;"></p>
+  <button class="btn" onclick="goToLogin()">ログイン画面へ</button>
+</div>
+
+<div class="box" id="errorBox" style="display:none;">
+  <div style="font-size:40px;margin-bottom:16px;">❌</div>
+  <h2 style="color:#ff6b6b;">リンクが無効です</h2>
+  <p>このリセットリンクは期限切れか、すでに使用済みです。<br>もう一度パスワードリセットを申請してください。</p>
+  <div style="margin-top:20px;">
+    <button class="btn" onclick="goToLogin()">ログイン画面へ</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getAuth, verifyPasswordResetCode, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDoQlri0Yl5CWOWROVz3lcpV-m5RZtWEn4",
+  authDomain: "my-closet-21d11.firebaseapp.com",
+  projectId: "my-closet-21d11",
+  storageBucket: "my-closet-21d11.firebasestorage.app",
+  messagingSenderId: "709312024370",
+  appId: "1:709312024370:web:2a9cca87b06a2344e2112b",
+  measurementId: "G-S43KFSX7LH"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const params = new URLSearchParams(window.location.search);
+const oobCode = params.get('oobCode');
+const mode = params.get('mode');
+
+window.goToLogin = function() {
+  window.location.href = 'index.html';
+}
+
+if (mode === 'resetPassword' && oobCode) {
+  verifyPasswordResetCode(auth, oobCode)
+    .then(() => {
+      document.getElementById('loadingBox').style.display = 'none';
+      document.getElementById('resetBox').style.display = 'block';
+    })
+    .catch(() => {
+      document.getElementById('loadingBox').style.display = 'none';
+      document.getElementById('errorBox').style.display = 'block';
+    });
+} else {
+  document.getElementById('loadingBox').style.display = 'none';
+  document.getElementById('errorBox').style.display = 'block';
+}
+
+window.doReset = async function() {
+  const newPassword = document.getElementById('newPassword').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+  const errorMsg = document.getElementById('errorMsg');
+
+  if (newPassword.length < 6) { errorMsg.textContent = 'パスワードは6文字以上にしてください'; return; }
+  if (newPassword !== confirmPassword) { errorMsg.textContent = 'パスワードが一致しません'; return; }
+
+  try {
+    await confirmPasswordReset(auth, oobCode, newPassword);
+    document.getElementById('resetBox').style.display = 'none';
+    document.getElementById('successBox').style.display = 'block';
+
+    // 5秒後に自動でログイン画面へ
+    let count = 5;
+    const countdown = document.getElementById('countdown');
+    const timer = setInterval(() => {
+      countdown.textContent = `${count}秒後に自動でログイン画面へ移動します`;
+      count--;
+      if (count < 0) {
+        clearInterval(timer);
+        goToLogin();
+      }
+    }, 1000);
+  } catch(e) {
+    document.getElementById('errorMsg').textContent = 'エラーが発生しました。もう一度お試しください';
+  }
+}
+</script>
+</body>
+</html>
