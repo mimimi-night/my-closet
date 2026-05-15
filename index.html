@@ -318,12 +318,67 @@ select option { background: #333; }
   padding: 6px 12px; border-radius: 20px;
   font-size: 11px; font-weight: bold; z-index: 300; display: none;
 }
+
+.menu-btn {
+  position: fixed; top: 16px; right: 16px;
+  background: rgba(201,169,110,0.15);
+  border: 1px solid #c9a96e44;
+  border-radius: 50%;
+  width: 32px; height: 32px;
+  color: #c9a96e; font-size: 16px;
+  cursor: pointer; z-index: 150;
+  display: flex; align-items: center; justify-content: center;
+}
+.menu-modal {
+  display: none; position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7); z-index: 400;
+  justify-content: center; align-items: center; padding: 20px;
+}
+.menu-modal.show { display: flex; }
+.menu-box {
+  background: #222; border-radius: 20px;
+  padding: 24px; width: 100%; max-width: 300px;
+  border: 1px solid #c9a96e22;
+}
+.menu-box h3 { color: #c9a96e; font-size: 14px; letter-spacing: 2px; margin-bottom: 16px; text-align: center; }
+.menu-item {
+  width: 100%; padding: 12px;
+  background: #2a2a2a; border: 1px solid #c9a96e22;
+  border-radius: 10px; color: #f0e6d3;
+  font-size: 14px; cursor: pointer; margin-bottom: 10px;
+  text-align: left; display: flex; align-items: center; gap: 10px;
+}
+.menu-item.danger { color: #ff6b6b; border-color: #ff6b6b22; }
+.menu-item.danger:hover { background: #2a1a1a; }
+.menu-close {
+  width: 100%; padding: 10px;
+  background: transparent; border: 1px solid #444;
+  border-radius: 10px; color: #888;
+  font-size: 13px; cursor: pointer; margin-top: 4px;
+}
+  
 </style>
 </head>
 <body>
 
 <div class="saving-indicator" id="savingIndicator">保存中...</div>
 
+<button class="menu-btn" onclick="openMenu()">?</button>
+
+<div class="menu-modal" id="menuModal">
+  <div class="menu-box">
+    <h3>メニュー</h3>
+    <button class="menu-item" onclick="openContact()">
+      ✉️ お問い合わせ
+    </button>
+    <button class="menu-item danger" onclick="deleteAccount()">
+      🗑️ アカウントを削除する
+    </button>
+    <button class="menu-close" onclick="closeMenu()">閉じる</button>
+  </div>
+</div>
+  
 <!-- ローディング -->
 <div class="loading" id="loadingScreen">
   <div class="loading-spinner"></div>
@@ -644,7 +699,36 @@ window.sendReset = async function() {
 window.logout = async function() {
   if (confirm('ログアウトしますか？')) await signOut(auth);
 }
-
+window.openMenu = function() {
+  document.getElementById('menuModal').classList.add('show');
+}
+window.closeMenu = function() {
+  document.getElementById('menuModal').classList.remove('show');
+}
+window.openContact = function() {
+  closeMenu();
+  window.open('mailto:nightmimimi@gmail.com?subject=あなたクローゼット お問い合わせ', '_blank');
+}
+window.deleteAccount = async function() {
+  if (!currentUser) {
+    alert('ログインしていないためアカウント削除はできません');
+    closeMenu();
+    return;
+  }
+  if (!confirm('アカウントを削除すると、登録した服のデータがすべて消えます。本当に削除しますか？')) return;
+  if (!confirm('本当に削除しますか？この操作は取り消せません。')) return;
+  try {
+    const snap = await getDocs(collection(db, 'users', currentUser.uid, 'items'));
+    for (const d of snap.docs) await deleteDoc(doc(db, 'users', currentUser.uid, 'items', d.id));
+    const tSnap = await getDocs(collection(db, 'users', currentUser.uid, 'tastes'));
+    for (const d of tSnap.docs) await deleteDoc(doc(db, 'users', currentUser.uid, 'tastes', d.id));
+    await currentUser.delete();
+    alert('アカウントを削除しました');
+  } catch(e) {
+    alert('削除に失敗しました。一度ログアウトして再ログインしてから試してください');
+  }
+}
+  
 async function loadItems() {
   if (!currentUser) return;
   const q = query(collection(db, 'users', currentUser.uid, 'items'), orderBy('createdAt', 'desc'));
