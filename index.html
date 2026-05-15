@@ -129,7 +129,7 @@ select option { background: #333; }
 .filter-row { display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; align-items: center; }
 .filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid #c9a96e44; background: transparent; color: #c9a96e; font-size: 12px; cursor: pointer; white-space: nowrap; }
 .filter-btn.active { background: #c9a96e; color: #111; }
-.sort-select { padding: 6px 10px; border-radius: 20px; border: 1px solid #c9a96e44; background: #1a1a1a; color: #c9a96e; font-size: 11px; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.sort-select { padding: 6px 10px; border-radius: 20px; border: 1px solid #c9a96e44; background: #1a1a1a; color: #c9a96e; font-size: 11px; cursor: pointer; white-space: nowrap; flex-shrink: 0; width: fit-content; }
 .search-panel { display: none; background: #1e1e1e; border-bottom: 1px solid #c9a96e22; padding: 16px; }
 .search-panel.show { display: block; }
 .search-panel h3 { font-size: 13px; color: #c9a96e; margin-bottom: 12px; letter-spacing: 2px; }
@@ -164,7 +164,7 @@ select option { background: #333; }
 .card-fav.active { background: rgba(180,80,100,0.7); border-color: rgba(255,150,170,0.4); }
 .card-bottom { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px 8px; border-top: 1px solid #c9a96e11; }
 .card-last-worn { font-size: 9px; color: #666; line-height: 1.4; }
-.card-wear-btn { display: flex; flex-direction: row; align-items: center; gap: 5px; background: transparent; border: 1px solid #c9a96e33; border-radius: 8px; padding: 4px 8px; cursor: pointer; transition: all 0.2s; }
+.card-wear-btn { display: flex; flex-direction: row; align-items: center; gap: 5px; background: transparent; border: 1px solid #c9a96e33; border-radius: 8px; padding: 4px 8px; cursor: pointer; transition: background 0.2s; min-width: 70px; justify-content: center; }
 .card-wear-btn:hover { background: #c9a96e11; }
 .card-wear-btn.disabled { opacity: 0.4; cursor: not-allowed; }
 .card-wear-btn.disabled:hover { background: transparent; }
@@ -283,11 +283,13 @@ select option { background: #333; }
   <div class="search-result-notice" id="searchResultNotice"></div>
 
   <div class="filter-row">
-    <select class="sort-select" id="sortSelect" onchange="renderGrid()">
-      <option value="new">登録が新しい順</option>
-      <option value="worn">着用回数が多い順</option>
-      <option value="date">最後に着た日が新しい順</option>
-    </select>
+   <select class="sort-select" id="sortSelect" onchange="renderGrid()">
+  <option value="new">デフォルト</option>
+  <option value="worn_desc">着用回数が多い順</option>
+  <option value="worn_asc">着用回数が少ない順</option>
+  <option value="date_desc">最後に着た日が新しい順</option>
+  <option value="date_asc">最後に着た日が古い順</option>
+</select>
     <button class="filter-btn active" onclick="filterItems('全て')">全て</button>
     <button class="filter-btn" onclick="filterItems('トップス')">トップス</button>
     <button class="filter-btn" onclick="filterItems('ボトムス')">ボトムス</button>
@@ -683,15 +685,20 @@ window.filterItems = function(filter) {
 function sortItems(arr) {
   const sort = document.getElementById('sortSelect')?.value || 'new';
   const copy = [...arr];
-  if (sort === 'worn') { copy.sort((a, b) => (b.wornCount || 0) - (a.wornCount || 0)); }
-  else if (sort === 'date') {
-    copy.sort((a, b) => {
-      if (!a.lastWornDate && !b.lastWornDate) return 0;
-      if (!a.lastWornDate) return 1;
-      if (!b.lastWornDate) return -1;
-      return b.lastWornDate.localeCompare(a.lastWornDate);
-    });
-  }
+  if (sort === 'worn_desc') copy.sort((a, b) => (b.wornCount || 0) - (a.wornCount || 0));
+  else if (sort === 'worn_asc') copy.sort((a, b) => (a.wornCount || 0) - (b.wornCount || 0));
+  else if (sort === 'date_desc') copy.sort((a, b) => {
+    if (!a.lastWornDate && !b.lastWornDate) return 0;
+    if (!a.lastWornDate) return 1;
+    if (!b.lastWornDate) return -1;
+    return b.lastWornDate.localeCompare(a.lastWornDate);
+  });
+  else if (sort === 'date_asc') copy.sort((a, b) => {
+    if (!a.lastWornDate && !b.lastWornDate) return 0;
+    if (!a.lastWornDate) return -1;
+    if (!b.lastWornDate) return 1;
+    return a.lastWornDate.localeCompare(b.lastWornDate);
+  });
   return copy;
 }
 window.doSearch = function() {
