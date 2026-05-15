@@ -101,7 +101,7 @@ select option { background: #333; }
 .card-fav.active { background: rgba(180,80,100,0.7); border-color: rgba(255,150,170,0.4); }
 .card-bottom { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px 8px; border-top: 1px solid #c9a96e11; }
 .card-last-worn { font-size: 9px; color: #666; line-height: 1.4; }
-.card-wear-btn { display: flex; flex-direction: row; align-items: center; gap: 5px; background: transparent; border: 1px solid #c9a96e33; border-radius: 8px; padding: 4px 8px; cursor: pointer; transition: background 0.2s; min-width: 80px; width: 80px; justify-content: center; }
+.card-wear-btn { display: flex; flex-direction: row; align-items: center; gap: 5px; background: transparent; border: 1px solid #c9a96e33; border-radius: 8px; padding: 4px 8px; cursor: pointer; transition: background 0.2s; min-width: 80px; width: 80px; flex: none; justify-content: center; }
 .card-wear-btn:hover { background: #c9a96e11; }
 .card-wear-btn.worn-today { border-color: #c9a96e88; background: #c9a96e11; }
 .card-wear-count { font-size: 13px; font-weight: bold; color: #c9a96e; line-height: 1; min-width: 18px; text-align: center; display: inline-block; }
@@ -186,10 +186,6 @@ select option { background: #333; }
   <div class="search-panel" id="searchPanel">
     <h3>詳細検索</h3>
     <div class="search-row">
-      <select class="search-select" id="searchCategory">
-        <option value="">カテゴリ：全て</option>
-        <option>トップス</option><option>ボトムス</option><option>ワンピース</option><option>アウター</option><option>シューズ</option>
-      </select>
       <select class="search-select" id="searchSeason">
         <option value="">季節：全て</option>
         <option>春夏</option><option>秋冬</option><option>オールシーズン</option>
@@ -711,7 +707,7 @@ window.toggleSearch = function() {
   if (panel.classList.contains('show')) renderColorChips();
 }
 window.resetSearch = function() {
-  ['searchCategory','searchSeason','searchTaste'].forEach(id => document.getElementById(id).value = '');
+  ['searchSeason','searchTaste'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('searchFav').checked = false;
   selectedSearchColor = null; renderColorChips();
   isSearchMode = false; searchResults = null;
@@ -760,7 +756,7 @@ function sortItems(arr) {
   return copy;
 }
 window.doSearch = function() {
-  const category = document.getElementById('searchCategory').value;
+  const category = currentFilter === '全て' ? '' : currentFilter;
   const season = document.getElementById('searchSeason').value;
   const taste = document.getElementById('searchTaste').value;
   const favOnly = document.getElementById('searchFav').checked;
@@ -772,7 +768,7 @@ window.doSearch = function() {
     if (selectedSearchColor && (!item.color || colorDistance(item.color, selectedSearchColor) >= 40)) return false;
     return true;
   });
-  isSearchMode = true;
+ isSearchMode = true;
   document.getElementById('searchResultNotice').textContent = `検索結果：${searchResults.length}件`;
   renderGrid();
 }
@@ -793,7 +789,7 @@ window.renderGrid = function() {
   grid.innerHTML = source.map(item => {
     const worn = item.wornCount || 0;
     const wornToday = item.lastWornDate === today;
-    const wornDisplay = worn === 0 ? '０' : `${worn}`;
+    const wornDisplay = worn === 0 ? '0' : `${worn}`;
     const lastDate = item.lastWornDate ? item.lastWornDate.replace(/-/g, '/') : '未着用';
     return `
     <div class="card">
