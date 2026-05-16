@@ -482,10 +482,14 @@ async function loadItems() {
 async function loadTastes() {
   if (!currentUser) return;
   const snap = await getDocs(collection(db, 'users', currentUser.uid, 'tastes'));
-  if (!snap.empty) tastes = snap.docs.map(d => d.data().name);
+  tastes = snap.empty ? [] : snap.docs.map(d => d.data().name);
 }
 async function saveTastesToDB() {
-  if (!currentUser) { localStorage.setItem('closet_tastes_guest', JSON.stringify(tastes)); return; }
+  if (!currentUser) {
+    localStorage.setItem('closet_tastes_guest', JSON.stringify(tastes));
+    renderTasteSelect();
+    return;
+  }
   const snap = await getDocs(collection(db, 'users', currentUser.uid, 'tastes'));
   for (const d of snap.docs) await deleteDoc(doc(db, 'users', currentUser.uid, 'tastes', d.id));
   for (const t of tastes) await addDoc(collection(db, 'users', currentUser.uid, 'tastes'), { name: t });
@@ -818,6 +822,8 @@ window.searchSimilar = function() {
   if (!currentColor) { alert('先に写真を選んでください！'); return; }
   const category = document.getElementById('category').value;
   const season = document.getElementById('season').value;
+  if (!category) { alert('カテゴリを選んでください！'); return; }
+  if (!season) { alert('季節を選んでください！'); return; }
   const taste = document.getElementById('tasteSelect').value;
   const memo = document.getElementById('memo').value;
   pendingItem = { photo: currentPhoto, color: currentColor, category, season, taste, memo, createdAt: new Date().toISOString() };
