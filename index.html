@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>あなたクローゼット</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body { font-family: 'Hiragino Sans', sans-serif; background: #1a1a1a; color: #f0e6d3; min-height: 100vh; padding-bottom: 100px; }
 header { background: #111; padding: 16px 20px; text-align: center; border-bottom: 1px solid #c9a96e44; position: sticky; top: 0; z-index: 50; }
 header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
@@ -927,6 +927,7 @@ window.wearItem = async function(id) {
     localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
   }
   if (isSearchMode) doSearch(); else renderGrid();
+  renderStats();
 }
 window.filterItems = function(filter) {
   currentFilter = filter;
