@@ -269,10 +269,11 @@ select option { background: #333; }
         </div>
       </div>
       <input type="text" id="memo" placeholder="メモ（任意）">
-      <div class="btn-row">
-        <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
-        <button class="btn-save" onclick="saveItem()">保存する</button>
-      </div>
+<button style="width:100%;padding:10px;background:#2a2a2a;border:1px solid #c9a96e44;border-radius:10px;color:#c9a96e;font-size:13px;cursor:pointer;margin-bottom:10px;" onclick="searchSimilar()">🔍 似たアイテムを検索する</button>
+<div class="btn-row">
+  <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
+  <button class="btn-save" onclick="saveItem()">保存する</button>
+</div>
     </div>
   </div>
 </div>
@@ -502,7 +503,24 @@ window.renderColorChips = function() {
   }
   container.innerHTML = html;
 }
-
+window.searchSimilar = function() {
+  if (!currentColor) { alert('先に写真を選んでください！'); return; }
+  const category = document.getElementById('category').value;
+  const season = document.getElementById('season').value;
+  closeModal();
+  selectedSearchColors = [currentColor];
+  if (season) document.getElementById('searchSeason').value = season;
+  if (category) currentFilter = category;
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.trim() === (category || '全て'));
+  });
+  const panel = document.getElementById('searchPanel');
+  const btn = document.getElementById('searchToggleBtn');
+  panel.classList.add('show');
+  btn.classList.add('active');
+  renderColorChips();
+  doSearch();
+}
 window.clearColorSelection = function() {
   selectedSearchColors = [];
   renderColorChips();
