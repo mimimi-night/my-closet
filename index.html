@@ -78,6 +78,8 @@ select option { background: #333; }
 .color-chip-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 4px; }
 .color-chip { width: 34px; height: 34px; border-radius: 50%; border: 3px solid transparent; transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s; flex-shrink: 0; box-shadow: none; }
 .color-chip.selected { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 10px rgba(255,255,255,0.6); }
+.color-chip.source-locked { border-color: #c9a96e; transform: scale(1.15); box-shadow: 0 0 10px rgba(201,169,110,0.7); cursor: not-allowed; }
+.source-color-label { font-size: 9px; color: #c9a96e; white-space: nowrap; }
 .color-clear-btn { padding: 4px 10px; background: transparent; border: 1px solid #c9a96e44; border-radius: 12px; color: #888; font-size: 11px; cursor: pointer; align-self: center; }
 .no-colors-msg { font-size: 11px; color: #666; padding: 4px 0; }
 .search-btns { display: flex; gap: 8px; }
@@ -117,6 +119,15 @@ select option { background: #333; }
 .menu-item { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #c9a96e22; border-radius: 10px; color: #f0e6d3; font-size: 14px; cursor: pointer; margin-bottom: 10px; text-align: left; display: flex; align-items: center; gap: 10px; }
 .menu-item.danger { color: #ff6b6b; border-color: #ff6b6b22; }
 .menu-close { width: 100%; padding: 10px; background: transparent; border: 1px solid #444; border-radius: 10px; color: #888; font-size: 13px; cursor: pointer; margin-top: 4px; }
+
+/* 似たアイテム検索モード用フローティングバー */
+.similar-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #111; border-top: 1px solid #c9a96e33; padding: 12px 16px; z-index: 99; flex-direction: column; gap: 8px; }
+.similar-bar.show { display: flex; }
+.similar-bar-title { font-size: 11px; color: #c9a96e88; text-align: center; letter-spacing: 1px; }
+.similar-bar-btns { display: flex; gap: 10px; }
+.similar-bar-btns button { flex: 1; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; }
+.btn-similar-save { background: #c9a96e; color: #111; }
+.btn-similar-cancel { background: #333; color: #888; }
 </style>
 </head>
 <body>
@@ -197,7 +208,7 @@ select option { background: #333; }
     </label>
     <div class="color-search-section">
       <div class="color-search-label">メインカラーで絞り込む</div>
-      <div class="color-search-hint">タップで選択・もう一度タップで解除／複数選択OK</div>
+      <div class="color-search-hint" id="colorSearchHint">タップで選択・もう一度タップで解除／複数選択OK</div>
       <div class="color-chips-row" id="colorChips"></div>
     </div>
     <div class="search-btns">
@@ -230,7 +241,16 @@ select option { background: #333; }
   </div>
 
   <div class="grid" id="grid"></div>
-  <button class="add-btn" onclick="openModal()">＋</button>
+  <button class="add-btn" id="addBtn" onclick="openModal()">＋</button>
+
+  <!-- 似たアイテム検索モード時のフローティングバー -->
+  <div class="similar-bar" id="similarBar">
+    <div class="similar-bar-title">📷 この服を登録しますか？</div>
+    <div class="similar-bar-btns">
+      <button class="btn-similar-cancel" onclick="cancelSimilarSearch()">やめる</button>
+      <button class="btn-similar-save" onclick="registerPendingItem()">この服を登録する</button>
+    </div>
+  </div>
 
   <div class="modal" id="modal">
     <div class="modal-content">
@@ -269,11 +289,11 @@ select option { background: #333; }
         </div>
       </div>
       <input type="text" id="memo" placeholder="メモ（任意）">
-<button style="width:100%;padding:10px;background:#2a2a2a;border:1px solid #c9a96e44;border-radius:10px;color:#c9a96e;font-size:13px;cursor:pointer;margin-bottom:10px;" onclick="searchSimilar()">🔍 似たアイテムを検索する</button>
-<div class="btn-row">
-  <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
-  <button class="btn-save" onclick="saveItem()">保存する</button>
-</div>
+      <button style="width:100%;padding:10px;background:#2a2a2a;border:1px solid #c9a96e44;border-radius:10px;color:#c9a96e;font-size:13px;cursor:pointer;margin-top:8px;margin-bottom:10px;" onclick="searchSimilar()">🔍 似たアイテムを検索する</button>
+      <div class="btn-row">
+        <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
+        <button class="btn-save" onclick="saveItem()">保存する</button>
+      </div>
     </div>
   </div>
 </div>
@@ -309,18 +329,17 @@ let currentPhoto = null;
 let currentColor = null;
 let isSearchMode = false;
 let searchResults = null;
-
-// 複数色選択（配列）
 let selectedSearchColors = [];
+
+// 似たアイテム検索モード用
+let isSimilarMode = false;
+let similarSourceColor = null; // ロックされた検索元の色
+let pendingItem = null; // 登録待ちのアイテムデータ
 
 // 色分析ボックス
 let boxPctX = 50, boxPctY = 50;
 let isDragging = false, dragStartX, dragStartY, boxStartX, boxStartY;
 let currentImgEl = null;
-
-// 長押しスライド選択用
-let isSliding = false;
-let slideTimer = null;
 
 getRedirectResult(auth).then(result => {
   if (result && result.user) {
@@ -451,7 +470,6 @@ function colorDistance(c1, c2) {
   return Math.sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2 + (a[2]-b[2])**2);
 }
 
-// 全色をそのまま返す（まとめない）
 function rgbToHue(color) {
   const m = color.match(/rgb\((\d+),(\d+),(\d+)\)/);
   if (!m) return 0;
@@ -461,19 +479,16 @@ function rgbToHue(color) {
   let h = max === r ? (g-b)/d % 6 : max === g ? (b-r)/d + 2 : (r-g)/d + 4;
   return (h * 60 + 360) % 360;
 }
+
 function getAllColors() {
   return items.filter(i => i.color).map(i => i.color)
     .sort((a, b) => rgbToHue(a) - rgbToHue(b));
 }
 
-// 色チップの選択トグル
 window.toggleSearchColor = function(color) {
   const idx = selectedSearchColors.indexOf(color);
-  if (idx === -1) {
-    selectedSearchColors.push(color);
-  } else {
-    selectedSearchColors.splice(idx, 1);
-  }
+  if (idx === -1) { selectedSearchColors.push(color); }
+  else { selectedSearchColors.splice(idx, 1); }
   renderColorChips();
 }
 
@@ -488,9 +503,24 @@ window.renderTasteTags = function() {
 window.renderColorChips = function() {
   const container = document.getElementById('colorChips');
   const colors = getAllColors();
-  if (colors.length === 0) { container.innerHTML = '<span class="no-colors-msg">服を登録するとカラーが表示されます</span>'; return; }
 
-  let html = colors.map(color => {
+  let html = '';
+
+  // 似たアイテム検索モードのとき：ロックされた検索元の色を先頭に表示
+  if (isSimilarMode && similarSourceColor) {
+    html += `
+      <div class="color-chip-wrap" title="検索元の色（外せません）">
+        <div class="color-chip source-locked" style="background:${similarSourceColor};"></div>
+        <span class="source-color-label">検索元</span>
+      </div>`;
+  }
+
+  if (colors.length === 0 && !isSimilarMode) {
+    container.innerHTML = '<span class="no-colors-msg">服を登録するとカラーが表示されます</span>';
+    return;
+  }
+
+  html += colors.map(color => {
     const isSelected = selectedSearchColors.includes(color);
     return `
       <div class="color-chip-wrap" onclick="toggleSearchColor('${color}')">
@@ -501,32 +531,107 @@ window.renderColorChips = function() {
   if (selectedSearchColors.length > 0) {
     html += `<button class="color-clear-btn" onclick="clearColorSelection()">全解除</button>`;
   }
+
   container.innerHTML = html;
 }
-window.searchSimilar = function() {
-  if (!currentColor) { alert('先に写真を選んでください！'); return; }
-  const category = document.getElementById('category').value;
-  const season = document.getElementById('season').value;
-  closeModal();
-  selectedSearchColors = [currentColor];
-  if (season) document.getElementById('searchSeason').value = season;
-  if (category) currentFilter = category;
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.textContent.trim() === (category || '全て'));
-  });
-  const panel = document.getElementById('searchPanel');
-  const btn = document.getElementById('searchToggleBtn');
-  panel.classList.add('show');
-  btn.classList.add('active');
-  renderColorChips();
-  doSearch();
-}
+
 window.clearColorSelection = function() {
   selectedSearchColors = [];
   renderColorChips();
 }
 
+// 似たアイテム検索
+window.searchSimilar = function() {
+  if (!currentColor) { alert('先に写真を選んでください！'); return; }
+  const category = document.getElementById('category').value;
+  const season = document.getElementById('season').value;
+  const taste = document.getElementById('tasteSelect').value;
+  const memo = document.getElementById('memo').value;
+
+  // 登録待ちデータを保存
+  pendingItem = {
+    photo: currentPhoto,
+    color: currentColor,
+    category, season, taste, memo,
+    createdAt: new Date().toISOString()
+  };
+
+  // 似たアイテム検索モードON
+  isSimilarMode = true;
+  similarSourceColor = currentColor;
+  selectedSearchColors = [];
+
+  // モーダルを閉じる（データはpendingItemに保存済みなのでクリアしない）
+  document.getElementById('modal').classList.remove('show');
+  ['cameraInput','albumInput'].forEach(id => document.getElementById(id).value = '');
+
+  // フィルター設定
+  if (category) {
+    currentFilter = category;
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent.trim() === category);
+    });
+  }
+  if (season) document.getElementById('searchSeason').value = season;
+  if (taste) document.getElementById('searchTaste').value = taste;
+
+  // 詳細検索パネルを開く
+  document.getElementById('searchPanel').classList.add('show');
+  document.getElementById('searchToggleBtn').classList.add('active');
+  document.getElementById('colorSearchHint').textContent = '「検索元」の色は外せません。他の色をタップで追加できます';
+
+  // フローティングバーを表示・＋ボタンを隠す
+  document.getElementById('similarBar').classList.add('show');
+  document.getElementById('addBtn').style.display = 'none';
+
+  renderColorChips();
+  doSearch();
+}
+
+// 似たアイテム検索をやめる
+window.cancelSimilarSearch = function() {
+  isSimilarMode = false;
+  similarSourceColor = null;
+  pendingItem = null;
+  selectedSearchColors = [];
+  document.getElementById('similarBar').classList.remove('show');
+  document.getElementById('addBtn').style.display = '';
+  document.getElementById('colorSearchHint').textContent = 'タップで選択・もう一度タップで解除／複数選択OK';
+  document.getElementById('searchPanel').classList.remove('show');
+  document.getElementById('searchToggleBtn').classList.remove('active');
+  isSearchMode = false; searchResults = null;
+  document.getElementById('searchResultNotice').textContent = '';
+  document.getElementById('searchSeason').value = '';
+  document.getElementById('searchTaste').value = '';
+  currentFilter = '全て';
+  document.querySelectorAll('.filter-btn').forEach(btn => { btn.classList.toggle('active', btn.textContent.trim() === '全て'); });
+  renderGrid();
+}
+
+// 登録待ちアイテムを登録する
+window.registerPendingItem = async function() {
+  if (!pendingItem) return;
+  const indicator = document.getElementById('savingIndicator');
+  indicator.style.display = 'block';
+  try {
+    if (currentUser) {
+      const docRef = await addDoc(collection(db, 'users', currentUser.uid, 'items'), pendingItem);
+      items.unshift({ id: docRef.id, ...pendingItem });
+    } else {
+      const localItem = { id: Date.now().toString(), ...pendingItem };
+      localItems.unshift(localItem);
+      items = [...localItems];
+      localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
+    }
+    alert('登録しました！');
+    cancelSimilarSearch();
+    renderGrid();
+  } catch(e) { alert('保存に失敗しました。'); }
+  finally { indicator.style.display = 'none'; }
+}
+
 window.toggleSearch = function() {
+  if (isSimilarMode) return; // 似たアイテム検索モード中は閉じられない
   const panel = document.getElementById('searchPanel');
   const btn = document.getElementById('searchToggleBtn');
   panel.classList.toggle('show');
@@ -534,6 +639,15 @@ window.toggleSearch = function() {
   if (panel.classList.contains('show')) renderColorChips();
 }
 window.resetSearch = function() {
+  if (isSimilarMode) {
+    // 似たアイテム検索モードのときは選択色だけリセット
+    selectedSearchColors = [];
+    document.getElementById('searchSeason').value = pendingItem?.season || '';
+    document.getElementById('searchTaste').value = pendingItem?.taste || '';
+    renderColorChips();
+    doSearch();
+    return;
+  }
   ['searchSeason','searchTaste'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('searchFav').checked = false;
   selectedSearchColors = [];
@@ -560,7 +674,6 @@ window.addTaste = async function() {
   input.value = ''; renderTasteSelect(); renderTasteTags();
 }
 
-// 指定位置から色を抽出
 function extractColorAtPos(imgEl, pctX, pctY) {
   if (!imgEl) return;
   const wrap = imgEl.parentElement;
@@ -623,16 +736,9 @@ function setupAnalysisBox(wrap) {
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
     return { x: clientX - rect.left, y: clientY - rect.top, w: rect.width, h: rect.height };
   }
-  function onStart(e) {
-    e.preventDefault();
-    isDragging = true;
-    const p = getPos(e);
-    dragStartX = p.x; dragStartY = p.y;
-    boxStartX = boxPctX; boxStartY = boxPctY;
-  }
+  function onStart(e) { e.preventDefault(); isDragging = true; const p = getPos(e); dragStartX = p.x; dragStartY = p.y; boxStartX = boxPctX; boxStartY = boxPctY; }
   function onMove(e) {
-    if (!isDragging) return;
-    e.preventDefault();
+    if (!isDragging) return; e.preventDefault();
     const p = getPos(e);
     const dx = ((p.x - dragStartX) / p.w) * 100;
     const dy = ((p.y - dragStartY) / p.h) * 100;
@@ -724,7 +830,7 @@ window.saveItem = async function() {
       localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
     }
     closeModal(); renderGrid();
-  } catch(e) { alert('保存に失敗しました。ネット接続を確認してください。'); }
+  } catch(e) { alert('保存に失敗しました。'); }
   finally { indicator.style.display = 'none'; }
 }
 window.deleteItem = async function(id) {
@@ -757,7 +863,7 @@ window.wearItem = async function(id) {
   const item = items.find(i => i.id === id);
   if (!item) return;
   const today = new Date().toISOString().slice(0, 10);
-    if (item.lastWornDate === today) {
+  if (item.lastWornDate === today) {
     item.wornCount = Math.max((item.wornCount || 1) - 1, 0);
     item.lastWornDate = item.prevLastWornDate || null;
     item.prevLastWornDate = null;
@@ -768,10 +874,10 @@ window.wearItem = async function(id) {
   }
   if (currentUser) {
     const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js");
-await updateDoc(doc(db, 'users', currentUser.uid, 'items', id), { wornCount: item.wornCount, lastWornDate: item.lastWornDate, prevLastWornDate: item.prevLastWornDate || null });
+    await updateDoc(doc(db, 'users', currentUser.uid, 'items', id), { wornCount: item.wornCount, lastWornDate: item.lastWornDate, prevLastWornDate: item.prevLastWornDate || null });
   } else {
     const li = localItems.find(i => i.id === id);
-if (li) { li.wornCount = item.wornCount; li.lastWornDate = item.lastWornDate; li.prevLastWornDate = item.prevLastWornDate || null; }
+    if (li) { li.wornCount = item.wornCount; li.lastWornDate = item.lastWornDate; li.prevLastWornDate = item.prevLastWornDate || null; }
     localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
   }
   if (isSearchMode) doSearch(); else renderGrid();
@@ -810,8 +916,13 @@ window.doSearch = function() {
     if (season && item.season !== season) return false;
     if (taste && item.taste !== taste) return false;
     if (favOnly && !item.fav) return false;
-    // 選択した色と完全一致のみ
-    if (selectedSearchColors.length > 0) {
+    if (isSimilarMode && similarSourceColor) {
+      // 似たアイテム検索モード：検索元の色と距離50以内 OR 追加選択した色と完全一致
+      const matchesSource = item.color && colorDistance(item.color, similarSourceColor) < 50;
+      const matchesSelected = selectedSearchColors.length > 0 && item.color && selectedSearchColors.includes(item.color);
+      if (!matchesSource && !matchesSelected) return false;
+    } else if (selectedSearchColors.length > 0) {
+      // 通常モード：完全一致
       if (!item.color || !selectedSearchColors.includes(item.color)) return false;
     }
     return true;
