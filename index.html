@@ -538,18 +538,6 @@ window.toggleSearchColor = function(color) {
   else { selectedSearchColors.splice(idx, 1); }
   renderColorChips();
 }
-  // 全解除ボタン表示制御
-  const existingClear = document.querySelector('#colorChips .color-clear-btn');
-  if (selectedSearchColors.length > 0 && !existingClear) {
-    const btn = document.createElement('button');
-    btn.className = 'color-clear-btn';
-    btn.textContent = '全解除';
-    btn.onclick = clearColorSelection;
-    document.getElementById('colorChips').appendChild(btn);
-  } else if (selectedSearchColors.length === 0 && existingClear) {
-    existingClear.remove();
-  }
-}
 
 window.renderTasteSelect = function() {
   document.getElementById('tasteSelect').innerHTML = '<option value="">テイストを選ぶ</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
