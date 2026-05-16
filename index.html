@@ -76,8 +76,8 @@ select option { background: #333; }
 .color-search-hint { font-size: 10px; color: #666; margin-bottom: 10px; }
 .color-chips-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; padding: 8px 0 14px; user-select: none; }
 .color-chip-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 4px; }
-.color-chip { width: 34px; height: 34px; border-radius: 50%; border: 2px solid transparent; transition: transform 0.15s, border 0.15s; flex-shrink: 0; }
-.color-chip.selected { border: 3px solid #fff; transform: scale(1.2); box-shadow: 0 0 10px rgba(255,255,255,0.6); }
+.color-chip { width: 34px; height: 34px; border-radius: 50%; border: 3px solid transparent; transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s; flex-shrink: 0; box-shadow: none; }
+.color-chip.selected { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 10px rgba(255,255,255,0.6); }
 .color-clear-btn { padding: 4px 10px; background: transparent; border: 1px solid #c9a96e44; border-radius: 12px; color: #888; font-size: 11px; cursor: pointer; align-self: center; }
 .no-colors-msg { font-size: 11px; color: #666; padding: 4px 0; }
 .search-btns { display: flex; gap: 8px; }
@@ -739,19 +739,21 @@ window.wearItem = async function(id) {
   const item = items.find(i => i.id === id);
   if (!item) return;
   const today = new Date().toISOString().slice(0, 10);
-  if (item.lastWornDate === today) {
+    if (item.lastWornDate === today) {
     item.wornCount = Math.max((item.wornCount || 1) - 1, 0);
-    item.lastWornDate = null;
+    item.lastWornDate = item.prevLastWornDate || null;
+    item.prevLastWornDate = null;
   } else {
+    item.prevLastWornDate = item.lastWornDate || null;
     item.wornCount = Math.min((item.wornCount || 0) + 1, 99);
     item.lastWornDate = today;
   }
   if (currentUser) {
     const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js");
-    await updateDoc(doc(db, 'users', currentUser.uid, 'items', id), { wornCount: item.wornCount, lastWornDate: item.lastWornDate });
+await updateDoc(doc(db, 'users', currentUser.uid, 'items', id), { wornCount: item.wornCount, lastWornDate: item.lastWornDate, prevLastWornDate: item.prevLastWornDate || null });
   } else {
     const li = localItems.find(i => i.id === id);
-    if (li) { li.wornCount = item.wornCount; li.lastWornDate = item.lastWornDate; }
+if (li) { li.wornCount = item.wornCount; li.lastWornDate = item.lastWornDate; li.prevLastWornDate = item.prevLastWornDate || null; }
     localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
   }
   if (isSearchMode) doSearch(); else renderGrid();
