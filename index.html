@@ -15,7 +15,6 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
 .header-btn.logout { border-color: #ff6b6b44; color: #ff6b6b; }
 .guest-banner { background: #1e1a0e; border-bottom: 1px solid #c9a96e33; padding: 12px 16px; font-size: 12px; color: #c9a96e88; text-align: center; line-height: 1.8; }
 .guest-banner strong { color: #c9a96e; display: block; margin-bottom: 4px; }
-.guest-banner .login-link { display: inline-block; margin-top: 8px; padding: 6px 16px; background: #c9a96e; color: #111; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; border: none; }
 .login-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 300; justify-content: center; align-items: center; padding: 20px; }
 .login-modal.show { display: flex; }
 .login-box { background: #222; border-radius: 20px; padding: 32px 24px; width: 100%; max-width: 360px; border: 1px solid #c9a96e22; position: relative; max-height: 90vh; overflow-y: auto; }
@@ -73,11 +72,12 @@ select option { background: #333; }
 .search-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
 .search-select { flex: 1; min-width: 120px; padding: 8px 10px; background: #2a2a2a; border: 1px solid #c9a96e33; border-radius: 8px; color: #f0e6d3; font-size: 12px; margin-bottom: 0; }
 .color-search-section { margin-bottom: 12px; }
-.color-search-label { font-size: 11px; color: #c9a96e; margin-bottom: 10px; }
-.color-chips-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; padding: 8px 6px 14px; }
+.color-search-label { font-size: 11px; color: #c9a96e; margin-bottom: 4px; }
+.color-search-hint { font-size: 10px; color: #666; margin-bottom: 10px; }
+.color-chips-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; padding: 8px 0 14px; user-select: none; }
 .color-chip-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 4px; }
-.color-chip { width: 30px; height: 30px; border-radius: 50%; border: 2px solid transparent; transition: transform 0.15s, border 0.15s; flex-shrink: 0; }
-.color-chip.selected { border: 2px solid #fff; transform: scale(1.15); box-shadow: 0 0 8px rgba(255,255,255,0.5); }
+.color-chip { width: 34px; height: 34px; border-radius: 50%; border: 2px solid transparent; transition: transform 0.15s, border 0.15s; flex-shrink: 0; }
+.color-chip.selected { border: 3px solid #fff; transform: scale(1.2); box-shadow: 0 0 10px rgba(255,255,255,0.6); }
 .color-clear-btn { padding: 4px 10px; background: transparent; border: 1px solid #c9a96e44; border-radius: 12px; color: #888; font-size: 11px; cursor: pointer; align-self: center; }
 .no-colors-msg { font-size: 11px; color: #666; padding: 4px 0; }
 .search-btns { display: flex; gap: 8px; }
@@ -197,6 +197,7 @@ select option { background: #333; }
     </label>
     <div class="color-search-section">
       <div class="color-search-label">メインカラーで絞り込む</div>
+      <div class="color-search-hint">タップで選択・もう一度タップで解除／複数選択OK</div>
       <div class="color-chips-row" id="colorChips"></div>
     </div>
     <div class="search-btns">
@@ -307,12 +308,18 @@ let currentPhoto = null;
 let currentColor = null;
 let isSearchMode = false;
 let searchResults = null;
-let selectedSearchColor = null;
 
-// 色分析ボックスの位置（%）
+// 複数色選択（配列）
+let selectedSearchColors = [];
+
+// 色分析ボックス
 let boxPctX = 50, boxPctY = 50;
 let isDragging = false, dragStartX, dragStartY, boxStartX, boxStartY;
 let currentImgEl = null;
+
+// 長押しスライド選択用
+let isSliding = false;
+let slideTimer = null;
 
 getRedirectResult(auth).then(result => {
   if (result && result.user) {
@@ -335,8 +342,7 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('loginHeaderBtn').style.display = 'none';
     document.getElementById('logoutBtn').style.display = 'inline-block';
     document.getElementById('guestBanner').style.display = 'none';
-        closeLoginModal();
-    // ゲストデータの引き継ぎ
+    closeLoginModal();
     const guestItems = JSON.parse(localStorage.getItem('closet_items_guest') || '[]');
     const guestTastes = JSON.parse(localStorage.getItem('closet_tastes_guest') || '[]');
     if (guestItems.length > 0) {
@@ -443,11 +449,97 @@ function colorDistance(c1, c2) {
   if (!a || !b) return 999;
   return Math.sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2 + (a[2]-b[2])**2);
 }
-function getUniqueColors() {
-  const colors = items.filter(i => i.color).map(i => i.color);
-  const unique = [];
-  colors.forEach(c => { if (!unique.includes(c)) unique.push(c); });
-  return unique;
+
+// 全色をそのまま返す（まとめない）
+function rgbToHue(color) {
+  const m = color.match(/rgb\((\d+),(\d+),(\d+)\)/);
+  if (!m) return 0;
+  let r = m[1]/255, g = m[2]/255, b = m[3]/255;
+  const max = Math.max(r,g,b), min = Math.min(r,g,b), d = max - min;
+  if (d === 0) return 0;
+  let h = max === r ? (g-b)/d % 6 : max === g ? (b-r)/d + 2 : (r-g)/d + 4;
+  return (h * 60 + 360) % 360;
+}
+function getAllColors() {
+  return items.filter(i => i.color).map(i => i.color)
+    .sort((a, b) => rgbToHue(a) - rgbToHue(b));
+}
+
+// 色チップの選択トグル
+window.toggleSearchColor = function(color) {
+  const idx = selectedSearchColors.indexOf(color);
+  if (idx === -1) {
+    selectedSearchColors.push(color);
+  } else {
+    selectedSearchColors.splice(idx, 1);
+  }
+  renderColorChips();
+}
+
+window.renderTasteSelect = function() {
+  document.getElementById('tasteSelect').innerHTML = '<option value="">テイストを選ぶ</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
+  document.getElementById('searchTaste').innerHTML = '<option value="">テイスト：全て</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
+}
+window.renderTasteTags = function() {
+  document.getElementById('tasteTags').innerHTML = tastes.map(t => `<button class="taste-tag" onclick="deleteTaste(event,'${t}')">${t} <span style="font-size:14px">×</span></button>`).join('');
+}
+
+window.renderColorChips = function() {
+  const container = document.getElementById('colorChips');
+  const colors = getAllColors();
+  if (colors.length === 0) { container.innerHTML = '<span class="no-colors-msg">服を登録するとカラーが表示されます</span>'; return; }
+
+  let html = colors.map(color => {
+    const isSelected = selectedSearchColors.includes(color);
+    return `
+      <div class="color-chip-wrap" onclick="toggleSearchColor('${color}')">
+        <div class="color-chip ${isSelected ? 'selected' : ''}" style="background:${color};"></div>
+      </div>`;
+  }).join('');
+
+  if (selectedSearchColors.length > 0) {
+    html += `<button class="color-clear-btn" onclick="clearColorSelection()">全解除</button>`;
+  }
+  container.innerHTML = html;
+}
+
+window.clearColorSelection = function() {
+  selectedSearchColors = [];
+  renderColorChips();
+}
+
+window.toggleSearch = function() {
+  const panel = document.getElementById('searchPanel');
+  const btn = document.getElementById('searchToggleBtn');
+  panel.classList.toggle('show');
+  btn.classList.toggle('active');
+  if (panel.classList.contains('show')) renderColorChips();
+}
+window.resetSearch = function() {
+  ['searchSeason','searchTaste'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('searchFav').checked = false;
+  selectedSearchColors = [];
+  renderColorChips();
+  isSearchMode = false; searchResults = null;
+  document.getElementById('searchResultNotice').textContent = '';
+  renderGrid();
+}
+window.deleteTaste = async function(e, t) {
+  e.stopPropagation();
+  if (confirm(`「${t}」を削除しますか？`)) {
+    tastes = tastes.filter(x => x !== t);
+    await saveTastesToDB();
+    renderTasteSelect(); renderTasteTags();
+  }
+}
+window.addTaste = async function() {
+  const input = document.getElementById('newTasteInput');
+  const val = input.value.trim();
+  if (!val) return;
+  if (tastes.includes(val)) { alert('すでに存在します！'); return; }
+  tastes.push(val);
+  await saveTastesToDB();
+  input.value = ''; renderTasteSelect(); renderTasteTags();
 }
 
 // 指定位置から色を抽出
@@ -457,8 +549,6 @@ function extractColorAtPos(imgEl, pctX, pctY) {
   const wrapW = wrap.offsetWidth, wrapH = wrap.offsetHeight;
   const natW = imgEl.naturalWidth, natH = imgEl.naturalHeight;
   if (!natW || !natH) return;
-
-  // object-fit: contain の実際の描画サイズと位置
   const imgAspect = natW / natH;
   const wrapAspect = wrapW / wrapH;
   let drawW, drawH, drawX, drawY;
@@ -469,22 +559,16 @@ function extractColorAtPos(imgEl, pctX, pctY) {
     drawH = wrapH; drawW = wrapH * imgAspect;
     drawX = (wrapW - drawW) / 2; drawY = 0;
   }
-
-  // ボックス中心のwrap座標
   const bx = (pctX / 100) * wrapW;
   const by = (pctY / 100) * wrapH;
-
-  // 画像上の対応座標
-  const sampleSize = 40; // ボックス内サンプリングサイズ(px)
+  const sampleSize = 40;
   const natSampleSize = (sampleSize / drawW) * natW;
   const natCX = ((bx - drawX) / drawW) * natW;
   const natCY = ((by - drawY) / drawH) * natH;
-
   const canvas = document.createElement('canvas');
   canvas.width = canvas.height = 40;
   const ctx = canvas.getContext('2d');
   ctx.drawImage(imgEl, natCX - natSampleSize/2, natCY - natSampleSize/2, natSampleSize, natSampleSize, 0, 0, 40, 40);
-
   const data = ctx.getImageData(0, 0, 40, 40).data;
   let r=0, g=0, b=0, count=0;
   for (let i=0; i<data.length; i+=4) {
@@ -499,24 +583,21 @@ function extractColorAtPos(imgEl, pctX, pctY) {
   document.getElementById('colorResultRow').style.display = 'flex';
 }
 
-function updateBoxPosition(box, wrap) {
+function updateBoxPosition(box) {
   box.style.left = boxPctX + '%';
   box.style.top = boxPctY + '%';
   extractColorAtPos(currentImgEl, boxPctX, boxPctY);
 }
 
 function setupAnalysisBox(wrap) {
-  // 既存のボックスを削除
   const old = wrap.querySelector('.analysis-box');
   if (old) old.remove();
-
   const box = document.createElement('div');
   box.className = 'analysis-box';
   box.innerHTML = '<span class="analysis-box-label">色分析</span>';
   wrap.appendChild(box);
-
   boxPctX = 50; boxPctY = 50;
-  updateBoxPosition(box, wrap);
+  updateBoxPosition(box);
 
   function getPos(e) {
     const rect = wrap.getBoundingClientRect();
@@ -524,7 +605,6 @@ function setupAnalysisBox(wrap) {
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
     return { x: clientX - rect.left, y: clientY - rect.top, w: rect.width, h: rect.height };
   }
-
   function onStart(e) {
     e.preventDefault();
     isDragging = true;
@@ -540,10 +620,9 @@ function setupAnalysisBox(wrap) {
     const dy = ((p.y - dragStartY) / p.h) * 100;
     boxPctX = Math.max(3, Math.min(97, boxStartX + dx));
     boxPctY = Math.max(3, Math.min(97, boxStartY + dy));
-    updateBoxPosition(box, wrap);
+    updateBoxPosition(box);
   }
   function onEnd() { isDragging = false; }
-
   box.addEventListener('touchstart', onStart, { passive: false });
   box.addEventListener('touchmove', onMove, { passive: false });
   box.addEventListener('touchend', onEnd);
@@ -656,14 +735,11 @@ window.toggleFav = async function(id) {
   }
   if (isSearchMode) doSearch(); else renderGrid();
 }
-
-// 着用カウンター（当日中は再タップでキャンセル）
 window.wearItem = async function(id) {
   const item = items.find(i => i.id === id);
   if (!item) return;
   const today = new Date().toISOString().slice(0, 10);
   if (item.lastWornDate === today) {
-    // キャンセル
     item.wornCount = Math.max((item.wornCount || 1) - 1, 0);
     item.lastWornDate = null;
   } else {
@@ -679,57 +755,6 @@ window.wearItem = async function(id) {
     localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
   }
   if (isSearchMode) doSearch(); else renderGrid();
-}
-
-window.renderTasteSelect = function() {
-  document.getElementById('tasteSelect').innerHTML = '<option value="">テイストを選ぶ</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
-  document.getElementById('searchTaste').innerHTML = '<option value="">テイスト：全て</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
-}
-window.renderTasteTags = function() {
-  document.getElementById('tasteTags').innerHTML = tastes.map(t => `<button class="taste-tag" onclick="deleteTaste(event,'${t}')">${t} <span style="font-size:14px">×</span></button>`).join('');
-}
-window.renderColorChips = function() {
-  const container = document.getElementById('colorChips');
-  const uniqueColors = getUniqueColors();
-  if (uniqueColors.length === 0) { container.innerHTML = '<span class="no-colors-msg">服を登録するとカラーが表示されます</span>'; return; }
-  container.innerHTML = uniqueColors.map(color => `
-    <div class="color-chip-wrap" onclick="selectSearchColor('${color}')">
-      <div class="color-chip ${selectedSearchColor && colorDistance(selectedSearchColor, color) < 40 ? 'selected' : ''}" style="background:${color};"></div>
-    </div>
-  `).join('') + `<button class="color-clear-btn" onclick="selectSearchColor(null)">指定なし</button>`;
-}
-window.selectSearchColor = function(color) { selectedSearchColor = color; renderColorChips(); }
-window.toggleSearch = function() {
-  const panel = document.getElementById('searchPanel');
-  const btn = document.getElementById('searchToggleBtn');
-  panel.classList.toggle('show');
-  btn.classList.toggle('active');
-  if (panel.classList.contains('show')) renderColorChips();
-}
-window.resetSearch = function() {
-  ['searchSeason','searchTaste'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('searchFav').checked = false;
-  selectedSearchColor = null; renderColorChips();
-  isSearchMode = false; searchResults = null;
-  document.getElementById('searchResultNotice').textContent = '';
-  renderGrid();
-}
-window.deleteTaste = async function(e, t) {
-  e.stopPropagation();
-  if (confirm(`「${t}」を削除しますか？`)) {
-    tastes = tastes.filter(x => x !== t);
-    await saveTastesToDB();
-    renderTasteSelect(); renderTasteTags();
-  }
-}
-window.addTaste = async function() {
-  const input = document.getElementById('newTasteInput');
-  const val = input.value.trim();
-  if (!val) return;
-  if (tastes.includes(val)) { alert('すでに存在します！'); return; }
-  tastes.push(val);
-  await saveTastesToDB();
-  input.value = ''; renderTasteSelect(); renderTasteTags();
 }
 window.filterItems = function(filter) {
   currentFilter = filter;
@@ -765,10 +790,13 @@ window.doSearch = function() {
     if (season && item.season !== season) return false;
     if (taste && item.taste !== taste) return false;
     if (favOnly && !item.fav) return false;
-    if (selectedSearchColor && (!item.color || colorDistance(item.color, selectedSearchColor) >= 40)) return false;
+    // 選択した色と完全一致のみ
+    if (selectedSearchColors.length > 0) {
+      if (!item.color || !selectedSearchColors.includes(item.color)) return false;
+    }
     return true;
   });
- isSearchMode = true;
+  isSearchMode = true;
   document.getElementById('searchResultNotice').textContent = `検索結果：${searchResults.length}件`;
   renderGrid();
 }
@@ -812,8 +840,8 @@ window.renderGrid = function() {
         <button class="card-wear-btn ${wornToday ? 'worn-today' : ''}" onclick="wearItem('${item.id}')"
           title="${wornToday ? 'もう一度タップで取消' : '今日着たら押してね'}">
           <span class="card-wear-count">${wornDisplay}</span>
-<span class="card-wear-label">着用回数</span>
-</button>
+          <span class="card-wear-label">着用回数</span>
+        </button>
       </div>
     </div>`;
   }).join('');
