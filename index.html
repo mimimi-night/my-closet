@@ -43,6 +43,8 @@ header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
 .photo-preview-wrap { position: relative; width: 100%; height: 260px; background: #333; border: 2px dashed #c9a96e44; border-radius: 12px; margin-bottom: 8px; overflow: hidden; }
 .photo-preview-wrap img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; user-select: none; display: block; }
 .photo-preview-empty { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: #888; font-size: 14px; }
+.edit-photo-preview { width: 100%; height: 180px; border-radius: 12px; overflow: hidden; margin-bottom: 12px; border: 1px solid #c9a96e22; }
+.edit-photo-preview img { width: 100%; height: 100%; object-fit: cover; }
 .analysis-box { position: absolute; width: 60px; height: 60px; border: 2px solid rgba(255,255,255,0.95); border-radius: 8px; box-shadow: 0 0 0 1px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(0,0,0,0.3); cursor: move; display: flex; align-items: center; justify-content: center; transform: translate(-50%, -50%); }
 .analysis-box-label { font-size: 9px; color: white; text-shadow: 0 1px 3px rgba(0,0,0,1); white-space: nowrap; pointer-events: none; }
 .color-result-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding: 8px 12px; background: #2a2a2a; border-radius: 8px; }
@@ -74,11 +76,11 @@ select option { background: #333; }
 .color-search-section { margin-bottom: 12px; }
 .color-search-label { font-size: 11px; color: #c9a96e; margin-bottom: 4px; }
 .color-search-hint { font-size: 10px; color: #666; margin-bottom: 10px; }
-.color-chips-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; padding: 8px 0 14px; user-select: none; }
-.color-chip-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 4px; }
-.color-chip { width: 34px; height: 34px; border-radius: 50%; border: 3px solid transparent; transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s; flex-shrink: 0; box-shadow: none; }
-.color-chip.selected { border-color: #fff; transform: scale(1.15); box-shadow: 0 0 10px rgba(255,255,255,0.6); }
-.color-chip.source-locked { border-color: #c9a96e; transform: scale(1.15); box-shadow: 0 0 10px rgba(201,169,110,0.7); cursor: not-allowed; }
+.color-chips-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; padding: 8px 0 14px; }
+.color-chip-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 6px; border-radius: 50%; }
+.color-chip { width: 30px; height: 30px; border-radius: 50%; border: 3px solid transparent; flex-shrink: 0; }
+.color-chip.selected { border-color: #fff; transform: scale(1.15); outline: 3px solid rgba(255,255,255,0.4); outline-offset: 1px; }
+.color-chip.source-locked { border-color: #c9a96e; transform: scale(1.15); outline: 3px solid rgba(201,169,110,0.4); outline-offset: 1px; cursor: not-allowed; }
 .source-color-label { font-size: 9px; color: #c9a96e; white-space: nowrap; }
 .color-clear-btn { padding: 4px 10px; background: transparent; border: 1px solid #c9a96e44; border-radius: 12px; color: #888; font-size: 11px; cursor: pointer; align-self: center; }
 .no-colors-msg { font-size: 11px; color: #666; padding: 4px 0; }
@@ -88,6 +90,15 @@ select option { background: #333; }
 .search-result-notice { font-size: 11px; color: #c9a96e88; padding: 6px 16px 0; }
 .color-notice { font-size: 11px; color: #888; padding: 0 16px 10px; display: flex; align-items: center; gap: 6px; }
 .color-notice-bar { display: inline-block; width: 18px; height: 4px; border-radius: 2px; background: linear-gradient(to right, #e74c3c, #3498db, #2ecc71); flex-shrink: 0; }
+
+/* 統計パネル */
+.stats-panel { padding: 12px 16px; border-bottom: 1px solid #c9a96e11; }
+.stats-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.stat-chip { display: flex; flex-direction: column; align-items: center; background: #222; border: 1px solid #c9a96e22; border-radius: 10px; padding: 8px 12px; flex-shrink: 0; min-width: 60px; }
+.stat-num { font-size: 18px; font-weight: bold; color: #c9a96e; line-height: 1; }
+.stat-label { font-size: 9px; color: #888; margin-top: 3px; letter-spacing: 1px; }
+.stat-divider { width: 1px; background: #c9a96e22; flex-shrink: 0; margin: 4px 0; }
+
 .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; }
 .card { background: #222; border-radius: 12px; overflow: hidden; border: 1px solid #c9a96e22; position: relative; }
 .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
@@ -98,6 +109,7 @@ select option { background: #333; }
 .card-season { font-size: 11px; color: #888; margin-top: 2px; }
 .card-taste { font-size: 11px; color: #c9a96e88; margin-top: 2px; }
 .card-delete { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.6); border: none; border-radius: 50%; width: 28px; height: 28px; color: white; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.card-edit-btn { position: absolute; top: 8px; left: 42px; background: rgba(0,0,0,0.6); border: none; border-radius: 50%; width: 28px; height: 28px; color: #c9a96e; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .card-fav { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
 .card-fav svg { width: 13px; height: 13px; transition: all 0.2s; }
 .card-fav.active { background: rgba(180,80,100,0.7); border-color: rgba(255,150,170,0.4); }
@@ -119,8 +131,6 @@ select option { background: #333; }
 .menu-item { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #c9a96e22; border-radius: 10px; color: #f0e6d3; font-size: 14px; cursor: pointer; margin-bottom: 10px; text-align: left; display: flex; align-items: center; gap: 10px; }
 .menu-item.danger { color: #ff6b6b; border-color: #ff6b6b22; }
 .menu-close { width: 100%; padding: 10px; background: transparent; border: 1px solid #444; border-radius: 10px; color: #888; font-size: 13px; cursor: pointer; margin-top: 4px; }
-
-/* 似たアイテム検索モード用フローティングバー */
 .similar-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #111; border-top: 1px solid #c9a96e33; padding: 12px 16px; z-index: 99; flex-direction: column; gap: 8px; }
 .similar-bar.show { display: flex; }
 .similar-bar-title { font-size: 11px; color: #c9a96e88; text-align: center; letter-spacing: 1px; }
@@ -219,6 +229,9 @@ select option { background: #333; }
 
   <div class="search-result-notice" id="searchResultNotice"></div>
 
+  <!-- 統計パネル -->
+  <div class="stats-panel" id="statsPanel"></div>
+
   <div class="filter-row">
     <select class="sort-select" id="sortSelect" onchange="renderGrid()">
       <option value="new">デフォルト</option>
@@ -243,7 +256,6 @@ select option { background: #333; }
   <div class="grid" id="grid"></div>
   <button class="add-btn" id="addBtn" onclick="openModal()">＋</button>
 
-  <!-- 似たアイテム検索モード時のフローティングバー -->
   <div class="similar-bar" id="similarBar">
     <div class="similar-bar-title">📷 この服を登録しますか？</div>
     <div class="similar-bar-btns">
@@ -252,25 +264,36 @@ select option { background: #333; }
     </div>
   </div>
 
+  <!-- 追加モーダル -->
   <div class="modal" id="modal">
     <div class="modal-content">
-      <h2>服を追加する</h2>
-      <div class="photo-buttons">
-        <div class="photo-btn" onclick="document.getElementById('cameraInput').click()">📷 カメラで撮影</div>
-        <div class="photo-btn" onclick="document.getElementById('albumInput').click()">🖼️ アルバムから選ぶ</div>
-      </div>
-      <p class="photo-hint">白いボックスをドラッグして色分析の範囲を調整できます</p>
-      <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="previewPhoto(event)">
-      <input type="file" id="albumInput" accept="image/*" onchange="previewPhoto(event)">
-      <div class="photo-preview-wrap" id="photoPreviewWrap">
-        <div class="photo-preview-empty">写真を選んでください</div>
-      </div>
-      <div class="color-result-row" id="colorResultRow" style="display:none;">
-        <div class="color-result-chip" id="colorResultChip"></div>
-        <div class="color-result-info">分析した色はこれです
-          <span>ボックスを動かして範囲を変更できます</span>
+      <h2 id="modalTitle">服を追加する</h2>
+
+      <!-- 追加モード用 -->
+      <div id="addModeSection">
+        <div class="photo-buttons">
+          <div class="photo-btn" onclick="document.getElementById('cameraInput').click()">📷 カメラで撮影</div>
+          <div class="photo-btn" onclick="document.getElementById('albumInput').click()">🖼️ アルバムから選ぶ</div>
+        </div>
+        <p class="photo-hint">白いボックスをドラッグして色分析の範囲を調整できます</p>
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="previewPhoto(event)">
+        <input type="file" id="albumInput" accept="image/*" onchange="previewPhoto(event)">
+        <div class="photo-preview-wrap" id="photoPreviewWrap">
+          <div class="photo-preview-empty">写真を選んでください</div>
+        </div>
+        <div class="color-result-row" id="colorResultRow" style="display:none;">
+          <div class="color-result-chip" id="colorResultChip"></div>
+          <div class="color-result-info">分析した色はこれです
+            <span>ボックスを動かして範囲を変更できます</span>
+          </div>
         </div>
       </div>
+
+      <!-- 編集モード用：写真プレビュー -->
+      <div id="editModeSection" style="display:none;">
+        <div class="edit-photo-preview" id="editPhotoPreview"></div>
+      </div>
+
       <select id="category">
         <option value="">カテゴリを選ぶ</option>
         <option>トップス</option><option>ボトムス</option><option>ワンピース</option><option>アウター</option><option>シューズ</option>
@@ -289,10 +312,12 @@ select option { background: #333; }
         </div>
       </div>
       <input type="text" id="memo" placeholder="メモ（任意）">
-      <button style="width:100%;padding:10px;background:#2a2a2a;border:1px solid #c9a96e44;border-radius:10px;color:#c9a96e;font-size:13px;cursor:pointer;margin-top:8px;margin-bottom:10px;" onclick="searchSimilar()">🔍 似たアイテムを検索する</button>
+      <div id="similarSearchBtn">
+        <button style="width:100%;padding:10px;background:#2a2a2a;border:1px solid #c9a96e44;border-radius:10px;color:#c9a96e;font-size:13px;cursor:pointer;margin-top:8px;margin-bottom:10px;" onclick="searchSimilar()">🔍 似たアイテムを検索する</button>
+      </div>
       <div class="btn-row">
         <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
-        <button class="btn-save" onclick="saveItem()">保存する</button>
+        <button class="btn-save" id="modalSaveBtn" onclick="saveOrUpdateItem()">保存する</button>
       </div>
     </div>
   </div>
@@ -331,10 +356,14 @@ let isSearchMode = false;
 let searchResults = null;
 let selectedSearchColors = [];
 
-// 似たアイテム検索モード用
+// 編集モード
+let isEditMode = false;
+let currentEditId = null;
+
+// 似たアイテム検索モード
 let isSimilarMode = false;
-let similarSourceColor = null; // ロックされた検索元の色
-let pendingItem = null; // 登録待ちのアイテムデータ
+let similarSourceColor = null;
+let pendingItem = null;
 
 // 色分析ボックス
 let boxPctX = 50, boxPctY = 50;
@@ -394,7 +423,7 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('logoutBtn').style.display = 'none';
     document.getElementById('guestBanner').style.display = 'block';
   }
-  renderTasteSelect(); renderTasteTags(); renderGrid();
+  renderTasteSelect(); renderTasteTags(); renderGrid(); renderStats();
 });
 
 window.openLoginModal = function() { document.getElementById('loginModal').classList.add('show'); showLoginForm(); }
@@ -402,7 +431,6 @@ window.closeLoginModal = function() { document.getElementById('loginModal').clas
 window.showRegister = function() { document.getElementById('loginForm').style.display = 'none'; document.getElementById('registerForm').style.display = 'block'; document.getElementById('resetForm').style.display = 'none'; document.getElementById('loginError').textContent = ''; }
 window.showLoginForm = function() { document.getElementById('loginForm').style.display = 'block'; document.getElementById('registerForm').style.display = 'none'; document.getElementById('resetForm').style.display = 'none'; document.getElementById('loginError').textContent = ''; }
 window.showReset = function() { document.getElementById('loginForm').style.display = 'none'; document.getElementById('registerForm').style.display = 'none'; document.getElementById('resetForm').style.display = 'block'; document.getElementById('loginError').textContent = ''; }
-
 window.loginWithEmail = async function() {
   const email = document.getElementById('loginEmail').value;
   const password = document.getElementById('loginPassword').value;
@@ -481,15 +509,49 @@ function rgbToHue(color) {
 }
 
 function getAllColors() {
-  return items.filter(i => i.color).map(i => i.color)
-    .sort((a, b) => rgbToHue(a) - rgbToHue(b));
+  return items.filter(i => i.color).map(i => i.color).sort((a, b) => rgbToHue(a) - rgbToHue(b));
+}
+
+// 統計パネル
+function renderStats() {
+  const panel = document.getElementById('statsPanel');
+  if (items.length === 0) { panel.innerHTML = ''; return; }
+  const total = items.length;
+  const cats = ['トップス','ボトムス','ワンピース','アウター','シューズ'];
+  const seasons = ['春夏','秋冬','オールシーズン'];
+  const catCounts = cats.map(c => ({ label: c, count: items.filter(i => i.category === c).length })).filter(x => x.count > 0);
+  const seasonCounts = seasons.map(s => ({ label: s, count: items.filter(i => i.season === s).length })).filter(x => x.count > 0);
+  const neverWorn = items.filter(i => !i.wornCount || i.wornCount === 0).length;
+
+  panel.innerHTML = `
+    <div class="stats-row">
+      <div class="stat-chip"><span class="stat-num">${total}</span><span class="stat-label">総数</span></div>
+      ${catCounts.map(x => `<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}
+      ${seasonCounts.map(x => `<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}
+      ${neverWorn > 0 ? `<div class="stat-chip" style="border-color:#ff6b6b33;"><span class="stat-num" style="color:#ff6b6b88;">${neverWorn}</span><span class="stat-label">未着用</span></div>` : ''}
+    </div>`;
 }
 
 window.toggleSearchColor = function(color) {
   const idx = selectedSearchColors.indexOf(color);
   if (idx === -1) { selectedSearchColors.push(color); }
   else { selectedSearchColors.splice(idx, 1); }
-  renderColorChips();
+  // DOMを再構築せずクラスだけ更新
+  document.querySelectorAll('#colorChips .color-chip-wrap .color-chip:not(.source-locked)').forEach(chip => {
+    const bg = chip.style.background;
+    chip.classList.toggle('selected', selectedSearchColors.includes(bg));
+  });
+  // 全解除ボタン表示制御
+  const existingClear = document.querySelector('#colorChips .color-clear-btn');
+  if (selectedSearchColors.length > 0 && !existingClear) {
+    const btn = document.createElement('button');
+    btn.className = 'color-clear-btn';
+    btn.textContent = '全解除';
+    btn.onclick = clearColorSelection;
+    document.getElementById('colorChips').appendChild(btn);
+  } else if (selectedSearchColors.length === 0 && existingClear) {
+    existingClear.remove();
+  }
 }
 
 window.renderTasteSelect = function() {
@@ -503,35 +565,21 @@ window.renderTasteTags = function() {
 window.renderColorChips = function() {
   const container = document.getElementById('colorChips');
   const colors = getAllColors();
-
   let html = '';
-
-  // 似たアイテム検索モードのとき：ロックされた検索元の色を先頭に表示
   if (isSimilarMode && similarSourceColor) {
-    html += `
-      <div class="color-chip-wrap" title="検索元の色（外せません）">
-        <div class="color-chip source-locked" style="background:${similarSourceColor};"></div>
-        <span class="source-color-label">検索元</span>
-      </div>`;
+    html += `<div class="color-chip-wrap" title="検索元の色（外せません）"><div class="color-chip source-locked" style="background:${similarSourceColor};"></div><span class="source-color-label">検索元</span></div>`;
   }
-
   if (colors.length === 0 && !isSimilarMode) {
     container.innerHTML = '<span class="no-colors-msg">服を登録するとカラーが表示されます</span>';
     return;
   }
-
   html += colors.map(color => {
     const isSelected = selectedSearchColors.includes(color);
-    return `
-      <div class="color-chip-wrap" onclick="toggleSearchColor('${color}')">
-        <div class="color-chip ${isSelected ? 'selected' : ''}" style="background:${color};"></div>
-      </div>`;
+    return `<div class="color-chip-wrap" onclick="toggleSearchColor('${color}')"><div class="color-chip${isSelected ? ' selected' : ''}" style="background:${color};"></div></div>`;
   }).join('');
-
   if (selectedSearchColors.length > 0) {
     html += `<button class="color-clear-btn" onclick="clearColorSelection()">全解除</button>`;
   }
-
   container.innerHTML = html;
 }
 
@@ -540,98 +588,8 @@ window.clearColorSelection = function() {
   renderColorChips();
 }
 
-// 似たアイテム検索
-window.searchSimilar = function() {
-  if (!currentColor) { alert('先に写真を選んでください！'); return; }
-  const category = document.getElementById('category').value;
-  const season = document.getElementById('season').value;
-  const taste = document.getElementById('tasteSelect').value;
-  const memo = document.getElementById('memo').value;
-
-  // 登録待ちデータを保存
-  pendingItem = {
-    photo: currentPhoto,
-    color: currentColor,
-    category, season, taste, memo,
-    createdAt: new Date().toISOString()
-  };
-
-  // 似たアイテム検索モードON
-  isSimilarMode = true;
-  similarSourceColor = currentColor;
-  selectedSearchColors = [];
-
-  // モーダルを閉じる（データはpendingItemに保存済みなのでクリアしない）
-  document.getElementById('modal').classList.remove('show');
-  ['cameraInput','albumInput'].forEach(id => document.getElementById(id).value = '');
-
-  // フィルター設定
-  if (category) {
-    currentFilter = category;
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.textContent.trim() === category);
-    });
-  }
-  if (season) document.getElementById('searchSeason').value = season;
-  if (taste) document.getElementById('searchTaste').value = taste;
-
-  // 詳細検索パネルを開く
-  document.getElementById('searchPanel').classList.add('show');
-  document.getElementById('searchToggleBtn').classList.add('active');
-  document.getElementById('colorSearchHint').textContent = '「検索元」の色は外せません。他の色をタップで追加できます';
-
-  // フローティングバーを表示・＋ボタンを隠す
-  document.getElementById('similarBar').classList.add('show');
-  document.getElementById('addBtn').style.display = 'none';
-
-  renderColorChips();
-  doSearch();
-}
-
-// 似たアイテム検索をやめる
-window.cancelSimilarSearch = function() {
-  isSimilarMode = false;
-  similarSourceColor = null;
-  pendingItem = null;
-  selectedSearchColors = [];
-  document.getElementById('similarBar').classList.remove('show');
-  document.getElementById('addBtn').style.display = '';
-  document.getElementById('colorSearchHint').textContent = 'タップで選択・もう一度タップで解除／複数選択OK';
-  document.getElementById('searchPanel').classList.remove('show');
-  document.getElementById('searchToggleBtn').classList.remove('active');
-  isSearchMode = false; searchResults = null;
-  document.getElementById('searchResultNotice').textContent = '';
-  document.getElementById('searchSeason').value = '';
-  document.getElementById('searchTaste').value = '';
-  currentFilter = '全て';
-  document.querySelectorAll('.filter-btn').forEach(btn => { btn.classList.toggle('active', btn.textContent.trim() === '全て'); });
-  renderGrid();
-}
-
-// 登録待ちアイテムを登録する
-window.registerPendingItem = async function() {
-  if (!pendingItem) return;
-  const indicator = document.getElementById('savingIndicator');
-  indicator.style.display = 'block';
-  try {
-    if (currentUser) {
-      const docRef = await addDoc(collection(db, 'users', currentUser.uid, 'items'), pendingItem);
-      items.unshift({ id: docRef.id, ...pendingItem });
-    } else {
-      const localItem = { id: Date.now().toString(), ...pendingItem };
-      localItems.unshift(localItem);
-      items = [...localItems];
-      localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
-    }
-    alert('登録しました！');
-    cancelSimilarSearch();
-    renderGrid();
-  } catch(e) { alert('保存に失敗しました。'); }
-  finally { indicator.style.display = 'none'; }
-}
-
 window.toggleSearch = function() {
-  if (isSimilarMode) return; // 似たアイテム検索モード中は閉じられない
+  if (isSimilarMode) return;
   const panel = document.getElementById('searchPanel');
   const btn = document.getElementById('searchToggleBtn');
   panel.classList.toggle('show');
@@ -640,13 +598,10 @@ window.toggleSearch = function() {
 }
 window.resetSearch = function() {
   if (isSimilarMode) {
-    // 似たアイテム検索モードのときは選択色だけリセット
     selectedSearchColors = [];
     document.getElementById('searchSeason').value = pendingItem?.season || '';
     document.getElementById('searchTaste').value = pendingItem?.taste || '';
-    renderColorChips();
-    doSearch();
-    return;
+    renderColorChips(); doSearch(); return;
   }
   ['searchSeason','searchTaste'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('searchFav').checked = false;
@@ -680,45 +635,28 @@ function extractColorAtPos(imgEl, pctX, pctY) {
   const wrapW = wrap.offsetWidth, wrapH = wrap.offsetHeight;
   const natW = imgEl.naturalWidth, natH = imgEl.naturalHeight;
   if (!natW || !natH) return;
-  const imgAspect = natW / natH;
-  const wrapAspect = wrapW / wrapH;
+  const imgAspect = natW / natH, wrapAspect = wrapW / wrapH;
   let drawW, drawH, drawX, drawY;
-  if (imgAspect > wrapAspect) {
-    drawW = wrapW; drawH = wrapW / imgAspect;
-    drawX = 0; drawY = (wrapH - drawH) / 2;
-  } else {
-    drawH = wrapH; drawW = wrapH * imgAspect;
-    drawX = (wrapW - drawW) / 2; drawY = 0;
-  }
-  const bx = (pctX / 100) * wrapW;
-  const by = (pctY / 100) * wrapH;
-  const sampleSize = 40;
-  const natSampleSize = (sampleSize / drawW) * natW;
-  const natCX = ((bx - drawX) / drawW) * natW;
-  const natCY = ((by - drawY) / drawH) * natH;
+  if (imgAspect > wrapAspect) { drawW = wrapW; drawH = wrapW / imgAspect; drawX = 0; drawY = (wrapH - drawH) / 2; }
+  else { drawH = wrapH; drawW = wrapH * imgAspect; drawX = (wrapW - drawW) / 2; drawY = 0; }
+  const bx = (pctX / 100) * wrapW, by = (pctY / 100) * wrapH;
+  const sampleSize = 40, natSampleSize = (sampleSize / drawW) * natW;
+  const natCX = ((bx - drawX) / drawW) * natW, natCY = ((by - drawY) / drawH) * natH;
   const canvas = document.createElement('canvas');
   canvas.width = canvas.height = 40;
   const ctx = canvas.getContext('2d');
   ctx.drawImage(imgEl, natCX - natSampleSize/2, natCY - natSampleSize/2, natSampleSize, natSampleSize, 0, 0, 40, 40);
   const data = ctx.getImageData(0, 0, 40, 40).data;
   let r=0, g=0, b=0, count=0;
-  for (let i=0; i<data.length; i+=4) {
-    if (data[i+3] < 10) continue;
-    r+=data[i]; g+=data[i+1]; b+=data[i+2]; count++;
-  }
+  for (let i=0; i<data.length; i+=4) { if (data[i+3] < 10) continue; r+=data[i]; g+=data[i+1]; b+=data[i+2]; count++; }
   if (count === 0) return;
   r=Math.round(r/count); g=Math.round(g/count); b=Math.round(b/count);
-  const color = `rgb(${r},${g},${b})`;
-  currentColor = color;
-  document.getElementById('colorResultChip').style.background = color;
+  currentColor = `rgb(${r},${g},${b})`;
+  document.getElementById('colorResultChip').style.background = currentColor;
   document.getElementById('colorResultRow').style.display = 'flex';
 }
 
-function updateBoxPosition(box) {
-  box.style.left = boxPctX + '%';
-  box.style.top = boxPctY + '%';
-  extractColorAtPos(currentImgEl, boxPctX, boxPctY);
-}
+function updateBoxPosition(box) { box.style.left = boxPctX + '%'; box.style.top = boxPctY + '%'; extractColorAtPos(currentImgEl, boxPctX, boxPctY); }
 
 function setupAnalysisBox(wrap) {
   const old = wrap.querySelector('.analysis-box');
@@ -729,21 +667,16 @@ function setupAnalysisBox(wrap) {
   wrap.appendChild(box);
   boxPctX = 50; boxPctY = 50;
   updateBoxPosition(box);
-
   function getPos(e) {
     const rect = wrap.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    return { x: clientX - rect.left, y: clientY - rect.top, w: rect.width, h: rect.height };
+    return { x: (e.touches ? e.touches[0].clientX : e.clientX) - rect.left, y: (e.touches ? e.touches[0].clientY : e.clientY) - rect.top, w: rect.width, h: rect.height };
   }
   function onStart(e) { e.preventDefault(); isDragging = true; const p = getPos(e); dragStartX = p.x; dragStartY = p.y; boxStartX = boxPctX; boxStartY = boxPctY; }
   function onMove(e) {
     if (!isDragging) return; e.preventDefault();
     const p = getPos(e);
-    const dx = ((p.x - dragStartX) / p.w) * 100;
-    const dy = ((p.y - dragStartY) / p.h) * 100;
-    boxPctX = Math.max(3, Math.min(97, boxStartX + dx));
-    boxPctY = Math.max(3, Math.min(97, boxStartY + dy));
+    boxPctX = Math.max(3, Math.min(97, boxStartX + ((p.x - dragStartX) / p.w) * 100));
+    boxPctY = Math.max(3, Math.min(97, boxStartY + ((p.y - dragStartY) / p.h) * 100));
     updateBoxPosition(box);
   }
   function onEnd() { isDragging = false; }
@@ -782,22 +715,47 @@ window.previewPhoto = function(e) {
     wrap.innerHTML = '';
     const img = document.createElement('img');
     img.src = compressed;
-    img.onload = function() {
-      wrap.appendChild(img);
-      currentImgEl = img;
-      setupAnalysisBox(wrap);
-    };
+    img.onload = function() { wrap.appendChild(img); currentImgEl = img; setupAnalysisBox(wrap); };
   });
 }
 
 window.openModal = function() {
+  isEditMode = false; currentEditId = null;
   currentPhoto = null; currentColor = null; currentImgEl = null;
   boxPctX = 50; boxPctY = 50;
+  document.getElementById('modalTitle').textContent = '服を追加する';
+  document.getElementById('modalSaveBtn').textContent = '保存する';
+  document.getElementById('addModeSection').style.display = 'block';
+  document.getElementById('editModeSection').style.display = 'none';
+  document.getElementById('similarSearchBtn').style.display = 'block';
   document.getElementById('photoPreviewWrap').innerHTML = '<div class="photo-preview-empty">写真を選んでください</div>';
   document.getElementById('colorResultRow').style.display = 'none';
   renderTasteSelect(); renderTasteTags();
   document.getElementById('modal').classList.add('show');
 }
+
+// 編集モードでモーダルを開く
+window.editItem = function(id) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  isEditMode = true; currentEditId = id;
+  document.getElementById('modalTitle').textContent = '服を編集する';
+  document.getElementById('modalSaveBtn').textContent = '変更を保存';
+  document.getElementById('addModeSection').style.display = 'none';
+  document.getElementById('editModeSection').style.display = 'block';
+  document.getElementById('similarSearchBtn').style.display = 'none';
+  // 写真プレビュー
+  document.getElementById('editPhotoPreview').innerHTML = `<img src="${item.photo}">`;
+  // フィールドを埋める
+  document.getElementById('category').value = item.category || '';
+  document.getElementById('season').value = item.season || '';
+  document.getElementById('memo').value = item.memo || '';
+  renderTasteSelect();
+  renderTasteTags();
+  document.getElementById('tasteSelect').value = item.taste || '';
+  document.getElementById('modal').classList.add('show');
+}
+
 window.closeModal = function() {
   document.getElementById('modal').classList.remove('show');
   ['cameraInput','albumInput'].forEach(id => document.getElementById(id).value = '');
@@ -807,8 +765,19 @@ window.closeModal = function() {
   document.getElementById('photoPreviewWrap').innerHTML = '<div class="photo-preview-empty">写真を選んでください</div>';
   document.getElementById('colorResultRow').style.display = 'none';
   currentPhoto = null; currentColor = null; currentImgEl = null;
+  isEditMode = false; currentEditId = null;
 }
-window.saveItem = async function() {
+
+// 保存 or 更新
+window.saveOrUpdateItem = async function() {
+  if (isEditMode) {
+    await updateItem();
+  } else {
+    await saveItem();
+  }
+}
+
+async function saveItem() {
   const category = document.getElementById('category').value;
   const season = document.getElementById('season').value;
   const taste = document.getElementById('tasteSelect').value;
@@ -829,10 +798,101 @@ window.saveItem = async function() {
       items = [...localItems];
       localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
     }
-    closeModal(); renderGrid();
+    closeModal(); renderGrid(); renderStats();
   } catch(e) { alert('保存に失敗しました。'); }
   finally { indicator.style.display = 'none'; }
 }
+
+async function updateItem() {
+  const category = document.getElementById('category').value;
+  const season = document.getElementById('season').value;
+  const taste = document.getElementById('tasteSelect').value;
+  const memo = document.getElementById('memo').value;
+  if (!category) { alert('カテゴリを選んでください！'); return; }
+  if (!season) { alert('季節を選んでください！'); return; }
+  const indicator = document.getElementById('savingIndicator');
+  indicator.style.display = 'block';
+  const item = items.find(i => i.id === currentEditId);
+  if (!item) return;
+  item.category = category; item.season = season; item.taste = taste; item.memo = memo;
+  try {
+    if (currentUser) {
+      const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js");
+      await updateDoc(doc(db, 'users', currentUser.uid, 'items', currentEditId), { category, season, taste, memo });
+    } else {
+      const li = localItems.find(i => i.id === currentEditId);
+      if (li) { li.category = category; li.season = season; li.taste = taste; li.memo = memo; }
+      localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
+    }
+    closeModal(); renderGrid(); renderStats();
+  } catch(e) { alert('更新に失敗しました。'); }
+  finally { indicator.style.display = 'none'; }
+}
+
+window.searchSimilar = function() {
+  if (!currentColor) { alert('先に写真を選んでください！'); return; }
+  const category = document.getElementById('category').value;
+  const season = document.getElementById('season').value;
+  const taste = document.getElementById('tasteSelect').value;
+  const memo = document.getElementById('memo').value;
+  pendingItem = { photo: currentPhoto, color: currentColor, category, season, taste, memo, createdAt: new Date().toISOString() };
+  isSimilarMode = true;
+  similarSourceColor = currentColor;
+  selectedSearchColors = [];
+  document.getElementById('modal').classList.remove('show');
+  ['cameraInput','albumInput'].forEach(id => document.getElementById(id).value = '');
+  if (category) {
+    currentFilter = category;
+    document.querySelectorAll('.filter-btn').forEach(btn => { btn.classList.toggle('active', btn.textContent.trim() === category); });
+  }
+  if (season) document.getElementById('searchSeason').value = season;
+  if (taste) document.getElementById('searchTaste').value = taste;
+  document.getElementById('searchPanel').classList.add('show');
+  document.getElementById('searchToggleBtn').classList.add('active');
+  document.getElementById('colorSearchHint').textContent = '「検索元」の色は外せません。他の色をタップで追加できます';
+  document.getElementById('similarBar').classList.add('show');
+  document.getElementById('addBtn').style.display = 'none';
+  renderColorChips();
+  doSearch();
+}
+
+window.cancelSimilarSearch = function() {
+  isSimilarMode = false; similarSourceColor = null; pendingItem = null; selectedSearchColors = [];
+  document.getElementById('similarBar').classList.remove('show');
+  document.getElementById('addBtn').style.display = '';
+  document.getElementById('colorSearchHint').textContent = 'タップで選択・もう一度タップで解除／複数選択OK';
+  document.getElementById('searchPanel').classList.remove('show');
+  document.getElementById('searchToggleBtn').classList.remove('active');
+  isSearchMode = false; searchResults = null;
+  document.getElementById('searchResultNotice').textContent = '';
+  document.getElementById('searchSeason').value = '';
+  document.getElementById('searchTaste').value = '';
+  currentFilter = '全て';
+  document.querySelectorAll('.filter-btn').forEach(btn => { btn.classList.toggle('active', btn.textContent.trim() === '全て'); });
+  renderGrid();
+}
+
+window.registerPendingItem = async function() {
+  if (!pendingItem) return;
+  const indicator = document.getElementById('savingIndicator');
+  indicator.style.display = 'block';
+  try {
+    if (currentUser) {
+      const docRef = await addDoc(collection(db, 'users', currentUser.uid, 'items'), pendingItem);
+      items.unshift({ id: docRef.id, ...pendingItem });
+    } else {
+      const localItem = { id: Date.now().toString(), ...pendingItem };
+      localItems.unshift(localItem);
+      items = [...localItems];
+      localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
+    }
+    alert('登録しました！');
+    cancelSimilarSearch();
+    renderGrid(); renderStats();
+  } catch(e) { alert('保存に失敗しました。'); }
+  finally { indicator.style.display = 'none'; }
+}
+
 window.deleteItem = async function(id) {
   if (confirm('この服を削除しますか？')) {
     if (currentUser) {
@@ -843,6 +903,7 @@ window.deleteItem = async function(id) {
     }
     items = items.filter(i => i.id !== id);
     if (isSearchMode) doSearch(); else renderGrid();
+    renderStats();
   }
 }
 window.toggleFav = async function(id) {
@@ -894,16 +955,8 @@ function sortItems(arr) {
   const copy = [...arr];
   if (sort === 'worn_desc') copy.sort((a, b) => (b.wornCount || 0) - (a.wornCount || 0));
   else if (sort === 'worn_asc') copy.sort((a, b) => (a.wornCount || 0) - (b.wornCount || 0));
-  else if (sort === 'date_desc') copy.sort((a, b) => {
-    if (!a.lastWornDate && !b.lastWornDate) return 0;
-    if (!a.lastWornDate) return 1; if (!b.lastWornDate) return -1;
-    return b.lastWornDate.localeCompare(a.lastWornDate);
-  });
-  else if (sort === 'date_asc') copy.sort((a, b) => {
-    if (!a.lastWornDate && !b.lastWornDate) return 0;
-    if (!a.lastWornDate) return -1; if (!b.lastWornDate) return 1;
-    return a.lastWornDate.localeCompare(b.lastWornDate);
-  });
+  else if (sort === 'date_desc') copy.sort((a, b) => { if (!a.lastWornDate && !b.lastWornDate) return 0; if (!a.lastWornDate) return 1; if (!b.lastWornDate) return -1; return b.lastWornDate.localeCompare(a.lastWornDate); });
+  else if (sort === 'date_asc') copy.sort((a, b) => { if (!a.lastWornDate && !b.lastWornDate) return 0; if (!a.lastWornDate) return -1; if (!b.lastWornDate) return 1; return a.lastWornDate.localeCompare(b.lastWornDate); });
   return copy;
 }
 window.doSearch = function() {
@@ -917,12 +970,10 @@ window.doSearch = function() {
     if (taste && item.taste !== taste) return false;
     if (favOnly && !item.fav) return false;
     if (isSimilarMode && similarSourceColor) {
-      // 似たアイテム検索モード：検索元の色と距離50以内 OR 追加選択した色と完全一致
       const matchesSource = item.color && colorDistance(item.color, similarSourceColor) < 50;
       const matchesSelected = selectedSearchColors.length > 0 && item.color && selectedSearchColors.includes(item.color);
       if (!matchesSource && !matchesSelected) return false;
     } else if (selectedSearchColors.length > 0) {
-      // 通常モード：完全一致
       if (!item.color || !selectedSearchColors.includes(item.color)) return false;
     }
     return true;
@@ -935,9 +986,8 @@ window.renderGrid = function() {
   const grid = document.getElementById('grid');
   const today = new Date().toISOString().slice(0, 10);
   let source;
-  if (isSearchMode) {
-    source = sortItems(searchResults);
-  } else {
+  if (isSearchMode) { source = sortItems(searchResults); }
+  else {
     let base = currentFilter === '全て' ? items : items.filter(i => i.category === currentFilter);
     source = sortItems([...base.filter(i => i.fav), ...base.filter(i => !i.fav)]);
   }
@@ -954,6 +1004,7 @@ window.renderGrid = function() {
     <div class="card">
       <img src="${item.photo}" alt="${item.category}">
       <button class="card-delete" onclick="deleteItem('${item.id}')">×</button>
+      <button class="card-edit-btn" onclick="editItem('${item.id}')" title="編集">✏️</button>
       <button class="card-fav ${item.fav ? 'active' : ''}" onclick="toggleFav('${item.id}')">
         <svg viewBox="0 0 24 24" fill="${item.fav ? '#ffb3c1' : 'none'}" stroke="${item.fav ? '#ffb3c1' : 'rgba(255,255,255,0.7)'}" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
       </button>
