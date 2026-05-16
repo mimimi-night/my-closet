@@ -536,11 +536,8 @@ window.toggleSearchColor = function(color) {
   const idx = selectedSearchColors.indexOf(color);
   if (idx === -1) { selectedSearchColors.push(color); }
   else { selectedSearchColors.splice(idx, 1); }
-  // DOMを再構築せずクラスだけ更新
-  document.querySelectorAll('#colorChips .color-chip-wrap .color-chip:not(.source-locked)').forEach(chip => {
-    const bg = chip.style.background;
-    chip.classList.toggle('selected', selectedSearchColors.includes(bg));
-  });
+  renderColorChips();
+}
   // 全解除ボタン表示制御
   const existingClear = document.querySelector('#colorChips .color-clear-btn');
   if (selectedSearchColors.length > 0 && !existingClear) {
