@@ -90,15 +90,11 @@ select option { background: #333; }
 .search-result-notice { font-size: 11px; color: #c9a96e88; padding: 6px 16px 0; }
 .color-notice { font-size: 11px; color: #888; padding: 0 16px 10px; display: flex; align-items: center; gap: 6px; }
 .color-notice-bar { display: inline-block; width: 18px; height: 4px; border-radius: 2px; background: linear-gradient(to right, #e74c3c, #3498db, #2ecc71); flex-shrink: 0; }
-
-/* 統計パネル */
 .stats-panel { padding: 12px 16px; border-bottom: 1px solid #c9a96e11; }
 .stats-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
 .stat-chip { display: flex; flex-direction: column; align-items: center; background: #222; border: 1px solid #c9a96e22; border-radius: 10px; padding: 8px 12px; flex-shrink: 0; min-width: 60px; }
 .stat-num { font-size: 18px; font-weight: bold; color: #c9a96e; line-height: 1; }
 .stat-label { font-size: 9px; color: #888; margin-top: 3px; letter-spacing: 1px; }
-.stat-divider { width: 1px; background: #c9a96e22; flex-shrink: 0; margin: 4px 0; }
-
 .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; }
 .card { background: #222; border-radius: 12px; overflow: hidden; border: 1px solid #c9a96e22; position: relative; }
 .card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
@@ -109,7 +105,8 @@ select option { background: #333; }
 .card-season { font-size: 11px; color: #888; margin-top: 2px; }
 .card-taste { font-size: 11px; color: #c9a96e88; margin-top: 2px; }
 .card-delete { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.6); border: none; border-radius: 50%; width: 28px; height: 28px; color: white; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.card-edit-btn { position: absolute; top: 8px; left: 42px; background: rgba(0,0,0,0.6); border: none; border-radius: 50%; width: 28px; height: 28px; color: #f0e6d3; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.card-edit-btn { position: absolute; top: 8px; left: 42px; background: rgba(0,0,0,0.6); border: none; border-radius: 50%; width: 28px; height: 28px; color: #f0e6d3; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.card-coorde-btn { position: absolute; top: 8px; left: 76px; background: rgba(0,0,0,0.6); border: none; border-radius: 50%; width: 28px; height: 28px; color: #c9a96e; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .card-fav { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
 .card-fav svg { width: 13px; height: 13px; transition: all 0.2s; }
 .card-fav.active { background: rgba(180,80,100,0.7); border-color: rgba(255,150,170,0.4); }
@@ -138,6 +135,29 @@ select option { background: #333; }
 .similar-bar-btns button { flex: 1; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; }
 .btn-similar-save { background: #c9a96e; color: #111; }
 .btn-similar-cancel { background: #333; color: #888; }
+
+/* ===== コーデ提案モーダル ===== */
+.coorde-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #111; z-index: 500; flex-direction: column; }
+.coorde-modal.show { display: flex; }
+.coorde-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #c9a96e22; background: #111; flex-shrink: 0; }
+.coorde-title { font-size: 14px; color: #c9a96e; letter-spacing: 2px; }
+.coorde-counter { font-size: 12px; color: #888; }
+.coorde-close-btn { background: transparent; border: none; color: #888; font-size: 22px; cursor: pointer; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+.coorde-body { flex: 1; overflow: hidden; display: flex; flex-direction: column; justify-content: center; padding: 12px 16px; }
+.coorde-outfit { display: grid; gap: 10px; width: 100%; height: 100%; }
+.coorde-outfit.count-2 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; }
+.coorde-outfit.count-3 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.coorde-outfit.count-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.coorde-item { background: #222; border-radius: 10px; overflow: hidden; border: 2px solid #c9a96e22; position: relative; display: flex; flex-direction: column; }
+.coorde-item.is-base { border-color: #c9a96e; box-shadow: 0 0 12px rgba(201,169,110,0.3); }
+.coorde-item img { width: 100%; flex: 1; object-fit: cover; min-height: 0; }
+.coorde-item-label { padding: 4px 8px; background: #1a1a1a; flex-shrink: 0; }
+.coorde-item-cat { font-size: 10px; color: #c9a96e; letter-spacing: 1px; }
+.coorde-item-base-tag { font-size: 9px; color: #c9a96e88; }
+.coorde-footer { display: flex; gap: 12px; padding: 12px 16px; border-top: 1px solid #c9a96e22; background: #111; flex-shrink: 0; }
+.coorde-nav-btn { flex: 1; padding: 12px; background: #2a2a2a; border: 1px solid #c9a96e33; border-radius: 10px; color: #c9a96e; font-size: 14px; cursor: pointer; }
+.coorde-nav-btn:active { background: #c9a96e22; }
+.coorde-no-result { text-align: center; color: #666; font-size: 13px; line-height: 1.8; padding: 20px; }
 </style>
 </head>
 <body>
@@ -228,8 +248,6 @@ select option { background: #333; }
   </div>
 
   <div class="search-result-notice" id="searchResultNotice"></div>
-
-  <!-- 統計パネル -->
   <div class="stats-panel" id="statsPanel"></div>
 
   <div class="filter-row">
@@ -264,12 +282,24 @@ select option { background: #333; }
     </div>
   </div>
 
-  <!-- 追加モーダル -->
+  <!-- コーデ提案モーダル -->
+  <div class="coorde-modal" id="coordeModal">
+    <div class="coorde-header">
+      <button class="coorde-close-btn" onclick="closeCoordeModal()">×</button>
+      <div class="coorde-title">👗 コーデ提案</div>
+      <div class="coorde-counter" id="coordeCounter"></div>
+    </div>
+    <div class="coorde-body" id="coordeBody"></div>
+    <div class="coorde-footer">
+      <button class="coorde-nav-btn" onclick="prevCoorde()">← 前へ</button>
+      <button class="coorde-nav-btn" onclick="nextCoorde()">次へ →</button>
+    </div>
+  </div>
+
+  <!-- 追加・編集モーダル -->
   <div class="modal" id="modal">
     <div class="modal-content">
       <h2 id="modalTitle">服を追加する</h2>
-
-      <!-- 追加モード用 -->
       <div id="addModeSection">
         <div class="photo-buttons">
           <div class="photo-btn" onclick="document.getElementById('cameraInput').click()">📷 カメラで撮影</div>
@@ -283,17 +313,12 @@ select option { background: #333; }
         </div>
         <div class="color-result-row" id="colorResultRow" style="display:none;">
           <div class="color-result-chip" id="colorResultChip"></div>
-          <div class="color-result-info">分析した色はこれです
-            <span>ボックスを動かして範囲を変更できます</span>
-          </div>
+          <div class="color-result-info">分析した色はこれです<span>ボックスを動かして範囲を変更できます</span></div>
         </div>
       </div>
-
-      <!-- 編集モード用：写真プレビュー -->
       <div id="editModeSection" style="display:none;">
         <div class="edit-photo-preview" id="editPhotoPreview"></div>
       </div>
-
       <select id="category">
         <option value="">カテゴリを選ぶ</option>
         <option>トップス</option><option>ボトムス</option><option>ワンピース</option><option>アウター</option><option>シューズ</option>
@@ -342,7 +367,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 auth.languageCode = 'ja';
 const db = getFirestore(app);
-const googleProvider = new GoogleAuthProvider();
 
 let currentUser = null;
 let items = [];
@@ -355,20 +379,19 @@ let currentColor = null;
 let isSearchMode = false;
 let searchResults = null;
 let selectedSearchColors = [];
-
-// 編集モード
 let isEditMode = false;
 let currentEditId = null;
-
-// 似たアイテム検索モード
 let isSimilarMode = false;
 let similarSourceColor = null;
 let pendingItem = null;
-
-// 色分析ボックス
 let boxPctX = 50, boxPctY = 50;
 let isDragging = false, dragStartX, dragStartY, boxStartX, boxStartY;
 let currentImgEl = null;
+
+// コーデ提案用
+let coordeCombinations = [];
+let coordeIndex = 0;
+let coordeTouchStartX = 0;
 
 getRedirectResult(auth).then(result => {
   if (result && result.user) {
@@ -380,7 +403,7 @@ getRedirectResult(auth).then(result => {
     }
     sessionStorage.removeItem('googleFlow');
   }
-}).catch(e => console.error('Redirect error:', e));
+}).catch(e => console.error(e));
 
 onAuthStateChanged(auth, async (user) => {
   document.getElementById('loadingScreen').style.display = 'none';
@@ -396,28 +419,18 @@ onAuthStateChanged(auth, async (user) => {
     const guestTastes = JSON.parse(localStorage.getItem('closet_tastes_guest') || '[]');
     if (guestItems.length > 0) {
       if (confirm(`ゲストとして登録した${guestItems.length}件の服データをアカウントに引き継ぎますか？`)) {
-        for (const item of guestItems) {
-          const { id, ...data } = item;
-          await addDoc(collection(db, 'users', user.uid, 'items'), data);
-        }
+        for (const item of guestItems) { const { id, ...data } = item; await addDoc(collection(db, 'users', user.uid, 'items'), data); }
         localStorage.removeItem('closet_items_guest');
       }
     }
     if (guestTastes.length > 0) {
       const existingSnap = await getDocs(collection(db, 'users', user.uid, 'tastes'));
-      if (existingSnap.empty) {
-        for (const t of guestTastes) {
-          await addDoc(collection(db, 'users', user.uid, 'tastes'), { name: t });
-        }
-      }
+      if (existingSnap.empty) { for (const t of guestTastes) await addDoc(collection(db, 'users', user.uid, 'tastes'), { name: t }); }
       localStorage.removeItem('closet_tastes_guest');
     }
-    await loadItems();
-    await loadTastes();
+    await loadItems(); await loadTastes();
   } else {
-    currentUser = null;
-    items = [...localItems];
-    tastes = [...localTastes];
+    currentUser = null; items = [...localItems]; tastes = [...localTastes];
     document.getElementById('userInfo').textContent = '';
     document.getElementById('loginHeaderBtn').style.display = 'inline-block';
     document.getElementById('logoutBtn').style.display = 'none';
@@ -428,71 +441,59 @@ onAuthStateChanged(auth, async (user) => {
 
 window.openLoginModal = function() { document.getElementById('loginModal').classList.add('show'); showLoginForm(); }
 window.closeLoginModal = function() { document.getElementById('loginModal').classList.remove('show'); document.getElementById('loginError').textContent = ''; document.getElementById('resetSuccess').textContent = ''; }
-window.showRegister = function() { document.getElementById('loginForm').style.display = 'none'; document.getElementById('registerForm').style.display = 'block'; document.getElementById('resetForm').style.display = 'none'; document.getElementById('loginError').textContent = ''; }
-window.showLoginForm = function() { document.getElementById('loginForm').style.display = 'block'; document.getElementById('registerForm').style.display = 'none'; document.getElementById('resetForm').style.display = 'none'; document.getElementById('loginError').textContent = ''; }
-window.showReset = function() { document.getElementById('loginForm').style.display = 'none'; document.getElementById('registerForm').style.display = 'none'; document.getElementById('resetForm').style.display = 'block'; document.getElementById('loginError').textContent = ''; }
+window.showRegister = function() { document.getElementById('loginForm').style.display='none'; document.getElementById('registerForm').style.display='block'; document.getElementById('resetForm').style.display='none'; document.getElementById('loginError').textContent=''; }
+window.showLoginForm = function() { document.getElementById('loginForm').style.display='block'; document.getElementById('registerForm').style.display='none'; document.getElementById('resetForm').style.display='none'; document.getElementById('loginError').textContent=''; }
+window.showReset = function() { document.getElementById('loginForm').style.display='none'; document.getElementById('registerForm').style.display='none'; document.getElementById('resetForm').style.display='block'; document.getElementById('loginError').textContent=''; }
 window.loginWithEmail = async function() {
-  const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPassword').value;
-  if (!email || !password) { document.getElementById('loginError').textContent = 'メールアドレスとパスワードを入力してください'; return; }
-  try { await signInWithEmailAndPassword(auth, email, password); }
-  catch(e) { document.getElementById('loginError').textContent = 'メールアドレスまたはパスワードが違います'; }
+  const email = document.getElementById('loginEmail').value, password = document.getElementById('loginPassword').value;
+  if (!email || !password) { document.getElementById('loginError').textContent='メールアドレスとパスワードを入力してください'; return; }
+  try { await signInWithEmailAndPassword(auth, email, password); } catch(e) { document.getElementById('loginError').textContent='メールアドレスまたはパスワードが違います'; }
 }
 window.registerWithEmail = async function() {
-  const email = document.getElementById('registerEmail').value;
-  const password = document.getElementById('registerPassword').value;
-  if (!email || !password) { document.getElementById('loginError').textContent = 'メールアドレスとパスワードを入力してください'; return; }
-  if (password.length < 6) { document.getElementById('loginError').textContent = 'パスワードは6文字以上にしてください'; return; }
-  try { await createUserWithEmailAndPassword(auth, email, password); }
-  catch(e) { document.getElementById('loginError').textContent = e.code === 'auth/email-already-in-use' ? 'このメールアドレスは既に使われています' : '登録に失敗しました'; }
+  const email = document.getElementById('registerEmail').value, password = document.getElementById('registerPassword').value;
+  if (!email || !password) { document.getElementById('loginError').textContent='メールアドレスとパスワードを入力してください'; return; }
+  if (password.length < 6) { document.getElementById('loginError').textContent='パスワードは6文字以上にしてください'; return; }
+  try { await createUserWithEmailAndPassword(auth, email, password); } catch(e) { document.getElementById('loginError').textContent = e.code==='auth/email-already-in-use'?'このメールアドレスは既に使われています':'登録に失敗しました'; }
 }
 window.sendReset = async function() {
   const email = document.getElementById('resetEmail').value;
-  if (!email) { document.getElementById('loginError').textContent = 'メールアドレスを入力してください'; return; }
-  try {
-    await sendPasswordResetEmail(auth, email, { url: 'https://mimimi-night.github.io/my-closet/reset.html' });
-    document.getElementById('loginError').textContent = '';
-    document.getElementById('resetSuccess').textContent = 'リセットメールを送信しました！';
-  } catch(e) { document.getElementById('loginError').textContent = 'メールアドレスが見つかりません'; }
+  if (!email) { document.getElementById('loginError').textContent='メールアドレスを入力してください'; return; }
+  try { await sendPasswordResetEmail(auth, email, { url:'https://mimimi-night.github.io/my-closet/reset.html' }); document.getElementById('loginError').textContent=''; document.getElementById('resetSuccess').textContent='リセットメールを送信しました！'; }
+  catch(e) { document.getElementById('loginError').textContent='メールアドレスが見つかりません'; }
 }
 window.logout = async function() { if (confirm('ログアウトしますか？')) await signOut(auth); }
 window.openMenu = function() { document.getElementById('menuModal').classList.add('show'); }
 window.closeMenu = function() { document.getElementById('menuModal').classList.remove('show'); }
-window.openContact = function() { closeMenu(); window.open('mailto:nightmimimi@gmail.com?subject=あなたクローゼット お問い合わせ', '_blank'); }
+window.openContact = function() { closeMenu(); window.open('mailto:nightmimimi@gmail.com?subject=あなたクローゼット お問い合わせ','_blank'); }
 window.deleteAccount = async function() {
   if (!currentUser) { alert('ログインしていないためアカウント削除はできません'); closeMenu(); return; }
   if (!confirm('アカウントを削除すると、登録した服のデータがすべて消えます。本当に削除しますか？')) return;
   if (!confirm('本当に削除しますか？この操作は取り消せません。')) return;
   try {
-    const snap = await getDocs(collection(db, 'users', currentUser.uid, 'items'));
-    for (const d of snap.docs) await deleteDoc(doc(db, 'users', currentUser.uid, 'items', d.id));
-    const tSnap = await getDocs(collection(db, 'users', currentUser.uid, 'tastes'));
-    for (const d of tSnap.docs) await deleteDoc(doc(db, 'users', currentUser.uid, 'tastes', d.id));
-    await currentUser.delete();
-    alert('アカウントを削除しました');
+    const snap = await getDocs(collection(db,'users',currentUser.uid,'items'));
+    for (const d of snap.docs) await deleteDoc(doc(db,'users',currentUser.uid,'items',d.id));
+    const tSnap = await getDocs(collection(db,'users',currentUser.uid,'tastes'));
+    for (const d of tSnap.docs) await deleteDoc(doc(db,'users',currentUser.uid,'tastes',d.id));
+    await currentUser.delete(); alert('アカウントを削除しました');
   } catch(e) { alert('削除に失敗しました。一度ログアウトして再ログインしてから試してください'); }
 }
 
 async function loadItems() {
   if (!currentUser) return;
-  const q = query(collection(db, 'users', currentUser.uid, 'items'), orderBy('createdAt', 'desc'));
+  const q = query(collection(db,'users',currentUser.uid,'items'), orderBy('createdAt','desc'));
   const snap = await getDocs(q);
   items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 async function loadTastes() {
   if (!currentUser) return;
-  const snap = await getDocs(collection(db, 'users', currentUser.uid, 'tastes'));
+  const snap = await getDocs(collection(db,'users',currentUser.uid,'tastes'));
   tastes = snap.empty ? [] : snap.docs.map(d => d.data().name);
 }
 async function saveTastesToDB() {
-  if (!currentUser) {
-    localStorage.setItem('closet_tastes_guest', JSON.stringify(tastes));
-    renderTasteSelect();
-    return;
-  }
-  const snap = await getDocs(collection(db, 'users', currentUser.uid, 'tastes'));
-  for (const d of snap.docs) await deleteDoc(doc(db, 'users', currentUser.uid, 'tastes', d.id));
-  for (const t of tastes) await addDoc(collection(db, 'users', currentUser.uid, 'tastes'), { name: t });
+  if (!currentUser) { localStorage.setItem('closet_tastes_guest', JSON.stringify(tastes)); renderTasteSelect(); return; }
+  const snap = await getDocs(collection(db,'users',currentUser.uid,'tastes'));
+  for (const d of snap.docs) await deleteDoc(doc(db,'users',currentUser.uid,'tastes',d.id));
+  for (const t of tastes) await addDoc(collection(db,'users',currentUser.uid,'tastes'), { name: t });
 }
 
 function colorDistance(c1, c2) {
@@ -501,20 +502,149 @@ function colorDistance(c1, c2) {
   if (!a || !b) return 999;
   return Math.sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2 + (a[2]-b[2])**2);
 }
-
 function rgbToHue(color) {
   const m = color.match(/rgb\((\d+),(\d+),(\d+)\)/);
   if (!m) return 0;
-  let r = m[1]/255, g = m[2]/255, b = m[3]/255;
-  const max = Math.max(r,g,b), min = Math.min(r,g,b), d = max - min;
-  if (d === 0) return 0;
-  let h = max === r ? (g-b)/d % 6 : max === g ? (b-r)/d + 2 : (r-g)/d + 4;
-  return (h * 60 + 360) % 360;
+  let r=m[1]/255, g=m[2]/255, b=m[3]/255;
+  const max=Math.max(r,g,b), min=Math.min(r,g,b), d=max-min;
+  if (d===0) return 0;
+  let h = max===r ? (g-b)/d%6 : max===g ? (b-r)/d+2 : (r-g)/d+4;
+  return (h*60+360)%360;
+}
+function getAllColors() {
+  return items.filter(i=>i.color).map(i=>i.color).sort((a,b)=>rgbToHue(a)-rgbToHue(b));
 }
 
-function getAllColors() {
-  return items.filter(i => i.color).map(i => i.color).sort((a, b) => rgbToHue(a) - rgbToHue(b));
+// ニュートラル色判定（白・黒・グレー・ベージュ系）
+function isNeutralColor(color) {
+  if (!color) return true;
+  const m = color.match(/rgb\((\d+),(\d+),(\d+)\)/);
+  if (!m) return true;
+  const r=+m[1], g=+m[2], b=+m[3];
+  return (Math.max(r,g,b) - Math.min(r,g,b)) < 40;
 }
+
+// コーデ対象カテゴリ
+function getTargetCategories(baseCategory) {
+  const map = {
+    'トップス': ['ボトムス','アウター','シューズ'],
+    'ボトムス': ['トップス','アウター','シューズ'],
+    'ワンピース': ['アウター','シューズ'],
+    'アウター': ['トップス','ボトムス','シューズ'],
+    'シューズ': ['トップス','ボトムス','アウター'],
+  };
+  return map[baseCategory] || [];
+}
+
+// コーデ候補を生成
+function generateCoordes(baseItem) {
+  const targetCats = getTargetCategories(baseItem.category);
+  const catCandidates = {};
+  const baseNeutral = isNeutralColor(baseItem.color);
+
+  for (const cat of targetCats) {
+    // 季節フィルター
+    let cands = items.filter(i =>
+      i.id !== baseItem.id && i.category === cat &&
+      (i.season === baseItem.season || i.season === 'オールシーズン' || baseItem.season === 'オールシーズン')
+    );
+    if (cands.length === 0) continue;
+
+    // テイストフィルター
+    if (baseItem.taste) {
+      const sameTaste = cands.filter(i => i.taste === baseItem.taste);
+      const noTaste = cands.filter(i => !i.taste);
+      cands = sameTaste.length > 0 ? sameTaste : noTaste.length > 0 ? noTaste : cands;
+    } else {
+      const noTaste = cands.filter(i => !i.taste);
+      cands = noTaste.length > 0 ? noTaste : cands;
+    }
+
+    // 色フィルター：ベースが彩度高い場合、ニュートラルを優先
+    if (!baseNeutral) {
+      const neutral = cands.filter(i => isNeutralColor(i.color));
+      cands = neutral.length > 0 ? [...neutral, ...cands.filter(i => !isNeutralColor(i.color))] : cands;
+    }
+
+    catCandidates[cat] = cands;
+  }
+
+  // ランダムな組み合わせを生成
+  const combos = [];
+  const maxCombos = 15;
+  for (let attempt = 0; attempt < maxCombos * 5; attempt++) {
+    const outfit = [baseItem];
+    for (const cat of targetCats) {
+      if (!catCandidates[cat]) continue;
+      const pool = catCandidates[cat];
+      // ニュートラル優先部分からランダム選択（上位60%から）
+      const limit = Math.max(1, Math.ceil(pool.length * 0.6));
+      const pick = pool[Math.floor(Math.random() * limit)];
+      outfit.push(pick);
+    }
+    if (outfit.length > 1) {
+      // 重複チェック（同じIDの組み合わせは除外）
+      const key = outfit.map(i => i.id).sort().join(',');
+      if (!combos.find(c => c.map(i => i.id).sort().join(',') === key)) {
+        combos.push(outfit);
+      }
+    }
+    if (combos.length >= maxCombos) break;
+  }
+  return combos;
+}
+
+// コーデ提案を開く
+window.openCoordeModal = function(id) {
+  const baseItem = items.find(i => i.id === id);
+  if (!baseItem) return;
+  coordeCombinations = generateCoordes(baseItem);
+  coordeIndex = 0;
+  document.getElementById('coordeModal').classList.add('show');
+  showCoorde(0);
+
+  // スワイプ検出
+  const body = document.getElementById('coordeBody');
+  body.addEventListener('touchstart', e => { coordeTouchStartX = e.touches[0].clientX; }, { passive: true });
+  body.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - coordeTouchStartX;
+    if (Math.abs(dx) > 50) { dx < 0 ? nextCoorde() : prevCoorde(); }
+  }, { passive: true });
+}
+
+window.closeCoordeModal = function() {
+  document.getElementById('coordeModal').classList.remove('show');
+}
+
+function showCoorde(idx) {
+  if (coordeCombinations.length === 0) {
+    document.getElementById('coordeBody').innerHTML = `<div class="coorde-no-result">コーデできる服が見つかりませんでした😢<br>他のカテゴリの服を登録してみてね！</div>`;
+    document.getElementById('coordeCounter').textContent = '';
+    return;
+  }
+  coordeIndex = ((idx % coordeCombinations.length) + coordeCombinations.length) % coordeCombinations.length;
+  const outfit = coordeCombinations[coordeIndex];
+  document.getElementById('coordeCounter').textContent = `${coordeIndex + 1} / ${coordeCombinations.length}`;
+
+  const count = outfit.length;
+  const countClass = count <= 2 ? 'count-2' : count === 3 ? 'count-3' : 'count-4';
+  const baseId = outfit[0].id;
+
+  document.getElementById('coordeBody').innerHTML = `
+    <div class="coorde-outfit ${countClass}">
+      ${outfit.map(item => `
+        <div class="coorde-item ${item.id === baseId ? 'is-base' : ''}">
+          <img src="${item.photo}" alt="${item.category}">
+          <div class="coorde-item-label">
+            <div class="coorde-item-cat">${item.category}${item.id === baseId ? ' ✦' : ''}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
+}
+
+window.nextCoorde = function() { showCoorde(coordeIndex + 1); }
+window.prevCoorde = function() { showCoorde(coordeIndex - 1); }
 
 // 統計パネル
 function renderStats() {
@@ -526,23 +656,19 @@ function renderStats() {
   const catCounts = cats.map(c => ({ label: c, count: items.filter(i => i.category === c).length })).filter(x => x.count > 0);
   const seasonCounts = seasons.map(s => ({ label: s, count: items.filter(i => i.season === s).length })).filter(x => x.count > 0);
   const neverWorn = items.filter(i => !i.wornCount || i.wornCount === 0).length;
-
-  panel.innerHTML = `
-    <div class="stats-row">
-      <div class="stat-chip"><span class="stat-num">${total}</span><span class="stat-label">総数</span></div>
-      ${catCounts.map(x => `<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}
-      ${seasonCounts.map(x => `<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}
-      ${neverWorn > 0 ? `<div class="stat-chip" style="border-color:#ff6b6b33;"><span class="stat-num" style="color:#ff6b6b88;">${neverWorn}</span><span class="stat-label">未着用</span></div>` : ''}
-    </div>`;
+  panel.innerHTML = `<div class="stats-row">
+    <div class="stat-chip"><span class="stat-num">${total}</span><span class="stat-label">総数</span></div>
+    ${catCounts.map(x => `<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}
+    ${seasonCounts.map(x => `<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}
+    ${neverWorn > 0 ? `<div class="stat-chip" style="border-color:#ff6b6b33;"><span class="stat-num" style="color:#ff6b6b88;">${neverWorn}</span><span class="stat-label">未着用</span></div>` : ''}
+  </div>`;
 }
 
 window.toggleSearchColor = function(color) {
   const idx = selectedSearchColors.indexOf(color);
-  if (idx === -1) { selectedSearchColors.push(color); }
-  else { selectedSearchColors.splice(idx, 1); }
+  if (idx === -1) selectedSearchColors.push(color); else selectedSearchColors.splice(idx, 1);
   renderColorChips();
 }
-
 window.renderTasteSelect = function() {
   document.getElementById('tasteSelect').innerHTML = '<option value="">テイストを選ぶ</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
   document.getElementById('searchTaste').innerHTML = '<option value="">テイスト：全て</option>' + tastes.map(t => `<option value="${t}">${t}</option>`).join('');
@@ -550,469 +676,280 @@ window.renderTasteSelect = function() {
 window.renderTasteTags = function() {
   document.getElementById('tasteTags').innerHTML = tastes.map(t => `<button class="taste-tag" onclick="deleteTaste(event,'${t}')">${t} <span style="font-size:14px">×</span></button>`).join('');
 }
-
 window.renderColorChips = function() {
   const container = document.getElementById('colorChips');
   const colors = getAllColors();
   let html = '';
-  if (isSimilarMode && similarSourceColor) {
-    html += `<div class="color-chip-wrap" title="検索元の色（外せません）"><div class="color-chip source-locked" style="background:${similarSourceColor};"></div><span class="source-color-label">検索元</span></div>`;
-  }
-  if (colors.length === 0 && !isSimilarMode) {
-    container.innerHTML = '<span class="no-colors-msg">服を登録するとカラーが表示されます</span>';
-    return;
-  }
+  if (isSimilarMode && similarSourceColor) html += `<div class="color-chip-wrap" title="検索元の色"><div class="color-chip source-locked" style="background:${similarSourceColor};"></div><span class="source-color-label">検索元</span></div>`;
+  if (colors.length === 0 && !isSimilarMode) { container.innerHTML = '<span class="no-colors-msg">服を登録するとカラーが表示されます</span>'; return; }
   html += colors.map(color => {
     const isSelected = selectedSearchColors.includes(color);
-    return `<div class="color-chip-wrap" onclick="toggleSearchColor('${color}')"><div class="color-chip${isSelected ? ' selected' : ''}" style="background:${color};"></div></div>`;
+    return `<div class="color-chip-wrap" onclick="toggleSearchColor('${color}')"><div class="color-chip${isSelected?' selected':''}" style="background:${color};"></div></div>`;
   }).join('');
-  if (selectedSearchColors.length > 0) {
-    html += `<button class="color-clear-btn" onclick="clearColorSelection()">全解除</button>`;
-  }
+  if (selectedSearchColors.length > 0) html += `<button class="color-clear-btn" onclick="clearColorSelection()">全解除</button>`;
   container.innerHTML = html;
 }
-
-window.clearColorSelection = function() {
-  selectedSearchColors = [];
-  renderColorChips();
-}
-
+window.clearColorSelection = function() { selectedSearchColors = []; renderColorChips(); }
 window.toggleSearch = function() {
   if (isSimilarMode) return;
-  const panel = document.getElementById('searchPanel');
-  const btn = document.getElementById('searchToggleBtn');
-  panel.classList.toggle('show');
-  btn.classList.toggle('active');
+  const panel = document.getElementById('searchPanel'), btn = document.getElementById('searchToggleBtn');
+  panel.classList.toggle('show'); btn.classList.toggle('active');
   if (panel.classList.contains('show')) renderColorChips();
 }
 window.resetSearch = function() {
-  if (isSimilarMode) {
-    selectedSearchColors = [];
-    document.getElementById('searchSeason').value = pendingItem?.season || '';
-    document.getElementById('searchTaste').value = pendingItem?.taste || '';
-    renderColorChips(); doSearch(); return;
-  }
+  if (isSimilarMode) { selectedSearchColors = []; document.getElementById('searchSeason').value = pendingItem?.season||''; document.getElementById('searchTaste').value = pendingItem?.taste||''; renderColorChips(); doSearch(); return; }
   ['searchSeason','searchTaste'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('searchFav').checked = false;
-  selectedSearchColors = [];
-  renderColorChips();
+  selectedSearchColors = []; renderColorChips();
   isSearchMode = false; searchResults = null;
   document.getElementById('searchResultNotice').textContent = '';
   renderGrid();
 }
 window.deleteTaste = async function(e, t) {
   e.stopPropagation();
-  if (confirm(`「${t}」を削除しますか？`)) {
-    tastes = tastes.filter(x => x !== t);
-    await saveTastesToDB();
-    renderTasteSelect(); renderTasteTags();
-  }
+  if (confirm(`「${t}」を削除しますか？`)) { tastes = tastes.filter(x => x !== t); await saveTastesToDB(); renderTasteSelect(); renderTasteTags(); }
 }
 window.addTaste = async function() {
-  const input = document.getElementById('newTasteInput');
-  const val = input.value.trim();
+  const input = document.getElementById('newTasteInput'), val = input.value.trim();
   if (!val) return;
   if (tastes.includes(val)) { alert('すでに存在します！'); return; }
-  tastes.push(val);
-  await saveTastesToDB();
+  tastes.push(val); await saveTastesToDB();
   input.value = ''; renderTasteSelect(); renderTasteTags();
 }
 
 function extractColorAtPos(imgEl, pctX, pctY) {
   if (!imgEl) return;
-  const wrap = imgEl.parentElement;
-  const wrapW = wrap.offsetWidth, wrapH = wrap.offsetHeight;
+  const wrap = imgEl.parentElement, wrapW = wrap.offsetWidth, wrapH = wrap.offsetHeight;
   const natW = imgEl.naturalWidth, natH = imgEl.naturalHeight;
   if (!natW || !natH) return;
-  const imgAspect = natW / natH, wrapAspect = wrapW / wrapH;
+  const imgAspect = natW/natH, wrapAspect = wrapW/wrapH;
   let drawW, drawH, drawX, drawY;
-  if (imgAspect > wrapAspect) { drawW = wrapW; drawH = wrapW / imgAspect; drawX = 0; drawY = (wrapH - drawH) / 2; }
-  else { drawH = wrapH; drawW = wrapH * imgAspect; drawX = (wrapW - drawW) / 2; drawY = 0; }
-  const bx = (pctX / 100) * wrapW, by = (pctY / 100) * wrapH;
-  const sampleSize = 40, natSampleSize = (sampleSize / drawW) * natW;
-  const natCX = ((bx - drawX) / drawW) * natW, natCY = ((by - drawY) / drawH) * natH;
-  const canvas = document.createElement('canvas');
-  canvas.width = canvas.height = 40;
-  const ctx = canvas.getContext('2d');
-  ctx.drawImage(imgEl, natCX - natSampleSize/2, natCY - natSampleSize/2, natSampleSize, natSampleSize, 0, 0, 40, 40);
-  const data = ctx.getImageData(0, 0, 40, 40).data;
-  let r=0, g=0, b=0, count=0;
-  for (let i=0; i<data.length; i+=4) { if (data[i+3] < 10) continue; r+=data[i]; g+=data[i+1]; b+=data[i+2]; count++; }
-  if (count === 0) return;
+  if (imgAspect > wrapAspect) { drawW=wrapW; drawH=wrapW/imgAspect; drawX=0; drawY=(wrapH-drawH)/2; }
+  else { drawH=wrapH; drawW=wrapH*imgAspect; drawX=(wrapW-drawW)/2; drawY=0; }
+  const bx=(pctX/100)*wrapW, by=(pctY/100)*wrapH;
+  const sampleSize=40, natSampleSize=(sampleSize/drawW)*natW;
+  const natCX=((bx-drawX)/drawW)*natW, natCY=((by-drawY)/drawH)*natH;
+  const canvas=document.createElement('canvas'); canvas.width=canvas.height=40;
+  const ctx=canvas.getContext('2d');
+  ctx.drawImage(imgEl, natCX-natSampleSize/2, natCY-natSampleSize/2, natSampleSize, natSampleSize, 0, 0, 40, 40);
+  const data=ctx.getImageData(0,0,40,40).data;
+  let r=0,g=0,b=0,count=0;
+  for (let i=0; i<data.length; i+=4) { if(data[i+3]<10) continue; r+=data[i]; g+=data[i+1]; b+=data[i+2]; count++; }
+  if (count===0) return;
   r=Math.round(r/count); g=Math.round(g/count); b=Math.round(b/count);
-  currentColor = `rgb(${r},${g},${b})`;
-  document.getElementById('colorResultChip').style.background = currentColor;
-  document.getElementById('colorResultRow').style.display = 'flex';
+  currentColor=`rgb(${r},${g},${b})`;
+  document.getElementById('colorResultChip').style.background=currentColor;
+  document.getElementById('colorResultRow').style.display='flex';
 }
-
-function updateBoxPosition(box) { box.style.left = boxPctX + '%'; box.style.top = boxPctY + '%'; extractColorAtPos(currentImgEl, boxPctX, boxPctY); }
-
+function updateBoxPosition(box) { box.style.left=boxPctX+'%'; box.style.top=boxPctY+'%'; extractColorAtPos(currentImgEl,boxPctX,boxPctY); }
 function setupAnalysisBox(wrap) {
-  const old = wrap.querySelector('.analysis-box');
-  if (old) old.remove();
-  const box = document.createElement('div');
-  box.className = 'analysis-box';
-  box.innerHTML = '<span class="analysis-box-label">色分析</span>';
-  wrap.appendChild(box);
-  boxPctX = 50; boxPctY = 50;
-  updateBoxPosition(box);
-  function getPos(e) {
-    const rect = wrap.getBoundingClientRect();
-    return { x: (e.touches ? e.touches[0].clientX : e.clientX) - rect.left, y: (e.touches ? e.touches[0].clientY : e.clientY) - rect.top, w: rect.width, h: rect.height };
-  }
-  function onStart(e) { e.preventDefault(); isDragging = true; const p = getPos(e); dragStartX = p.x; dragStartY = p.y; boxStartX = boxPctX; boxStartY = boxPctY; }
-  function onMove(e) {
-    if (!isDragging) return; e.preventDefault();
-    const p = getPos(e);
-    boxPctX = Math.max(3, Math.min(97, boxStartX + ((p.x - dragStartX) / p.w) * 100));
-    boxPctY = Math.max(3, Math.min(97, boxStartY + ((p.y - dragStartY) / p.h) * 100));
-    updateBoxPosition(box);
-  }
-  function onEnd() { isDragging = false; }
-  box.addEventListener('touchstart', onStart, { passive: false });
-  box.addEventListener('touchmove', onMove, { passive: false });
-  box.addEventListener('touchend', onEnd);
-  box.addEventListener('mousedown', onStart);
-  document.addEventListener('mousemove', onMove);
-  document.addEventListener('mouseup', onEnd);
+  const old=wrap.querySelector('.analysis-box'); if(old) old.remove();
+  const box=document.createElement('div'); box.className='analysis-box';
+  box.innerHTML='<span class="analysis-box-label">色分析</span>'; wrap.appendChild(box);
+  boxPctX=50; boxPctY=50; updateBoxPosition(box);
+  function getPos(e) { const rect=wrap.getBoundingClientRect(); return { x:(e.touches?e.touches[0].clientX:e.clientX)-rect.left, y:(e.touches?e.touches[0].clientY:e.clientY)-rect.top, w:rect.width, h:rect.height }; }
+  function onStart(e) { e.preventDefault(); isDragging=true; const p=getPos(e); dragStartX=p.x; dragStartY=p.y; boxStartX=boxPctX; boxStartY=boxPctY; }
+  function onMove(e) { if(!isDragging) return; e.preventDefault(); const p=getPos(e); boxPctX=Math.max(3,Math.min(97,boxStartX+((p.x-dragStartX)/p.w)*100)); boxPctY=Math.max(3,Math.min(97,boxStartY+((p.y-dragStartY)/p.h)*100)); updateBoxPosition(box); }
+  function onEnd() { isDragging=false; }
+  box.addEventListener('touchstart',onStart,{passive:false}); box.addEventListener('touchmove',onMove,{passive:false}); box.addEventListener('touchend',onEnd);
+  box.addEventListener('mousedown',onStart); document.addEventListener('mousemove',onMove); document.addEventListener('mouseup',onEnd);
 }
-
 function compressImage(file, callback) {
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const img = new Image();
-    img.onload = function() {
-      const canvas = document.createElement('canvas');
-      const MAX = 600;
-      let w=img.width, h=img.height;
-      if (w>h) { if (w>MAX) { h=h*MAX/w; w=MAX; } } else { if (h>MAX) { w=w*MAX/h; h=MAX; } }
-      canvas.width=w; canvas.height=h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      callback(canvas.toDataURL('image/jpeg', 0.7));
-    };
-    img.src = e.target.result;
-  };
+  const reader=new FileReader();
+  reader.onload=function(e) { const img=new Image(); img.onload=function() { const canvas=document.createElement('canvas'); const MAX=600; let w=img.width,h=img.height; if(w>h){if(w>MAX){h=h*MAX/w;w=MAX;}}else{if(h>MAX){w=w*MAX/h;h=MAX;}} canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(img,0,0,w,h); callback(canvas.toDataURL('image/jpeg',0.7)); }; img.src=e.target.result; };
   reader.readAsDataURL(file);
 }
-
 window.previewPhoto = function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  compressImage(file, function(compressed) {
-    currentPhoto = compressed;
-    const wrap = document.getElementById('photoPreviewWrap');
-    wrap.innerHTML = '';
-    const img = document.createElement('img');
-    img.src = compressed;
-    img.onload = function() { wrap.appendChild(img); currentImgEl = img; setupAnalysisBox(wrap); };
-  });
+  const file=e.target.files[0]; if(!file) return;
+  compressImage(file, function(compressed) { currentPhoto=compressed; const wrap=document.getElementById('photoPreviewWrap'); wrap.innerHTML=''; const img=document.createElement('img'); img.src=compressed; img.onload=function(){wrap.appendChild(img);currentImgEl=img;setupAnalysisBox(wrap);}; });
 }
-
 window.openModal = function() {
-  isEditMode = false; currentEditId = null;
-  currentPhoto = null; currentColor = null; currentImgEl = null;
-  boxPctX = 50; boxPctY = 50;
-  document.getElementById('modalTitle').textContent = '服を追加する';
-  document.getElementById('modalSaveBtn').textContent = '保存する';
-  document.getElementById('addModeSection').style.display = 'block';
-  document.getElementById('editModeSection').style.display = 'none';
-  document.getElementById('similarSearchBtn').style.display = 'block';
-  document.getElementById('photoPreviewWrap').innerHTML = '<div class="photo-preview-empty">写真を選んでください</div>';
-  document.getElementById('colorResultRow').style.display = 'none';
+  isEditMode=false; currentEditId=null; currentPhoto=null; currentColor=null; currentImgEl=null; boxPctX=50; boxPctY=50;
+  document.getElementById('modalTitle').textContent='服を追加する';
+  document.getElementById('modalSaveBtn').textContent='保存する';
+  document.getElementById('addModeSection').style.display='block';
+  document.getElementById('editModeSection').style.display='none';
+  document.getElementById('similarSearchBtn').style.display='block';
+  document.getElementById('photoPreviewWrap').innerHTML='<div class="photo-preview-empty">写真を選んでください</div>';
+  document.getElementById('colorResultRow').style.display='none';
   renderTasteSelect(); renderTasteTags();
   document.getElementById('modal').classList.add('show');
 }
-
-// 編集モードでモーダルを開く
 window.editItem = function(id) {
-  const item = items.find(i => i.id === id);
-  if (!item) return;
-  isEditMode = true; currentEditId = id;
-  document.getElementById('modalTitle').textContent = '服を編集する';
-  document.getElementById('modalSaveBtn').textContent = '変更を保存';
-  document.getElementById('addModeSection').style.display = 'none';
-  document.getElementById('editModeSection').style.display = 'block';
-  document.getElementById('similarSearchBtn').style.display = 'none';
-  // 写真プレビュー
-  document.getElementById('editPhotoPreview').innerHTML = `<img src="${item.photo}">`;
-  // フィールドを埋める
-  document.getElementById('category').value = item.category || '';
-  document.getElementById('season').value = item.season || '';
-  document.getElementById('memo').value = item.memo || '';
-  renderTasteSelect();
-  renderTasteTags();
-  document.getElementById('tasteSelect').value = item.taste || '';
+  const item=items.find(i=>i.id===id); if(!item) return;
+  isEditMode=true; currentEditId=id;
+  document.getElementById('modalTitle').textContent='服を編集する';
+  document.getElementById('modalSaveBtn').textContent='変更を保存';
+  document.getElementById('addModeSection').style.display='none';
+  document.getElementById('editModeSection').style.display='block';
+  document.getElementById('similarSearchBtn').style.display='none';
+  document.getElementById('editPhotoPreview').innerHTML=`<img src="${item.photo}">`;
+  document.getElementById('category').value=item.category||'';
+  document.getElementById('season').value=item.season||'';
+  document.getElementById('memo').value=item.memo||'';
+  renderTasteSelect(); renderTasteTags();
+  document.getElementById('tasteSelect').value=item.taste||'';
   document.getElementById('modal').classList.add('show');
 }
-
 window.closeModal = function() {
   document.getElementById('modal').classList.remove('show');
-  ['cameraInput','albumInput'].forEach(id => document.getElementById(id).value = '');
-  ['category','season','tasteSelect'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('memo').value = '';
-  document.getElementById('newTasteInput').value = '';
-  document.getElementById('photoPreviewWrap').innerHTML = '<div class="photo-preview-empty">写真を選んでください</div>';
-  document.getElementById('colorResultRow').style.display = 'none';
-  currentPhoto = null; currentColor = null; currentImgEl = null;
-  isEditMode = false; currentEditId = null;
+  ['cameraInput','albumInput'].forEach(id=>document.getElementById(id).value='');
+  ['category','season','tasteSelect'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('memo').value=''; document.getElementById('newTasteInput').value='';
+  document.getElementById('photoPreviewWrap').innerHTML='<div class="photo-preview-empty">写真を選んでください</div>';
+  document.getElementById('colorResultRow').style.display='none';
+  currentPhoto=null; currentColor=null; currentImgEl=null; isEditMode=false; currentEditId=null;
 }
-
-// 保存 or 更新
-window.saveOrUpdateItem = async function() {
-  if (isEditMode) {
-    await updateItem();
-  } else {
-    await saveItem();
-  }
-}
-
+window.saveOrUpdateItem = async function() { isEditMode ? await updateItem() : await saveItem(); }
 async function saveItem() {
-  const category = document.getElementById('category').value;
-  const season = document.getElementById('season').value;
-  const taste = document.getElementById('tasteSelect').value;
-  const memo = document.getElementById('memo').value;
-  if (!currentPhoto) { alert('写真を選んでください！'); return; }
-  if (!category) { alert('カテゴリを選んでください！'); return; }
-  if (!season) { alert('季節を選んでください！'); return; }
-  const indicator = document.getElementById('savingIndicator');
-  indicator.style.display = 'block';
-  const item = { photo: currentPhoto, color: currentColor, category, season, taste, memo, createdAt: new Date().toISOString() };
+  const category=document.getElementById('category').value, season=document.getElementById('season').value, taste=document.getElementById('tasteSelect').value, memo=document.getElementById('memo').value;
+  if(!currentPhoto){alert('写真を選んでください！');return;} if(!category){alert('カテゴリを選んでください！');return;} if(!season){alert('季節を選んでください！');return;}
+  const indicator=document.getElementById('savingIndicator'); indicator.style.display='block';
+  const item={photo:currentPhoto,color:currentColor,category,season,taste,memo,createdAt:new Date().toISOString()};
   try {
-    if (currentUser) {
-      const docRef = await addDoc(collection(db, 'users', currentUser.uid, 'items'), item);
-      items.unshift({ id: docRef.id, ...item });
-    } else {
-      const localItem = { id: Date.now().toString(), ...item };
-      localItems.unshift(localItem);
-      items = [...localItems];
-      localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
-    }
+    if(currentUser){const docRef=await addDoc(collection(db,'users',currentUser.uid,'items'),item);items.unshift({id:docRef.id,...item});}
+    else{const localItem={id:Date.now().toString(),...item};localItems.unshift(localItem);items=[...localItems];localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}
     closeModal(); renderGrid(); renderStats();
-  } catch(e) { alert('保存に失敗しました。'); }
-  finally { indicator.style.display = 'none'; }
+  } catch(e){alert('保存に失敗しました。');} finally{indicator.style.display='none';}
 }
-
 async function updateItem() {
-  const category = document.getElementById('category').value;
-  const season = document.getElementById('season').value;
-  const taste = document.getElementById('tasteSelect').value;
-  const memo = document.getElementById('memo').value;
-  if (!category) { alert('カテゴリを選んでください！'); return; }
-  if (!season) { alert('季節を選んでください！'); return; }
-  const indicator = document.getElementById('savingIndicator');
-  indicator.style.display = 'block';
-  const item = items.find(i => i.id === currentEditId);
-  if (!item) return;
-  item.category = category; item.season = season; item.taste = taste; item.memo = memo;
+  const category=document.getElementById('category').value, season=document.getElementById('season').value, taste=document.getElementById('tasteSelect').value, memo=document.getElementById('memo').value;
+  if(!category){alert('カテゴリを選んでください！');return;} if(!season){alert('季節を選んでください！');return;}
+  const indicator=document.getElementById('savingIndicator'); indicator.style.display='block';
+  const item=items.find(i=>i.id===currentEditId); if(!item) return;
+  item.category=category; item.season=season; item.taste=taste; item.memo=memo;
   try {
-    if (currentUser) {
-      const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js");
-      await updateDoc(doc(db, 'users', currentUser.uid, 'items', currentEditId), { category, season, taste, memo });
-    } else {
-      const li = localItems.find(i => i.id === currentEditId);
-      if (li) { li.category = category; li.season = season; li.taste = taste; li.memo = memo; }
-      localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
-    }
+    if(currentUser){const{updateDoc}=await import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js");await updateDoc(doc(db,'users',currentUser.uid,'items',currentEditId),{category,season,taste,memo});}
+    else{const li=localItems.find(i=>i.id===currentEditId);if(li){li.category=category;li.season=season;li.taste=taste;li.memo=memo;}localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}
     closeModal(); renderGrid(); renderStats();
-  } catch(e) { alert('更新に失敗しました。'); }
-  finally { indicator.style.display = 'none'; }
+  } catch(e){alert('更新に失敗しました。');} finally{indicator.style.display='none';}
 }
-
 window.searchSimilar = function() {
-  if (!currentColor) { alert('先に写真を選んでください！'); return; }
-  const category = document.getElementById('category').value;
-  const season = document.getElementById('season').value;
-  if (!category) { alert('カテゴリを選んでください！'); return; }
-  if (!season) { alert('季節を選んでください！'); return; }
-  const taste = document.getElementById('tasteSelect').value;
-  const memo = document.getElementById('memo').value;
-  pendingItem = { photo: currentPhoto, color: currentColor, category, season, taste, memo, createdAt: new Date().toISOString() };
-  isSimilarMode = true;
-  similarSourceColor = currentColor;
-  selectedSearchColors = [];
+  if(!currentColor){alert('先に写真を選んでください！');return;}
+  const category=document.getElementById('category').value, season=document.getElementById('season').value;
+  if(!category){alert('カテゴリを選んでください！');return;} if(!season){alert('季節を選んでください！');return;}
+  const taste=document.getElementById('tasteSelect').value, memo=document.getElementById('memo').value;
+  pendingItem={photo:currentPhoto,color:currentColor,category,season,taste,memo,createdAt:new Date().toISOString()};
+  isSimilarMode=true; similarSourceColor=currentColor; selectedSearchColors=[];
   document.getElementById('modal').classList.remove('show');
-  ['cameraInput','albumInput'].forEach(id => document.getElementById(id).value = '');
-  if (category) {
-    currentFilter = category;
-    document.querySelectorAll('.filter-btn').forEach(btn => { btn.classList.toggle('active', btn.textContent.trim() === category); });
-  }
-  if (season) document.getElementById('searchSeason').value = season;
-  if (taste) document.getElementById('searchTaste').value = taste;
+  ['cameraInput','albumInput'].forEach(id=>document.getElementById(id).value='');
+  if(category){currentFilter=category;document.querySelectorAll('.filter-btn').forEach(btn=>{btn.classList.toggle('active',btn.textContent.trim()===category)});}
+  if(season) document.getElementById('searchSeason').value=season;
+  if(taste) document.getElementById('searchTaste').value=taste;
   document.getElementById('searchPanel').classList.add('show');
   document.getElementById('searchToggleBtn').classList.add('active');
-  document.getElementById('colorSearchHint').textContent = '「検索元」の色は外せません。他の色をタップで追加できます';
+  document.getElementById('colorSearchHint').textContent='「検索元」の色は外せません。他の色をタップで追加できます';
   document.getElementById('similarBar').classList.add('show');
-  document.getElementById('addBtn').style.display = 'none';
-  renderColorChips();
-  doSearch();
+  document.getElementById('addBtn').style.display='none';
+  renderColorChips(); doSearch();
 }
-
 window.cancelSimilarSearch = function() {
-  isSimilarMode = false; similarSourceColor = null; pendingItem = null; selectedSearchColors = [];
+  isSimilarMode=false; similarSourceColor=null; pendingItem=null; selectedSearchColors=[];
   document.getElementById('similarBar').classList.remove('show');
-  document.getElementById('addBtn').style.display = '';
-  document.getElementById('colorSearchHint').textContent = 'タップで選択・もう一度タップで解除／複数選択OK';
+  document.getElementById('addBtn').style.display='';
+  document.getElementById('colorSearchHint').textContent='タップで選択・もう一度タップで解除／複数選択OK';
   document.getElementById('searchPanel').classList.remove('show');
   document.getElementById('searchToggleBtn').classList.remove('active');
-  isSearchMode = false; searchResults = null;
-  document.getElementById('searchResultNotice').textContent = '';
-  document.getElementById('searchSeason').value = '';
-  document.getElementById('searchTaste').value = '';
-  currentFilter = '全て';
-  document.querySelectorAll('.filter-btn').forEach(btn => { btn.classList.toggle('active', btn.textContent.trim() === '全て'); });
+  isSearchMode=false; searchResults=null;
+  document.getElementById('searchResultNotice').textContent='';
+  document.getElementById('searchSeason').value=''; document.getElementById('searchTaste').value='';
+  currentFilter='全て';
+  document.querySelectorAll('.filter-btn').forEach(btn=>{btn.classList.toggle('active',btn.textContent.trim()==='全て')});
   renderGrid();
 }
-
 window.registerPendingItem = async function() {
-  if (!pendingItem) return;
-  const indicator = document.getElementById('savingIndicator');
-  indicator.style.display = 'block';
+  if(!pendingItem) return;
+  const indicator=document.getElementById('savingIndicator'); indicator.style.display='block';
   try {
-    if (currentUser) {
-      const docRef = await addDoc(collection(db, 'users', currentUser.uid, 'items'), pendingItem);
-      items.unshift({ id: docRef.id, ...pendingItem });
-    } else {
-      const localItem = { id: Date.now().toString(), ...pendingItem };
-      localItems.unshift(localItem);
-      items = [...localItems];
-      localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
-    }
-    alert('登録しました！');
-    cancelSimilarSearch();
-    renderGrid(); renderStats();
-  } catch(e) { alert('保存に失敗しました。'); }
-  finally { indicator.style.display = 'none'; }
+    if(currentUser){const docRef=await addDoc(collection(db,'users',currentUser.uid,'items'),pendingItem);items.unshift({id:docRef.id,...pendingItem});}
+    else{const localItem={id:Date.now().toString(),...pendingItem};localItems.unshift(localItem);items=[...localItems];localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}
+    alert('登録しました！'); cancelSimilarSearch(); renderGrid(); renderStats();
+  } catch(e){alert('保存に失敗しました。');} finally{indicator.style.display='none';}
 }
-
 window.deleteItem = async function(id) {
-  if (confirm('この服を削除しますか？')) {
-    if (currentUser) {
-      await deleteDoc(doc(db, 'users', currentUser.uid, 'items', id));
-    } else {
-      localItems = localItems.filter(i => i.id !== id);
-      localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
-    }
-    items = items.filter(i => i.id !== id);
-    if (isSearchMode) doSearch(); else renderGrid();
+  if(confirm('この服を削除しますか？')){
+    if(currentUser) await deleteDoc(doc(db,'users',currentUser.uid,'items',id));
+    else{localItems=localItems.filter(i=>i.id!==id);localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}
+    items=items.filter(i=>i.id!==id);
+    if(isSearchMode) doSearch(); else renderGrid();
     renderStats();
   }
 }
 window.toggleFav = async function(id) {
-  const item = items.find(i => i.id === id);
-  if (!item) return;
-  item.fav = !item.fav;
-  if (currentUser) {
-    const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js");
-    await updateDoc(doc(db, 'users', currentUser.uid, 'items', id), { fav: item.fav });
-  } else {
-    const li = localItems.find(i => i.id === id);
-    if (li) li.fav = item.fav;
-    localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
-  }
-  if (isSearchMode) doSearch(); else renderGrid();
+  const item=items.find(i=>i.id===id); if(!item) return;
+  item.fav=!item.fav;
+  if(currentUser){const{updateDoc}=await import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js");await updateDoc(doc(db,'users',currentUser.uid,'items',id),{fav:item.fav});}
+  else{const li=localItems.find(i=>i.id===id);if(li)li.fav=item.fav;localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}
+  if(isSearchMode) doSearch(); else renderGrid();
 }
 window.wearItem = async function(id) {
-  const item = items.find(i => i.id === id);
-  if (!item) return;
-  const today = new Date().toISOString().slice(0, 10);
-  if (item.lastWornDate === today) {
-    item.wornCount = Math.max((item.wornCount || 1) - 1, 0);
-    item.lastWornDate = item.prevLastWornDate || null;
-    item.prevLastWornDate = null;
-  } else {
-    item.prevLastWornDate = item.lastWornDate || null;
-    item.wornCount = Math.min((item.wornCount || 0) + 1, 99);
-    item.lastWornDate = today;
-  }
-  if (currentUser) {
-    const { updateDoc } = await import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js");
-    await updateDoc(doc(db, 'users', currentUser.uid, 'items', id), { wornCount: item.wornCount, lastWornDate: item.lastWornDate, prevLastWornDate: item.prevLastWornDate || null });
-  } else {
-    const li = localItems.find(i => i.id === id);
-    if (li) { li.wornCount = item.wornCount; li.lastWornDate = item.lastWornDate; li.prevLastWornDate = item.prevLastWornDate || null; }
-    localStorage.setItem('closet_items_guest', JSON.stringify(localItems));
-  }
-  if (isSearchMode) doSearch(); else renderGrid();
+  const item=items.find(i=>i.id===id); if(!item) return;
+  const today=new Date().toISOString().slice(0,10);
+  if(item.lastWornDate===today){item.wornCount=Math.max((item.wornCount||1)-1,0);item.lastWornDate=item.prevLastWornDate||null;item.prevLastWornDate=null;}
+  else{item.prevLastWornDate=item.lastWornDate||null;item.wornCount=Math.min((item.wornCount||0)+1,99);item.lastWornDate=today;}
+  if(currentUser){const{updateDoc}=await import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js");await updateDoc(doc(db,'users',currentUser.uid,'items',id),{wornCount:item.wornCount,lastWornDate:item.lastWornDate,prevLastWornDate:item.prevLastWornDate||null});}
+  else{const li=localItems.find(i=>i.id===id);if(li){li.wornCount=item.wornCount;li.lastWornDate=item.lastWornDate;li.prevLastWornDate=item.prevLastWornDate||null;}localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}
+  if(isSearchMode) doSearch(); else renderGrid();
   renderStats();
 }
 window.filterItems = function(filter) {
-  currentFilter = filter;
-  isSearchMode = false; searchResults = null;
-  document.getElementById('searchResultNotice').textContent = '';
-  document.querySelectorAll('.filter-btn').forEach(btn => { btn.classList.toggle('active', btn.textContent.trim() === filter); });
+  currentFilter=filter; isSearchMode=false; searchResults=null;
+  document.getElementById('searchResultNotice').textContent='';
+  document.querySelectorAll('.filter-btn').forEach(btn=>{btn.classList.toggle('active',btn.textContent.trim()===filter)});
   renderGrid();
 }
 function sortItems(arr) {
-  const sort = document.getElementById('sortSelect')?.value || 'new';
-  const copy = [...arr];
-  if (sort === 'worn_desc') copy.sort((a, b) => (b.wornCount || 0) - (a.wornCount || 0));
-  else if (sort === 'worn_asc') copy.sort((a, b) => (a.wornCount || 0) - (b.wornCount || 0));
-  else if (sort === 'date_desc') copy.sort((a, b) => { if (!a.lastWornDate && !b.lastWornDate) return 0; if (!a.lastWornDate) return 1; if (!b.lastWornDate) return -1; return b.lastWornDate.localeCompare(a.lastWornDate); });
-  else if (sort === 'date_asc') copy.sort((a, b) => { if (!a.lastWornDate && !b.lastWornDate) return 0; if (!a.lastWornDate) return -1; if (!b.lastWornDate) return 1; return a.lastWornDate.localeCompare(b.lastWornDate); });
+  const sort=document.getElementById('sortSelect')?.value||'new', copy=[...arr];
+  if(sort==='worn_desc') copy.sort((a,b)=>(b.wornCount||0)-(a.wornCount||0));
+  else if(sort==='worn_asc') copy.sort((a,b)=>(a.wornCount||0)-(b.wornCount||0));
+  else if(sort==='date_desc') copy.sort((a,b)=>{if(!a.lastWornDate&&!b.lastWornDate)return 0;if(!a.lastWornDate)return 1;if(!b.lastWornDate)return -1;return b.lastWornDate.localeCompare(a.lastWornDate);});
+  else if(sort==='date_asc') copy.sort((a,b)=>{if(!a.lastWornDate&&!b.lastWornDate)return 0;if(!a.lastWornDate)return -1;if(!b.lastWornDate)return 1;return a.lastWornDate.localeCompare(b.lastWornDate);});
   return copy;
 }
 window.doSearch = function() {
-  const category = currentFilter === '全て' ? '' : currentFilter;
-  const season = document.getElementById('searchSeason').value;
-  const taste = document.getElementById('searchTaste').value;
-  const favOnly = document.getElementById('searchFav').checked;
-  searchResults = items.filter(item => {
-    if (category && item.category !== category) return false;
-    if (season && item.season !== season) return false;
-    if (taste && item.taste !== taste) return false;
-    if (favOnly && !item.fav) return false;
-    if (isSimilarMode && similarSourceColor) {
-      const matchesSource = item.color && colorDistance(item.color, similarSourceColor) < 50;
-      const matchesSelected = selectedSearchColors.length > 0 && item.color && selectedSearchColors.includes(item.color);
-      if (!matchesSource && !matchesSelected) return false;
-    } else if (selectedSearchColors.length > 0) {
-      if (!item.color || !selectedSearchColors.includes(item.color)) return false;
-    }
+  const category=currentFilter==='全て'?'':currentFilter;
+  const season=document.getElementById('searchSeason').value, taste=document.getElementById('searchTaste').value, favOnly=document.getElementById('searchFav').checked;
+  searchResults=items.filter(item=>{
+    if(category&&item.category!==category) return false;
+    if(season&&item.season!==season) return false;
+    if(taste&&item.taste!==taste) return false;
+    if(favOnly&&!item.fav) return false;
+    if(isSimilarMode&&similarSourceColor){const matchesSource=item.color&&colorDistance(item.color,similarSourceColor)<50;const matchesSelected=selectedSearchColors.length>0&&item.color&&selectedSearchColors.includes(item.color);if(!matchesSource&&!matchesSelected)return false;}
+    else if(selectedSearchColors.length>0){if(!item.color||!selectedSearchColors.includes(item.color))return false;}
     return true;
   });
-  isSearchMode = true;
-  document.getElementById('searchResultNotice').textContent = `検索結果：${searchResults.length}件`;
+  isSearchMode=true;
+  document.getElementById('searchResultNotice').textContent=`検索結果：${searchResults.length}件`;
   renderGrid();
 }
 window.renderGrid = function() {
-  const grid = document.getElementById('grid');
-  const today = new Date().toISOString().slice(0, 10);
+  const grid=document.getElementById('grid'), today=new Date().toISOString().slice(0,10);
   let source;
-  if (isSearchMode) { source = sortItems(searchResults); }
-  else {
-    let base = currentFilter === '全て' ? items : items.filter(i => i.category === currentFilter);
-    source = sortItems([...base.filter(i => i.fav), ...base.filter(i => !i.fav)]);
-  }
-  if (!source || source.length === 0) {
-    grid.innerHTML = `<div class="empty">${isSearchMode ? '条件に一致する服が見つかりませんでした' : 'まだ服が登録されていません！<br>＋ボタンから追加してね'}</div>`;
-    return;
-  }
-  grid.innerHTML = source.map(item => {
-    const worn = item.wornCount || 0;
-    const wornToday = item.lastWornDate === today;
-    const wornDisplay = worn === 0 ? '0' : `${worn}`;
-    const lastDate = item.lastWornDate ? item.lastWornDate.replace(/-/g, '/') : '未着用';
-    return `
-    <div class="card">
+  if(isSearchMode) source=sortItems(searchResults);
+  else { let base=currentFilter==='全て'?items:items.filter(i=>i.category===currentFilter); source=sortItems([...base.filter(i=>i.fav),...base.filter(i=>!i.fav)]); }
+  if(!source||source.length===0){grid.innerHTML=`<div class="empty">${isSearchMode?'条件に一致する服が見つかりませんでした':'まだ服が登録されていません！<br>＋ボタンから追加してね'}</div>`;return;}
+  grid.innerHTML=source.map(item=>{
+    const worn=item.wornCount||0, wornToday=item.lastWornDate===today, wornDisplay=worn===0?'0':`${worn}`, lastDate=item.lastWornDate?item.lastWornDate.replace(/-/g,'/'):'未着用';
+    return `<div class="card">
       <img src="${item.photo}" alt="${item.category}">
       <button class="card-delete" onclick="deleteItem('${item.id}')">×</button>
-<button class="card-edit-btn" onclick="editItem('${item.id}')" title="編集"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-<button class="card-fav ${item.fav ? 'active' : ''}" onclick="toggleFav('${item.id}')">
-        <svg viewBox="0 0 24 24" fill="${item.fav ? '#ffb3c1' : 'none'}" stroke="${item.fav ? '#ffb3c1' : 'rgba(255,255,255,0.7)'}" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <button class="card-edit-btn" onclick="editItem('${item.id}')" title="編集"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+      <button class="card-coorde-btn" onclick="openCoordeModal('${item.id}')" title="コーデ提案"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 6 5 6 7v1H4v12h16V8h-2V7c0-2-2-5-6-5z"/><path d="M9 8V7c0-1.5 1-3 3-3s3 1.5 3 3v1"/></svg></button>
+      <button class="card-fav ${item.fav?'active':''}" onclick="toggleFav('${item.id}')">
+        <svg viewBox="0 0 24 24" fill="${item.fav?'#ffb3c1':'none'}" stroke="${item.fav?'#ffb3c1':'rgba(255,255,255,0.7)'}" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
       </button>
       <div class="card-info">
-        ${item.color ? `<div class="card-color-bar" style="background:${item.color};"></div>` : ''}
+        ${item.color?`<div class="card-color-bar" style="background:${item.color};"></div>`:''}
         <div class="card-info-inner">
           <div class="card-category">${item.category}</div>
           <div class="card-season">${item.season}</div>
-          ${item.taste ? `<div class="card-taste">${item.taste}</div>` : ''}
-          ${item.memo ? `<div class="card-season">${item.memo}</div>` : ''}
+          ${item.taste?`<div class="card-taste">${item.taste}</div>`:''}
+          ${item.memo?`<div class="card-season">${item.memo}</div>`:''}
         </div>
       </div>
       <div class="card-bottom">
         <div class="card-last-worn">最後に着た日<br>${lastDate}</div>
-        <button class="card-wear-btn ${wornToday ? 'worn-today' : ''}" onclick="wearItem('${item.id}')"
-          title="${wornToday ? 'もう一度タップで取消' : '今日着たら押してね'}">
+        <button class="card-wear-btn ${wornToday?'worn-today':''}" onclick="wearItem('${item.id}')" title="${wornToday?'もう一度タップで取消':'今日着たら押してね'}">
           <span class="card-wear-count">${wornDisplay}</span>
           <span class="card-wear-label">着用回数</span>
         </button>
