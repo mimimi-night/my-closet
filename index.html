@@ -294,7 +294,7 @@ select option { background: #333; }
   <div class="coorde-modal" id="coordeModal">
     <div class="coorde-header">
       <button class="coorde-close-btn" onclick="closeCoordeModal()">×</button>
-      <div class="coorde-title">👗 コーデ提案</div>
+      <div class="coorde-title">コーデ提案</div>
       <div class="coorde-counter" id="coordeCounter"></div>
     </div>
     <div class="coorde-viewport" id="coordeViewport"></div>
@@ -581,7 +581,7 @@ grid.innerHTML=source.map(item=>{const worn=item.wornCount||0,wornToday=item.las
 return `<div class="card">
   <div class="card-img-wrap">
     <img src="${item.photo}" alt="${item.category}">
-    <button class="card-coorde-overlay" onclick="openCoordeModal('${item.id}')">👗 コーデ提案</button>
+    <button class="card-coorde-overlay" onclick="openCoordeModal('${item.id}')">コーデ提案</button>
   </div>
   <button class="card-delete" onclick="deleteItem('${item.id}')">×</button>
   <button class="card-edit-btn" onclick="editItem('${item.id}')" title="編集"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
