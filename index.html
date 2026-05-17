@@ -294,7 +294,7 @@ select option { background: #333; }
   <div class="coorde-modal" id="coordeModal">
     <div class="coorde-header">
       <button class="coorde-close-btn" onclick="closeCoordeModal()">×</button>
-      <div class="coorde-title">コーデ提案</div>
+      <div class="coorde-title">👗 コーデ提案</div>
       <div class="coorde-counter" id="coordeCounter"></div>
     </div>
     <div class="coorde-viewport" id="coordeViewport"></div>
@@ -359,7 +359,7 @@ select option { background: #333; }
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, getRedirectResult, sendPasswordResetEmail, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
 const firebaseConfig = { apiKey:"AIzaSyDoQlri0Yl5CWOWROVz3lcpV-m5RZtWEn4", authDomain:"my-closet-21d11.firebaseapp.com", projectId:"my-closet-21d11", storageBucket:"my-closet-21d11.firebasestorage.app", messagingSenderId:"709312024370", appId:"1:709312024370:web:2a9cca87b06a2344e2112b", measurementId:"G-S43KFSX7LH" };
 const app = initializeApp(firebaseConfig);
@@ -400,8 +400,9 @@ onAuthStateChanged(auth, async(user)=>{
     document.getElementById('logoutBtn').style.display='none';
     document.getElementById('guestBanner').style.display='block';
   }
-  renderTasteSelect();renderTasteTags();renderGrid();renderStats();setupSlideSelect();
+  renderTasteSelect();renderTasteTags();renderGrid();renderStats();
 });
+setupSlideSelect();
 
 window.openLoginModal=function(){document.getElementById('loginModal').classList.add('show');showLoginForm();}
 window.closeLoginModal=function(){document.getElementById('loginModal').classList.remove('show');document.getElementById('loginError').textContent='';document.getElementById('resetSuccess').textContent='';}
@@ -431,8 +432,6 @@ function colorDistance(c1,c2){const p=s=>{const m=s.match(/rgb\((\d+),(\d+),(\d+
 function rgbToHue(c){const m=c.match(/rgb\((\d+),(\d+),(\d+)\)/);if(!m)return 0;let r=m[1]/255,g=m[2]/255,b=m[3]/255;const max=Math.max(r,g,b),min=Math.min(r,g,b),d=max-min;if(d===0)return 0;let h=max===r?(g-b)/d%6:max===g?(b-r)/d+2:(r-g)/d+4;return(h*60+360)%360;}
 function getAllColors(){return items.filter(i=>i.color).map(i=>i.color).sort((a,b)=>rgbToHue(a)-rgbToHue(b));}
 
-// シャッフル
-function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
 // コーデ提案：完全ランダム・上限なし
 function getTargetCategories(cat){const m={'トップス':['ボトムス','アウター','シューズ'],'ボトムス':['トップス','アウター','シューズ'],'ワンピース':['アウター','シューズ'],'アウター':['トップス','ボトムス','シューズ'],'シューズ':['トップス','ボトムス','アウター']};return m[cat]||[];}
@@ -472,15 +471,19 @@ function generateCoordes(baseItem){
   return combos;
 }
 
+let coordeSwipeSetup=false;
 window.openCoordeModal=function(id){
   const baseItem=items.find(i=>i.id===id);if(!baseItem)return;
   coordeCombinations=generateCoordes(baseItem);coordeIndex=0;
   document.getElementById('coordeModal').classList.add('show');
   renderCoordeSlide(0,null);
-  // スワイプ
-  const vp=document.getElementById('coordeViewport');
-  vp.addEventListener('touchstart',e=>{coordeTouchStartX=e.touches[0].clientX;},{passive:true});
-  vp.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-coordeTouchStartX;if(Math.abs(dx)>50){dx<0?nextCoorde():prevCoorde();}},{passive:true});
+  // スワイプ（一度だけ登録）
+  if(!coordeSwipeSetup){
+    coordeSwipeSetup=true;
+    const vp=document.getElementById('coordeViewport');
+    vp.addEventListener('touchstart',e=>{coordeTouchStartX=e.touches[0].clientX;},{passive:true});
+    vp.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-coordeTouchStartX;if(Math.abs(dx)>50){dx<0?nextCoorde():prevCoorde();}},{passive:true});
+  }
 }
 window.closeCoordeModal=function(){document.getElementById('coordeModal').classList.remove('show');}
 
@@ -563,13 +566,13 @@ window.editItem=function(id){const item=items.find(i=>i.id===id);if(!item)return
 window.closeModal=function(){document.getElementById('modal').classList.remove('show');['cameraInput','albumInput'].forEach(id=>document.getElementById(id).value='');['category','season','tasteSelect'].forEach(id=>document.getElementById(id).value='');document.getElementById('memo').value='';document.getElementById('newTasteInput').value='';document.getElementById('photoPreviewWrap').innerHTML='<div class="photo-preview-empty">写真を選んでください</div>';document.getElementById('colorResultRow').style.display='none';currentPhoto=null;currentColor=null;currentImgEl=null;isEditMode=false;currentEditId=null;}
 window.saveOrUpdateItem=async function(){isEditMode?await updateItem():await saveItem();}
 async function saveItem(){const category=document.getElementById('category').value,season=document.getElementById('season').value,taste=document.getElementById('tasteSelect').value,memo=document.getElementById('memo').value;if(!currentPhoto){alert('写真を選んでください！');return;}if(!category){alert('カテゴリを選んでください！');return;}if(!season){alert('季節を選んでください！');return;}const ind=document.getElementById('savingIndicator');ind.style.display='block';const item={photo:currentPhoto,color:currentColor,category,season,taste,memo,createdAt:new Date().toISOString()};try{if(currentUser){const dr=await addDoc(collection(db,'users',currentUser.uid,'items'),item);items.unshift({id:dr.id,...item});}else{const li={id:Date.now().toString(),...item};localItems.unshift(li);items=[...localItems];localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}closeModal();renderGrid();renderStats();}catch(e){alert('保存に失敗しました。');}finally{ind.style.display='none';}}
-async function updateItem(){const category=document.getElementById('category').value,season=document.getElementById('season').value,taste=document.getElementById('tasteSelect').value,memo=document.getElementById('memo').value;if(!category){alert('カテゴリを選んでください！');return;}if(!season){alert('季節を選んでください！');return;}const ind=document.getElementById('savingIndicator');ind.style.display='block';const item=items.find(i=>i.id===currentEditId);if(!item)return;item.category=category;item.season=season;item.taste=taste;item.memo=memo;try{if(currentUser){const{updateDoc}=await import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js");await updateDoc(doc(db,'users',currentUser.uid,'items',currentEditId),{category,season,taste,memo});}else{const li=localItems.find(i=>i.id===currentEditId);if(li){li.category=category;li.season=season;li.taste=taste;li.memo=memo;}localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}closeModal();renderGrid();renderStats();}catch(e){alert('更新に失敗しました。');}finally{ind.style.display='none';}}
+async function updateItem(){const category=document.getElementById('category').value,season=document.getElementById('season').value,taste=document.getElementById('tasteSelect').value,memo=document.getElementById('memo').value;if(!category){alert('カテゴリを選んでください！');return;}if(!season){alert('季節を選んでください！');return;}const ind=document.getElementById('savingIndicator');ind.style.display='block';const item=items.find(i=>i.id===currentEditId);if(!item)return;item.category=category;item.season=season;item.taste=taste;item.memo=memo;try{if(currentUser){await updateDoc(doc(db,'users',currentUser.uid,'items',currentEditId),{category,season,taste,memo});}else{const li=localItems.find(i=>i.id===currentEditId);if(li){li.category=category;li.season=season;li.taste=taste;li.memo=memo;}localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}closeModal();renderGrid();renderStats();}catch(e){alert('更新に失敗しました。');}finally{ind.style.display='none';}}
 window.searchSimilar=function(){if(!currentColor){alert('先に写真を選んでください！');return;}const category=document.getElementById('category').value,season=document.getElementById('season').value;if(!category){alert('カテゴリを選んでください！');return;}if(!season){alert('季節を選んでください！');return;}const taste=document.getElementById('tasteSelect').value,memo=document.getElementById('memo').value;pendingItem={photo:currentPhoto,color:currentColor,category,season,taste,memo,createdAt:new Date().toISOString()};isSimilarMode=true;similarSourceColor=currentColor;selectedSearchColors=[];document.getElementById('modal').classList.remove('show');['cameraInput','albumInput'].forEach(id=>document.getElementById(id).value='');if(category){currentFilter=category;document.querySelectorAll('.filter-btn').forEach(btn=>{btn.classList.toggle('active',btn.textContent.trim()===category);});}if(season)document.getElementById('searchSeason').value=season;if(taste)document.getElementById('searchTaste').value=taste;document.getElementById('searchPanel').classList.add('show');document.getElementById('searchToggleBtn').classList.add('active');document.getElementById('colorSearchHint').textContent='「検索元」の色は外せません。他の色をタップで追加できます';document.getElementById('similarBar').classList.add('show');document.getElementById('addBtn').style.display='none';renderColorChips();doSearch();}
 window.cancelSimilarSearch=function(){isSimilarMode=false;similarSourceColor=null;pendingItem=null;selectedSearchColors=[];document.getElementById('similarBar').classList.remove('show');document.getElementById('addBtn').style.display='';document.getElementById('colorSearchHint').textContent='タップで選択・長押しでスライド複数選択OK';document.getElementById('searchPanel').classList.remove('show');document.getElementById('searchToggleBtn').classList.remove('active');isSearchMode=false;searchResults=null;document.getElementById('searchResultNotice').textContent='';document.getElementById('searchSeason').value='';document.getElementById('searchTaste').value='';currentFilter='全て';document.querySelectorAll('.filter-btn').forEach(btn=>{btn.classList.toggle('active',btn.textContent.trim()==='全て');});renderGrid();}
 window.registerPendingItem=async function(){if(!pendingItem)return;const ind=document.getElementById('savingIndicator');ind.style.display='block';try{if(currentUser){const dr=await addDoc(collection(db,'users',currentUser.uid,'items'),pendingItem);items.unshift({id:dr.id,...pendingItem});}else{const li={id:Date.now().toString(),...pendingItem};localItems.unshift(li);items=[...localItems];localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}alert('登録しました！');cancelSimilarSearch();renderGrid();renderStats();}catch(e){alert('保存に失敗しました。');}finally{ind.style.display='none';}}
 window.deleteItem=async function(id){if(confirm('この服を削除しますか？')){if(currentUser)await deleteDoc(doc(db,'users',currentUser.uid,'items',id));else{localItems=localItems.filter(i=>i.id!==id);localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}items=items.filter(i=>i.id!==id);if(isSearchMode)doSearch();else renderGrid();renderStats();}}
-window.toggleFav=async function(id){const item=items.find(i=>i.id===id);if(!item)return;item.fav=!item.fav;if(currentUser){const{updateDoc}=await import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js");await updateDoc(doc(db,'users',currentUser.uid,'items',id),{fav:item.fav});}else{const li=localItems.find(i=>i.id===id);if(li)li.fav=item.fav;localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}if(isSearchMode)doSearch();else renderGrid();}
-window.wearItem=async function(id){const item=items.find(i=>i.id===id);if(!item)return;const today=new Date().toISOString().slice(0,10);if(item.lastWornDate===today){item.wornCount=Math.max((item.wornCount||1)-1,0);item.lastWornDate=item.prevLastWornDate||null;item.prevLastWornDate=null;}else{item.prevLastWornDate=item.lastWornDate||null;item.wornCount=Math.min((item.wornCount||0)+1,99);item.lastWornDate=today;}if(currentUser){const{updateDoc}=await import("https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js");await updateDoc(doc(db,'users',currentUser.uid,'items',id),{wornCount:item.wornCount,lastWornDate:item.lastWornDate,prevLastWornDate:item.prevLastWornDate||null});}else{const li=localItems.find(i=>i.id===id);if(li){li.wornCount=item.wornCount;li.lastWornDate=item.lastWornDate;li.prevLastWornDate=item.prevLastWornDate||null;}localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}if(isSearchMode)doSearch();else renderGrid();renderStats();}
+window.toggleFav=async function(id){const item=items.find(i=>i.id===id);if(!item)return;item.fav=!item.fav;if(currentUser){await updateDoc(doc(db,'users',currentUser.uid,'items',id),{fav:item.fav});}else{const li=localItems.find(i=>i.id===id);if(li)li.fav=item.fav;localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}if(isSearchMode)doSearch();else renderGrid();}
+window.wearItem=async function(id){const item=items.find(i=>i.id===id);if(!item)return;const today=new Date().toISOString().slice(0,10);if(item.lastWornDate===today){item.wornCount=Math.max((item.wornCount||1)-1,0);item.lastWornDate=item.prevLastWornDate||null;item.prevLastWornDate=null;}else{item.prevLastWornDate=item.lastWornDate||null;item.wornCount=Math.min((item.wornCount||0)+1,99);item.lastWornDate=today;}if(currentUser){await updateDoc(doc(db,'users',currentUser.uid,'items',id),{wornCount:item.wornCount,lastWornDate:item.lastWornDate,prevLastWornDate:item.prevLastWornDate||null});}else{const li=localItems.find(i=>i.id===id);if(li){li.wornCount=item.wornCount;li.lastWornDate=item.lastWornDate;li.prevLastWornDate=item.prevLastWornDate||null;}localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}if(isSearchMode)doSearch();else renderGrid();renderStats();}
 window.filterItems=function(filter){currentFilter=filter;isSearchMode=false;searchResults=null;document.getElementById('searchResultNotice').textContent='';document.querySelectorAll('.filter-btn').forEach(btn=>{btn.classList.toggle('active',btn.textContent.trim()===filter);});renderGrid();}
 function sortItems(arr){const sort=document.getElementById('sortSelect')?.value||'new',copy=[...arr];if(sort==='worn_desc')copy.sort((a,b)=>(b.wornCount||0)-(a.wornCount||0));else if(sort==='worn_asc')copy.sort((a,b)=>(a.wornCount||0)-(b.wornCount||0));else if(sort==='date_desc')copy.sort((a,b)=>{if(!a.lastWornDate&&!b.lastWornDate)return 0;if(!a.lastWornDate)return 1;if(!b.lastWornDate)return -1;return b.lastWornDate.localeCompare(a.lastWornDate);});else if(sort==='date_asc')copy.sort((a,b)=>{if(!a.lastWornDate&&!b.lastWornDate)return 0;if(!a.lastWornDate)return -1;if(!b.lastWornDate)return 1;return a.lastWornDate.localeCompare(b.lastWornDate);});return copy;}
 window.doSearch=function(){const category=currentFilter==='全て'?'':currentFilter;const season=document.getElementById('searchSeason').value,taste=document.getElementById('searchTaste').value,favOnly=document.getElementById('searchFav').checked;searchResults=items.filter(item=>{if(category&&item.category!==category)return false;if(season&&item.season!==season)return false;if(taste&&item.taste!==taste)return false;if(favOnly&&!item.fav)return false;if(isSimilarMode&&similarSourceColor){const mS=item.color&&colorDistance(item.color,similarSourceColor)<50;const mC=selectedSearchColors.length>0&&item.color&&selectedSearchColors.includes(item.color);if(!mS&&!mC)return false;}else if(selectedSearchColors.length>0){if(!item.color||!selectedSearchColors.includes(item.color))return false;}return true;});isSearchMode=true;document.getElementById('searchResultNotice').textContent=`検索結果：${searchResults.length}件`;renderGrid();}
@@ -578,7 +581,7 @@ grid.innerHTML=source.map(item=>{const worn=item.wornCount||0,wornToday=item.las
 return `<div class="card">
   <div class="card-img-wrap">
     <img src="${item.photo}" alt="${item.category}">
-    <button class="card-coorde-overlay" onclick="openCoordeModal('${item.id}')">コーデ提案</button>
+    <button class="card-coorde-overlay" onclick="openCoordeModal('${item.id}')">👗 コーデ提案</button>
   </div>
   <button class="card-delete" onclick="deleteItem('${item.id}')">×</button>
   <button class="card-edit-btn" onclick="editItem('${item.id}')" title="編集"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
