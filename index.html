@@ -627,7 +627,7 @@ return `<div class="card">
       ${item.memo?`<div class="card-season">${item.memo}</div>`:''}
     </div>
   </div>
-  <button class="card-coorde-btn-text" onclick="openCoordeModal('${item.id}')">👗 コーデ提案</button>
+  <button class="card-coorde-btn-text" onclick="openCoordeModal('${item.id}')">コーデ提案</button>
   <div class="card-bottom">
     <div class="card-last-worn">最後に着た日<br>${lastDate}</div>
     <button class="card-wear-btn ${wornToday?'worn-today':''}" onclick="wearItem('${item.id}')" title="${wornToday?'もう一度タップで取消':'今日着たら押してね'}">
