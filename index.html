@@ -90,18 +90,26 @@ select option { background: #333; }
 .search-result-notice { font-size: 11px; color: #c9a96e88; padding: 6px 16px 0; }
 .color-notice { font-size: 11px; color: #888; padding: 0 16px 10px; display: flex; align-items: center; gap: 6px; }
 .color-notice-bar { display: inline-block; width: 18px; height: 4px; border-radius: 2px; background: linear-gradient(to right, #e74c3c, #3498db, #2ecc71); flex-shrink: 0; }
+
+/* ===== 統計パネル ===== */
 .stats-panel { padding: 12px 16px; border-bottom: 1px solid #c9a96e11; }
 .stats-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
 .stat-chip { display: flex; flex-direction: column; align-items: center; background: #222; border: 1px solid #c9a96e22; border-radius: 10px; padding: 8px 12px; flex-shrink: 0; min-width: 60px; }
 .stat-num { font-size: 18px; font-weight: bold; color: #c9a96e; line-height: 1; }
 .stat-label { font-size: 9px; color: #888; margin-top: 3px; letter-spacing: 1px; }
+/* 統計ロック（非プレミアム） */
+.stats-locked { display: flex; align-items: center; gap: 8px; padding: 10px 16px; cursor: pointer; border-bottom: 1px solid #c9a96e11; font-size: 12px; color: #c9a96e88; }
+.stats-locked:active { background: #c9a96e11; }
+
+/* ===== グリッド・カード ===== */
 .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; }
 .card { background: #222; border-radius: 12px; overflow: hidden; border: 1px solid #c9a96e22; position: relative; }
-/* カード画像エリア（コーデ提案ボタン用ラッパー） */
 .card-img-wrap { position: relative; }
 .card-img-wrap img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
 .card-coorde-overlay { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.65); color: #c9a96e; border: 1px solid rgba(201,169,110,0.4); border-radius: 6px; padding: 4px 8px; font-size: 10px; cursor: pointer; letter-spacing: 0.5px; }
 .card-coorde-overlay:active { background: rgba(201,169,110,0.3); }
+.card-coorde-locked { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.65); color: #888; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; padding: 4px 8px; font-size: 10px; cursor: pointer; letter-spacing: 0.5px; }
+.card-coorde-locked:active { background: rgba(201,169,110,0.15); }
 .card-info { display: flex; padding: 0; }
 .card-color-bar { width: 3px; flex-shrink: 0; }
 .card-info-inner { padding: 10px; flex: 1; }
@@ -166,6 +174,28 @@ select option { background: #333; }
 .coorde-nav-btn { flex: 1; padding: 12px; background: #2a2a2a; border: 1px solid #c9a96e33; border-radius: 10px; color: #c9a96e; font-size: 14px; cursor: pointer; }
 .coorde-nav-btn:active { background: #c9a96e22; }
 .coorde-no-result { text-align: center; color: #666; font-size: 13px; line-height: 1.8; padding: 20px; }
+
+/* ===== プレミアムモーダル ===== */
+.premium-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 600; justify-content: center; align-items: center; padding: 20px; }
+.premium-modal.show { display: flex; }
+.premium-box { background: #1a1a1a; border-radius: 24px; padding: 32px 24px; width: 100%; max-width: 360px; border: 1px solid #c9a96e55; text-align: center; }
+.premium-crown { font-size: 44px; margin-bottom: 10px; }
+.premium-title { font-size: 16px; color: #c9a96e; letter-spacing: 3px; margin-bottom: 6px; }
+.premium-price { font-size: 32px; font-weight: bold; color: #f0e6d3; margin-bottom: 2px; }
+.premium-price-sub { font-size: 12px; color: #888; margin-bottom: 20px; }
+.premium-features { background: #222; border-radius: 14px; padding: 16px; margin-bottom: 20px; text-align: left; }
+.premium-feature { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid #c9a96e11; font-size: 13px; color: #f0e6d3; line-height: 1.5; }
+.premium-feature:last-child { border-bottom: none; padding-bottom: 0; }
+.premium-feature-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.premium-feature-text { flex: 1; }
+.premium-feature-sub { font-size: 11px; color: #888; margin-top: 2px; }
+.premium-btn { display: block; width: 100%; padding: 14px; background: linear-gradient(135deg, #c9a96e, #e8c882); color: #111; border: none; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; text-decoration: none; margin-bottom: 10px; letter-spacing: 1px; }
+.premium-btn:active { opacity: 0.9; }
+.premium-note { font-size: 10px; color: #666; margin-bottom: 12px; line-height: 1.6; }
+.premium-close { width: 100%; padding: 10px; background: transparent; border: 1px solid #333; border-radius: 10px; color: #666; font-size: 13px; cursor: pointer; }
+.premium-badge { display: inline-block; background: linear-gradient(135deg, #c9a96e, #e8c882); color: #111; font-size: 8px; font-weight: bold; padding: 2px 5px; border-radius: 8px; letter-spacing: 1px; vertical-align: middle; margin-left: 4px; }
+/* プレミアムユーザー向けバッジ */
+.premium-user-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(201,169,110,0.15); border: 1px solid #c9a96e44; border-radius: 12px; padding: 3px 8px; font-size: 10px; color: #c9a96e; margin-top: 4px; }
 </style>
 </head>
 <body>
@@ -175,8 +205,9 @@ select option { background: #333; }
 <div class="menu-modal" id="menuModal">
   <div class="menu-box">
     <h3>メニュー</h3>
-    <button class="menu-item" onclick="openContact()">✉️ お問い合わせ</button>
-    <button class="menu-item danger" onclick="deleteAccount()">🗑️ アカウントを削除する</button>
+    <button class="menu-item" id="premiumMenuBtn" onclick="closeMenu();openPremiumModal()" style="display:none;">プレミアムプランを見る</button>
+    <button class="menu-item" onclick="openContact()">お問い合わせ</button>
+    <button class="menu-item danger" onclick="deleteAccount()">アカウントを削除する</button>
     <button class="menu-close" onclick="closeMenu()">閉じる</button>
   </div>
 </div>
@@ -214,19 +245,50 @@ select option { background: #333; }
   </div>
 </div>
 
+<!-- プレミアムモーダル -->
+<div class="premium-modal" id="premiumModal">
+  <div class="premium-box">
+    <div class="premium-crown"></div>
+    <div class="premium-title">PREMIUM</div>
+    <div class="premium-price">¥300</div>
+    <div class="premium-price-sub">/ 月（税込）</div>
+    <div class="premium-features">
+      <div class="premium-feature">
+        <div class="premium-feature-icon"></div>
+        <div class="premium-feature-text">
+          クローゼット統計
+          <div class="premium-feature-sub">総数・カテゴリ別枚数・未着用数が一覧で確認できる</div>
+        </div>
+      </div>
+      <div class="premium-feature">
+        <div class="premium-feature-icon"></div>
+        <div class="premium-feature-text">
+          AIコーデ提案
+          <div class="premium-feature-sub">登録した服からその日のコーデを自動で組み合わせ提案</div>
+        </div>
+      </div>
+    </div>
+    <div id="premiumBtnArea">
+      <!-- ログイン状態によって動的に変わる -->
+    </div>
+    <button class="premium-close" onclick="closePremiumModal()">閉じる</button>
+  </div>
+</div>
+
 <div id="mainScreen" style="display:none;">
   <header>
     <h1>あなたクローゼット</h1>
     <div class="user-info" id="userInfo"></div>
+    <div id="premiumUserBadge" style="display:flex;justify-content:center;margin-top:4px;display:none;"></div>
     <div class="header-buttons">
-      <button class="header-btn" id="searchToggleBtn" onclick="toggleSearch()">🔍 詳細検索</button>
+      <button class="header-btn" id="searchToggleBtn" onclick="toggleSearch()">詳細検索</button>
       <button class="header-btn" id="loginHeaderBtn" onclick="openLoginModal()" style="display:none;">ログイン / 登録</button>
       <button class="header-btn logout" id="logoutBtn" onclick="logout()" style="display:none;">ログアウト</button>
     </div>
   </header>
 
   <div class="guest-banner" id="guestBanner" style="display:none;">
-    <strong>💡 アカウント登録でデータが消えなくなります！</strong>
+    <strong>アカウント登録でデータが消えなくなります！</strong>
     ログインなしでは約50枚まで保存できます。<br>
     アカウント登録すると約10,000枚まで保存でき、機種変更や<br>キャッシュ削除でもデータが消えません。<br>
     このアカウントは服のデータ保存のためだけに使用され、外部に漏れることはありません。
@@ -283,7 +345,7 @@ select option { background: #333; }
   <button class="add-btn" id="addBtn" onclick="openModal()">＋</button>
 
   <div class="similar-bar" id="similarBar">
-    <div class="similar-bar-title">📷 この服を登録しますか？</div>
+    <div class="similar-bar-title">この服を登録しますか？</div>
     <div class="similar-bar-btns">
       <button class="btn-similar-cancel" onclick="cancelSimilarSearch()">やめる</button>
       <button class="btn-similar-save" onclick="registerPendingItem()">この服を登録する</button>
@@ -310,8 +372,8 @@ select option { background: #333; }
       <h2 id="modalTitle">服を追加する</h2>
       <div id="addModeSection">
         <div class="photo-buttons">
-          <div class="photo-btn" onclick="document.getElementById('cameraInput').click()">📷 カメラで撮影</div>
-          <div class="photo-btn" onclick="document.getElementById('albumInput').click()">🖼️ アルバムから選ぶ</div>
+          <div class="photo-btn" onclick="document.getElementById('cameraInput').click()">カメラで撮影</div>
+          <div class="photo-btn" onclick="document.getElementById('albumInput').click()">アルバムから選ぶ</div>
         </div>
         <p class="photo-hint">白いボックスをドラッグして色分析の範囲を調整できます</p>
         <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="previewPhoto(event)">
@@ -346,7 +408,7 @@ select option { background: #333; }
       </div>
       <input type="text" id="memo" placeholder="メモ（任意）">
       <div id="similarSearchBtn">
-        <button style="width:100%;padding:10px;background:#2a2a2a;border:1px solid #c9a96e44;border-radius:10px;color:#c9a96e;font-size:13px;cursor:pointer;margin-top:8px;margin-bottom:10px;" onclick="searchSimilar()">🔍 似たアイテムを検索する</button>
+        <button style="width:100%;padding:10px;background:#2a2a2a;border:1px solid #c9a96e44;border-radius:10px;color:#c9a96e;font-size:13px;cursor:pointer;margin-top:8px;margin-bottom:10px;" onclick="searchSimilar()">似たアイテムを検索する</button>
       </div>
       <div class="btn-row">
         <button class="btn-cancel" onclick="closeModal()">キャンセル</button>
@@ -359,14 +421,18 @@ select option { background: #333; }
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, getRedirectResult, sendPasswordResetEmail, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, updateDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
 const firebaseConfig = { apiKey:"AIzaSyDoQlri0Yl5CWOWROVz3lcpV-m5RZtWEn4", authDomain:"my-closet-21d11.firebaseapp.com", projectId:"my-closet-21d11", storageBucket:"my-closet-21d11.firebasestorage.app", messagingSenderId:"709312024370", appId:"1:709312024370:web:2a9cca87b06a2344e2112b", measurementId:"G-S43KFSX7LH" };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); auth.languageCode='ja';
 const db = getFirestore(app);
 
+// Stripeの決済リンク
+const STRIPE_PREMIUM_URL = 'https://buy.stripe.com/dRmfZiehmdl20Lk0C5fUQ01';
+
 let currentUser=null, items=[], tastes=["カジュアル","フェミニン","ストリート","フォーマル"];
+let isPremium=false;
 let localItems=JSON.parse(localStorage.getItem('closet_items_guest')||'[]');
 let localTastes=JSON.parse(localStorage.getItem('closet_tastes_guest')||'["カジュアル","フェミニン","ストリート","フォーマル"]');
 let currentFilter='全て', currentPhoto=null, currentColor=null;
@@ -381,6 +447,11 @@ getRedirectResult(auth).then(r=>{if(r?.user){const isNew=r.user.metadata.creatio
 onAuthStateChanged(auth, async(user)=>{
   document.getElementById('loadingScreen').style.display='none';
   document.getElementById('mainScreen').style.display='block';
+
+  // ?paid=1 チェック
+  const urlParams = new URLSearchParams(window.location.search);
+  const paidParam = urlParams.get('paid');
+
   if(user){
     currentUser=user;
     document.getElementById('userInfo').textContent=user.displayName||user.email;
@@ -388,21 +459,95 @@ onAuthStateChanged(auth, async(user)=>{
     document.getElementById('logoutBtn').style.display='inline-block';
     document.getElementById('guestBanner').style.display='none';
     closeLoginModal();
+
+    // プレミアム状態を読み込む
+    const profileSnap = await getDoc(doc(db,'users',user.uid));
+    isPremium = profileSnap.exists() && profileSnap.data().isPremium === true;
+
+    // 支払い完了リダイレクト処理
+    if(paidParam === '1'){
+      await setDoc(doc(db,'users',user.uid), {isPremium:true}, {merge:true});
+      isPremium = true;
+      window.history.replaceState({}, '', window.location.pathname);
+      setTimeout(()=>{
+        alert('プレミアムプランへようこそ！\nコーデ提案と統計機能が使えるようになりました！');
+      }, 800);
+    }
+
+    // ゲストデータ引き継ぎ
     const guestItems=JSON.parse(localStorage.getItem('closet_items_guest')||'[]');
     const guestTastes=JSON.parse(localStorage.getItem('closet_tastes_guest')||'[]');
     if(guestItems.length>0&&confirm(`ゲストとして登録した${guestItems.length}件の服データをアカウントに引き継ぎますか？`)){for(const item of guestItems){const{id,...data}=item;await addDoc(collection(db,'users',user.uid,'items'),data);}localStorage.removeItem('closet_items_guest');}
     if(guestTastes.length>0){const s=await getDocs(collection(db,'users',user.uid,'tastes'));if(s.empty){for(const t of guestTastes)await addDoc(collection(db,'users',user.uid,'tastes'),{name:t});}localStorage.removeItem('closet_tastes_guest');}
-    await loadItems();await loadTastes();
+
+    await loadItems(); await loadTastes();
+
+    // プレミアムバッジ表示
+    updatePremiumUI();
   }else{
-    currentUser=null;items=[...localItems];tastes=[...localTastes];
+    currentUser=null; items=[...localItems]; tastes=[...localTastes];
+    isPremium=false;
     document.getElementById('userInfo').textContent='';
     document.getElementById('loginHeaderBtn').style.display='inline-block';
     document.getElementById('logoutBtn').style.display='none';
     document.getElementById('guestBanner').style.display='block';
+
+    // ゲストが ?paid=1 で戻ってきた場合はログインを促す
+    if(paidParam === '1'){
+      window.history.replaceState({}, '', window.location.pathname);
+      setTimeout(()=>{
+        alert('お支払いありがとうございます！\nプレミアムを有効にするためにログインしてください。');
+        openLoginModal();
+      }, 500);
+    }
+
+    updatePremiumUI();
   }
-  renderTasteSelect();renderTasteTags();renderGrid();renderStats();
+  renderTasteSelect(); renderTasteTags(); renderGrid(); renderStats();
 });
 setupSlideSelect();
+
+// プレミアムUI更新
+function updatePremiumUI(){
+  const badge = document.getElementById('premiumUserBadge');
+  const menuBtn = document.getElementById('premiumMenuBtn');
+  if(isPremium){
+    badge.style.display='flex';
+    badge.innerHTML='<span class="premium-user-badge">プレミアム会員</span>';
+    if(menuBtn) menuBtn.style.display='none';
+  } else {
+    badge.style.display='none';
+    badge.innerHTML='';
+    if(menuBtn) menuBtn.style.display='flex';
+  }
+  // プレミアムモーダルのボタン更新
+  updatePremiumModalBtn();
+}
+
+function updatePremiumModalBtn(){
+  const area = document.getElementById('premiumBtnArea');
+  if(!area) return;
+  if(isPremium){
+    area.innerHTML='<div style="background:#222;border-radius:10px;padding:12px;font-size:13px;color:#c9a96e;margin-bottom:12px;">プレミアム会員です</div>';
+  } else if(!currentUser){
+    area.innerHTML=`
+      <p class="premium-note">※ ご利用にはログインが必要です</p>
+      <button class="premium-btn" onclick="closePremiumModal();openLoginModal()">ログインして購入する</button>`;
+  } else {
+    area.innerHTML=`
+      <p class="premium-note">※ いつでもStripeのカスタマーポータルからキャンセルできます</p>
+      <button class="premium-btn" onclick="goToPremium()">月300円でプレミアムになる</button>`;
+  }
+}
+
+window.openPremiumModal=function(){
+  updatePremiumModalBtn();
+  document.getElementById('premiumModal').classList.add('show');
+}
+window.closePremiumModal=function(){ document.getElementById('premiumModal').classList.remove('show'); }
+window.goToPremium=function(){
+  window.location.href = STRIPE_PREMIUM_URL;
+}
 
 window.openLoginModal=function(){document.getElementById('loginModal').classList.add('show');showLoginForm();}
 window.closeLoginModal=function(){document.getElementById('loginModal').classList.remove('show');document.getElementById('loginError').textContent='';document.getElementById('resetSuccess').textContent='';}
@@ -432,28 +577,17 @@ function colorDistance(c1,c2){const p=s=>{const m=s.match(/rgb\((\d+),(\d+),(\d+
 function rgbToHue(c){const m=c.match(/rgb\((\d+),(\d+),(\d+)\)/);if(!m)return 0;let r=m[1]/255,g=m[2]/255,b=m[3]/255;const max=Math.max(r,g,b),min=Math.min(r,g,b),d=max-min;if(d===0)return 0;let h=max===r?(g-b)/d%6:max===g?(b-r)/d+2:(r-g)/d+4;return(h*60+360)%360;}
 function getAllColors(){return items.filter(i=>i.color).map(i=>i.color).sort((a,b)=>rgbToHue(a)-rgbToHue(b));}
 
-
-// コーデ提案：完全ランダム・上限なし
+// コーデ提案：プレミアム判定付き
 function getTargetCategories(cat){const m={'トップス':['ボトムス','アウター','シューズ'],'ボトムス':['トップス','アウター','シューズ'],'ワンピース':['アウター','シューズ'],'アウター':['トップス','ボトムス','シューズ'],'シューズ':['トップス','ボトムス','アウター']};return m[cat]||[];}
 
 function generateCoordes(baseItem){
   const targetCats=getTargetCategories(baseItem.category);
   const catCandidates={};
   for(const cat of targetCats){
-    let cands=items.filter(i=>
-      i.id!==baseItem.id&&i.category===cat&&
-      (i.season===baseItem.season||i.season==='オールシーズン'||baseItem.season==='オールシーズン')
-    );
+    let cands=items.filter(i=>i.id!==baseItem.id&&i.category===cat&&(i.season===baseItem.season||i.season==='オールシーズン'||baseItem.season==='オールシーズン'));
     if(cands.length===0)continue;
-    if(baseItem.taste){
-      const same=cands.filter(i=>i.taste===baseItem.taste);
-      if(same.length===0)continue;
-      cands=same;
-    }else{
-      const none=cands.filter(i=>!i.taste);
-      if(none.length===0)continue;
-      cands=none;
-    }
+    if(baseItem.taste){const same=cands.filter(i=>i.taste===baseItem.taste);if(same.length===0)continue;cands=same;}
+    else{const none=cands.filter(i=>!i.taste);if(none.length===0)continue;cands=none;}
     catCandidates[cat]=cands;
   }
   const validCats=targetCats.filter(c=>catCandidates[c]);
@@ -461,10 +595,7 @@ function generateCoordes(baseItem){
   const combos=[],seen=new Set();
   for(let attempt=0;attempt<500&&combos.length<50;attempt++){
     const outfit=[baseItem];
-    for(const cat of validCats){
-      const pool=catCandidates[cat];
-      outfit.push(pool[Math.floor(Math.random()*pool.length)]);
-    }
+    for(const cat of validCats){const pool=catCandidates[cat];outfit.push(pool[Math.floor(Math.random()*pool.length)]);}
     const key=outfit.map(x=>x.id).sort().join(',');
     if(!seen.has(key)){seen.add(key);combos.push(outfit);}
   }
@@ -473,11 +604,11 @@ function generateCoordes(baseItem){
 
 let coordeSwipeSetup=false;
 window.openCoordeModal=function(id){
+  if(!isPremium){ openPremiumModal(); return; }
   const baseItem=items.find(i=>i.id===id);if(!baseItem)return;
   coordeCombinations=generateCoordes(baseItem);coordeIndex=0;
   document.getElementById('coordeModal').classList.add('show');
   renderCoordeSlide(0,null);
-  // スワイプ（一度だけ登録）
   if(!coordeSwipeSetup){
     coordeSwipeSetup=true;
     const vp=document.getElementById('coordeViewport');
@@ -495,45 +626,21 @@ function buildOutfitHTML(outfit){
 function renderCoordeSlide(idx, direction){
   if(coordeIsAnimating)return;
   const vp=document.getElementById('coordeViewport');
-
-  if(coordeCombinations.length===0){
-    vp.innerHTML='<div class="coorde-slide slide-active"><div class="coorde-no-result">コーデできる服が見つかりませんでした😢<br>他のカテゴリの服を登録してみてね！</div></div>';
-    document.getElementById('coordeCounter').textContent='';
-    return;
-  }
+  if(coordeCombinations.length===0){vp.innerHTML='<div class="coorde-slide slide-active"><div class="coorde-no-result">コーデできる服が見つかりませんでした<br>他のカテゴリの服を登録してみてね！</div></div>';document.getElementById('coordeCounter').textContent='';return;}
   coordeIndex=((idx%coordeCombinations.length)+coordeCombinations.length)%coordeCombinations.length;
   document.getElementById('coordeCounter').textContent=`${coordeIndex+1} / ${coordeCombinations.length}`;
-
-  if(!direction){
-    // 初回：アニメなし
-    vp.innerHTML=`<div class="coorde-slide slide-active">${buildOutfitHTML(coordeCombinations[coordeIndex])}</div>`;
-    return;
-  }
-
-  // スライドアニメ
+  if(!direction){vp.innerHTML=`<div class="coorde-slide slide-active">${buildOutfitHTML(coordeCombinations[coordeIndex])}</div>`;return;}
   coordeIsAnimating=true;
   const oldSlide=vp.querySelector('.coorde-slide');
   const newSlide=document.createElement('div');
   newSlide.className='coorde-slide '+(direction==='next'?'slide-from-right':'slide-from-left');
   newSlide.innerHTML=buildOutfitHTML(coordeCombinations[coordeIndex]);
   vp.appendChild(newSlide);
-
-  requestAnimationFrame(()=>{
-    requestAnimationFrame(()=>{
-      if(oldSlide)oldSlide.className='coorde-slide '+(direction==='next'?'slide-to-left':'slide-to-right');
-      newSlide.className='coorde-slide slide-active';
-      setTimeout(()=>{
-        if(oldSlide)oldSlide.remove();
-        coordeIsAnimating=false;
-      },260);
-    });
-  });
+  requestAnimationFrame(()=>{requestAnimationFrame(()=>{if(oldSlide)oldSlide.className='coorde-slide '+(direction==='next'?'slide-to-left':'slide-to-right');newSlide.className='coorde-slide slide-active';setTimeout(()=>{if(oldSlide)oldSlide.remove();coordeIsAnimating=false;},260);});});
 }
-
 window.nextCoorde=function(){renderCoordeSlide(coordeIndex+1,'next');}
 window.prevCoorde=function(){renderCoordeSlide(coordeIndex-1,'prev');}
 
-// 長押しスライド選択
 function setupSlideSelect(){
   const row=document.getElementById('colorChips');
   let slideTimer=null,isSliding=false,lastToggled=null;
@@ -543,7 +650,23 @@ function setupSlideSelect(){
   row.addEventListener('touchcancel',()=>{clearTimeout(slideTimer);isSliding=false;lastToggled=null;},{passive:true});
 }
 
-function renderStats(){const panel=document.getElementById('statsPanel');if(items.length===0){panel.innerHTML='';return;}const total=items.length;const cats=['トップス','ボトムス','ワンピース','アウター','シューズ'];const seasons=['春夏','秋冬','オールシーズン'];const catCounts=cats.map(c=>({label:c,count:items.filter(i=>i.category===c).length})).filter(x=>x.count>0);const seasonCounts=seasons.map(s=>({label:s,count:items.filter(i=>i.season===s).length})).filter(x=>x.count>0);const neverWorn=items.filter(i=>!i.wornCount||i.wornCount===0).length;panel.innerHTML=`<div class="stats-row"><div class="stat-chip"><span class="stat-num">${total}</span><span class="stat-label">総数</span></div>${catCounts.map(x=>`<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}${seasonCounts.map(x=>`<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}${neverWorn>0?`<div class="stat-chip" style="border-color:#ff6b6b33;"><span class="stat-num" style="color:#ff6b6b88;">${neverWorn}</span><span class="stat-label">未着用</span></div>`:''}</div>`;}
+// 統計：プレミアムのみ表示
+function renderStats(){
+  const panel=document.getElementById('statsPanel');
+  if(!isPremium){
+    if(items.length===0){panel.innerHTML='';return;}
+    panel.innerHTML=`<div class="stats-locked" onclick="openPremiumModal()">クローゼット統計 <span class="premium-badge">PREMIUM</span><span style="margin-left:auto;font-size:10px;color:#666;">タップして詳細</span></div>`;
+    return;
+  }
+  if(items.length===0){panel.innerHTML='';return;}
+  const total=items.length;
+  const cats=['トップス','ボトムス','ワンピース','アウター','シューズ'];
+  const seasons=['春夏','秋冬','オールシーズン'];
+  const catCounts=cats.map(c=>({label:c,count:items.filter(i=>i.category===c).length})).filter(x=>x.count>0);
+  const seasonCounts=seasons.map(s=>({label:s,count:items.filter(i=>i.season===s).length})).filter(x=>x.count>0);
+  const neverWorn=items.filter(i=>!i.wornCount||i.wornCount===0).length;
+  panel.innerHTML=`<div class="stats-row"><div class="stat-chip"><span class="stat-num">${total}</span><span class="stat-label">総数</span></div>${catCounts.map(x=>`<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}${seasonCounts.map(x=>`<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}${neverWorn>0?`<div class="stat-chip" style="border-color:#ff6b6b33;"><span class="stat-num" style="color:#ff6b6b88;">${neverWorn}</span><span class="stat-label">未着用</span></div>`:''}</div>`;
+}
 
 window.toggleSearchColor=function(color){const idx=selectedSearchColors.indexOf(color);if(idx===-1)selectedSearchColors.push(color);else selectedSearchColors.splice(idx,1);renderColorChips();}
 window.renderTasteSelect=function(){document.getElementById('tasteSelect').innerHTML='<option value="">テイストを選ぶ</option>'+tastes.map(t=>`<option value="${t}">${t}</option>`).join('');document.getElementById('searchTaste').innerHTML='<option value="">テイスト：全て</option>'+tastes.map(t=>`<option value="${t}">${t}</option>`).join('');}
@@ -574,14 +697,27 @@ window.deleteItem=async function(id){if(confirm('この服を削除しますか�
 window.toggleFav=async function(id){const item=items.find(i=>i.id===id);if(!item)return;item.fav=!item.fav;if(currentUser){await updateDoc(doc(db,'users',currentUser.uid,'items',id),{fav:item.fav});}else{const li=localItems.find(i=>i.id===id);if(li)li.fav=item.fav;localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}if(isSearchMode)doSearch();else renderGrid();}
 window.wearItem=async function(id){const item=items.find(i=>i.id===id);if(!item)return;const today=new Date().toISOString().slice(0,10);if(item.lastWornDate===today){item.wornCount=Math.max((item.wornCount||1)-1,0);item.lastWornDate=item.prevLastWornDate||null;item.prevLastWornDate=null;}else{item.prevLastWornDate=item.lastWornDate||null;item.wornCount=Math.min((item.wornCount||0)+1,99);item.lastWornDate=today;}if(currentUser){await updateDoc(doc(db,'users',currentUser.uid,'items',id),{wornCount:item.wornCount,lastWornDate:item.lastWornDate,prevLastWornDate:item.prevLastWornDate||null});}else{const li=localItems.find(i=>i.id===id);if(li){li.wornCount=item.wornCount;li.lastWornDate=item.lastWornDate;li.prevLastWornDate=item.prevLastWornDate||null;}localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}if(isSearchMode)doSearch();else renderGrid();renderStats();}
 window.filterItems=function(filter){currentFilter=filter;isSearchMode=false;searchResults=null;document.getElementById('searchResultNotice').textContent='';document.querySelectorAll('.filter-btn').forEach(btn=>{btn.classList.toggle('active',btn.textContent.trim()===filter);});renderGrid();}
-function sortItems(arr){const sort=document.getElementById('sortSelect')?.value||'new',copy=[...arr];if(sort==='worn_desc')copy.sort((a,b)=>(b.wornCount||0)-(a.wornCount||0));else if(sort==='worn_asc')copy.sort((a,b)=>(a.wornCount||0)-(b.wornCount||0));else if(sort==='date_desc')copy.sort((a,b)=>{if(!a.lastWornDate&&!b.lastWornDate)return 0;if(!a.lastWornDate)return 1;if(!b.lastWornDate)return -1;return b.lastWornDate.localeCompare(a.lastWornDate);});else if(sort==='date_asc')copy.sort((a,b)=>{if(!a.lastWornDate&&!b.lastWornDate)return 0;if(!a.lastWornDate)return -1;if(!b.lastWornDate)return 1;return a.lastWornDate.localeCompare(b.lastWornDate);});return copy;}
+function sortItems(arr){const sort=document.getElementById('sortSelect')?.value||'new',copy=[...arr];if(sort==='worn_desc')copy.sort((a,b)=>(b.wornCount||0)-(a.wornCount||0));else if(sort==='worn_asc')copy.sort((a,b)=>(a.wornCount||0)-(b.wornCount||0));else if(sort==='date_desc')copy.sort((a,b)=>{if(!a.lastWornDate&&!b.lastWornDate)return 0;if(!a.lastWornDate)return 1;if(!b.lastWornDate)return -1;return b.lastWornDate.localeCompare(a.lastWornDate);});else if(sort==='date_asc')copy.sort((a,b)=>{if(!a.lastWornDate&&!b.lastWornDate)return 0;if(!a.lastWornDate)return-1;if(!b.lastWornDate)return 1;return a.lastWornDate.localeCompare(b.lastWornDate);});return copy;}
 window.doSearch=function(){const category=currentFilter==='全て'?'':currentFilter;const season=document.getElementById('searchSeason').value,taste=document.getElementById('searchTaste').value,favOnly=document.getElementById('searchFav').checked;searchResults=items.filter(item=>{if(category&&item.category!==category)return false;if(season&&item.season!==season)return false;if(taste&&item.taste!==taste)return false;if(favOnly&&!item.fav)return false;if(isSimilarMode&&similarSourceColor){const mS=item.color&&colorDistance(item.color,similarSourceColor)<50;const mC=selectedSearchColors.length>0&&item.color&&selectedSearchColors.includes(item.color);if(!mS&&!mC)return false;}else if(selectedSearchColors.length>0){if(!item.color||!selectedSearchColors.includes(item.color))return false;}return true;});isSearchMode=true;document.getElementById('searchResultNotice').textContent=`検索結果：${searchResults.length}件`;renderGrid();}
-window.renderGrid=function(){const grid=document.getElementById('grid'),today=new Date().toISOString().slice(0,10);let source;if(isSearchMode)source=sortItems(searchResults);else{let base=currentFilter==='全て'?items:items.filter(i=>i.category===currentFilter);source=sortItems([...base.filter(i=>i.fav),...base.filter(i=>!i.fav)]);}if(!source||source.length===0){grid.innerHTML=`<div class="empty">${isSearchMode?'条件に一致する服が見つかりませんでした':'まだ服が登録されていません！<br>＋ボタンから追加してね'}</div>`;return;}
-grid.innerHTML=source.map(item=>{const worn=item.wornCount||0,wornToday=item.lastWornDate===today,wornDisplay=worn===0?'0':`${worn}`,lastDate=item.lastWornDate?item.lastWornDate.replace(/-/g,'/'):'未着用';
-return `<div class="card">
+
+window.renderGrid=function(){
+  const grid=document.getElementById('grid'),today=new Date().toISOString().slice(0,10);
+  let source;
+  if(isSearchMode)source=sortItems(searchResults);
+  else{let base=currentFilter==='全て'?items:items.filter(i=>i.category===currentFilter);source=sortItems([...base.filter(i=>i.fav),...base.filter(i=>!i.fav)]);}
+  if(!source||source.length===0){grid.innerHTML=`<div class="empty">${isSearchMode?'条件に一致する服が見つかりませんでした':'まだ服が登録されていません！<br>＋ボタンから追加してね'}</div>`;return;}
+
+  // コーデ提案ボタン（プレミアム判定）
+  const coordeBtn = isPremium
+    ? (id) => `<button class="card-coorde-overlay" onclick="openCoordeModal('${id}')">コーデ提案</button>`
+    : (id) => `<button class="card-coorde-locked" onclick="openPremiumModal()">コーデ提案</button>`;
+
+  grid.innerHTML=source.map(item=>{
+    const worn=item.wornCount||0,wornToday=item.lastWornDate===today,wornDisplay=worn===0?'0':`${worn}`,lastDate=item.lastWornDate?item.lastWornDate.replace(/-/g,'/'):'未着用';
+    return `<div class="card">
   <div class="card-img-wrap">
     <img src="${item.photo}" alt="${item.category}">
-    <button class="card-coorde-overlay" onclick="openCoordeModal('${item.id}')">コーデ提案</button>
+    ${coordeBtn(item.id)}
   </div>
   <button class="card-delete" onclick="deleteItem('${item.id}')">×</button>
   <button class="card-edit-btn" onclick="editItem('${item.id}')" title="編集"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
@@ -604,7 +740,8 @@ return `<div class="card">
       <span class="card-wear-label">着用回数</span>
     </button>
   </div>
-</div>`;}).join('');}
+</div>`;}).join('');
+}
 </script>
 </body>
 </html>
