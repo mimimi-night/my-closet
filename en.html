@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LookBookCheck</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'Hiragino Sans', sans-serif; background: #1a1a1a; color: #f0e6d3; min-height: 100vh; padding-bottom: 100px; }
+header { background: #111; padding: 16px 20px; text-align: center; border-bottom: 1px solid #c9a96e44; position: sticky; top: 0; z-index: 50; }
+header h1 { font-size: 20px; color: #c9a96e; letter-spacing: 3px; }
+.header-buttons { display: flex; justify-content: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+.header-btn { padding: 6px 16px; border-radius: 20px; border: 1px solid #c9a96e44; background: transparent; color: #c9a96e; font-size: 12px; cursor: pointer; }
+.header-btn.active { background: #c9a96e; color: #111; }
+.header-btn.logout { border-color: #ff6b6b44; color: #ff6b6b; }
+.guest-banner { background: #1e1a0e; border-bottom: 1px solid #c9a96e33; padding: 12px 16px; font-size: 12px; color: #c9a96e88; text-align: center; line-height: 1.8; }
+.guest-banner strong { color: #c9a96e; display: block; margin-bottom: 4px; }
+.login-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 300; justify-content: center; align-items: center; padding: 20px; }
+.login-modal.show { display: flex; }
+.login-box { background: #222; border-radius: 20px; padding: 32px 24px; width: 100%; max-width: 360px; border: 1px solid #c9a96e22; position: relative; max-height: 90vh; overflow-y: auto; }
+.login-box h2 { color: #c9a96e; font-size: 18px; letter-spacing: 2px; text-align: center; margin-bottom: 20px; }
+.login-close { position: absolute; top: 16px; right: 16px; background: transparent; border: none; color: #888; font-size: 20px; cursor: pointer; }
+.login-input { width: 100%; padding: 12px 14px; background: #333; border: 1px solid #c9a96e44; border-radius: 10px; color: #f0e6d3; font-size: 14px; margin-bottom: 12px; }
+.login-btn-modal { width: 100%; padding: 12px; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; margin-bottom: 10px; }
+.login-btn-modal.email { background: #c9a96e; color: #111; }
+.login-switch { text-align: center; font-size: 12px; color: #888; margin-top: 12px; }
+.login-switch span { color: #c9a96e; text-decoration: underline; cursor: pointer; }
+.login-error { color: #ff6b6b; font-size: 12px; text-align: center; margin-bottom: 10px; min-height: 18px; }
+.forgot-pw { text-align: center; font-size: 11px; color: #888; margin-top: 6px; cursor: pointer; }
+.forgot-pw span { color: #c9a96e; text-decoration: underline; }
+.reset-success { color: #2ecc71; font-size: 12px; text-align: center; margin-bottom: 10px; }
+.loading { display: flex; align-items: center; justify-content: center; min-height: 80vh; flex-direction: column; gap: 16px; }
+.loading-spinner { width: 40px; height: 40px; border: 3px solid #c9a96e44; border-top: 3px solid #c9a96e; border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.add-btn { position: fixed; bottom: 24px; right: 24px; background: #c9a96e; color: #111; border: none; border-radius: 50%; width: 60px; height: 60px; font-size: 28px; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.4); z-index: 100; }
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 200; justify-content: center; align-items: flex-end; }
+.modal.show { display: flex; }
+.modal-content { background: #222; width: 100%; max-width: 500px; border-radius: 20px 20px 0 0; padding: 24px; max-height: 90vh; overflow-y: auto; }
+.modal-content h2 { color: #c9a96e; margin-bottom: 16px; font-size: 16px; letter-spacing: 2px; }
+.photo-buttons { display: flex; gap: 10px; margin-bottom: 12px; }
+.photo-btn { flex: 1; padding: 12px; background: #333; border: 1px solid #c9a96e44; border-radius: 10px; color: #f0e6d3; font-size: 13px; cursor: pointer; text-align: center; }
+.photo-hint { font-size: 11px; color: #888; text-align: center; margin-bottom: 8px; line-height: 1.5; }
+.photo-preview-wrap { position: relative; width: 100%; height: 260px; background: #333; border: 2px dashed #c9a96e44; border-radius: 12px; margin-bottom: 8px; overflow: hidden; }
+.photo-preview-wrap img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; user-select: none; display: block; }
+.photo-preview-empty { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: #888; font-size: 14px; }
+.edit-photo-preview { width: 100%; height: 180px; border-radius: 12px; overflow: hidden; margin-bottom: 12px; border: 1px solid #c9a96e22; }
+.edit-photo-preview img { width: 100%; height: 100%; object-fit: cover; }
+.analysis-box { position: absolute; width: 60px; height: 60px; border: 2px solid rgba(255,255,255,0.95); border-radius: 8px; box-shadow: 0 0 0 1px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(0,0,0,0.3); cursor: move; display: flex; align-items: center; justify-content: center; transform: translate(-50%, -50%); }
+.analysis-box-label { font-size: 9px; color: white; text-shadow: 0 1px 3px rgba(0,0,0,1); white-space: nowrap; pointer-events: none; }
+.color-result-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding: 8px 12px; background: #2a2a2a; border-radius: 8px; }
+.color-result-chip { width: 30px; height: 30px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); flex-shrink: 0; }
+.color-result-info { font-size: 11px; color: #888; line-height: 1.5; }
+.color-result-info span { display: block; font-size: 10px; color: #666; }
+input[type="file"] { display: none; }
+select, input[type="text"], input[type="email"], input[type="password"] { width: 100%; padding: 10px 14px; background: #333; border: 1px solid #c9a96e44; border-radius: 10px; color: #f0e6d3; font-size: 14px; margin-bottom: 12px; }
+select option { background: #333; }
+.taste-section { margin-bottom: 12px; }
+.taste-section label { font-size: 12px; color: #c9a96e; display: block; margin-bottom: 8px; }
+.taste-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.taste-tag { padding: 6px 12px; border-radius: 20px; border: 1px solid #c9a96e44; background: transparent; color: #c9a96e; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.add-taste-row { display: flex; gap: 8px; }
+.add-taste-row input { flex: 1; margin-bottom: 0; padding: 8px 12px; font-size: 13px; }
+.add-taste-row button { padding: 8px 14px; background: #c9a96e; color: #111; border: none; border-radius: 10px; font-size: 13px; cursor: pointer; }
+.btn-row { display: flex; gap: 10px; margin-top: 16px; }
+.btn-save { flex: 1; padding: 12px; background: #c9a96e; color: #111; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; }
+.btn-cancel { flex: 1; padding: 12px; background: #333; color: #f0e6d3; border: none; border-radius: 10px; font-size: 15px; cursor: pointer; }
+.filter-row { display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; align-items: center; }
+.filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid #c9a96e44; background: transparent; color: #c9a96e; font-size: 12px; cursor: pointer; white-space: nowrap; }
+.filter-btn.active { background: #c9a96e; color: #111; }
+.sort-select { padding: 6px 10px; border-radius: 20px; border: 1px solid #c9a96e44; background: #1a1a1a; color: #c9a96e; font-size: 11px; cursor: pointer; white-space: nowrap; flex-shrink: 0; width: fit-content; }
+.search-panel { display: none; background: #1e1e1e; border-bottom: 1px solid #c9a96e22; padding: 16px; }
+.search-panel.show { display: block; }
+.search-panel h3 { font-size: 13px; color: #c9a96e; margin-bottom: 12px; letter-spacing: 2px; }
+.search-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.search-select { flex: 1; min-width: 120px; padding: 8px 10px; background: #2a2a2a; border: 1px solid #c9a96e33; border-radius: 8px; color: #f0e6d3; font-size: 12px; margin-bottom: 0; }
+.color-search-section { margin-bottom: 12px; }
+.color-search-label { font-size: 11px; color: #c9a96e; margin-bottom: 4px; }
+.color-search-hint { font-size: 10px; color: #666; margin-bottom: 10px; }
+.color-chips-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; padding: 8px 0 14px; }
+.color-chip-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; padding: 6px; border-radius: 50%; }
+.color-chip { width: 30px; height: 30px; border-radius: 50%; border: 3px solid transparent; flex-shrink: 0; }
+.color-chip.selected { border-color: #fff; transform: scale(1.2); box-shadow: 0 0 0 3px rgba(255,255,255,0.25), 0 0 12px rgba(255,255,255,0.5); }
+.color-chip.source-locked { border-color: #c9a96e; transform: scale(1.2); box-shadow: 0 0 0 3px rgba(201,169,110,0.25), 0 0 12px rgba(201,169,110,0.5); cursor: not-allowed; }
+.source-color-label { font-size: 9px; color: #c9a96e; white-space: nowrap; }
+.color-clear-btn { padding: 4px 10px; background: transparent; border: 1px solid #c9a96e44; border-radius: 12px; color: #888; font-size: 11px; cursor: pointer; align-self: center; }
+.no-colors-msg { font-size: 11px; color: #666; padding: 4px 0; }
+.search-btns { display: flex; gap: 8px; }
+.btn-search { flex: 1; padding: 10px; background: #c9a96e; color: #111; border: none; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer; }
+.btn-search-reset { flex: 1; padding: 10px; background: #333; color: #888; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; }
+.search-result-notice { font-size: 11px; color: #c9a96e88; padding: 6px 16px 0; }
+.color-notice { font-size: 11px; color: #888; padding: 0 16px 10px; display: flex; align-items: center; gap: 6px; }
+.color-notice-bar { display: inline-block; width: 18px; height: 4px; border-radius: 2px; background: linear-gradient(to right, #e74c3c, #3498db, #2ecc71); flex-shrink: 0; }
+
+/* ===== Stats Panel ===== */
+.stats-panel { padding: 12px 16px; border-bottom: 1px solid #c9a96e11; }
+.stats-row { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.stat-chip { display: flex; flex-direction: column; align-items: center; background: #222; border: 1px solid #c9a96e22; border-radius: 10px; padding: 8px 12px; flex-shrink: 0; min-width: 60px; }
+.stat-num { font-size: 18px; font-weight: bold; color: #c9a96e; line-height: 1; }
+.stat-label { font-size: 9px; color: #888; margin-top: 3px; letter-spacing: 1px; }
+/* Stats locked (non-premium) */
+.stats-locked { display: flex; align-items: center; gap: 8px; padding: 10px 16px; cursor: pointer; border-bottom: 1px solid #c9a96e11; font-size: 12px; color: #c9a96e88; }
+.stats-locked:active { background: #c9a96e11; }
+
+/* ===== Grid & Cards ===== */
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; }
+.card { background: #222; border-radius: 12px; overflow: hidden; border: 1px solid #c9a96e22; position: relative; }
+.card-img-wrap { position: relative; }
+.card-img-wrap img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
+.card-coorde-overlay { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.65); color: #c9a96e; border: 1px solid rgba(201,169,110,0.4); border-radius: 6px; padding: 4px 8px; font-size: 10px; cursor: pointer; letter-spacing: 0.5px; }
+.card-coorde-overlay:active { background: rgba(201,169,110,0.3); }
+.card-coorde-locked { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.65); color: #888; border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; padding: 4px 8px; font-size: 10px; cursor: pointer; letter-spacing: 0.5px; }
+.card-coorde-locked:active { background: rgba(201,169,110,0.15); }
+.card-info { display: flex; padding: 0; }
+.card-color-bar { width: 3px; flex-shrink: 0; }
+.card-info-inner { padding: 10px; flex: 1; }
+.card-category { font-size: 11px; color: #c9a96e; letter-spacing: 1px; margin-bottom: 2px; }
+.card-season { font-size: 11px; color: #888; margin-top: 2px; }
+.card-taste { font-size: 11px; color: #c9a96e88; margin-top: 2px; }
+.card-delete { position: absolute; top: 8px; left: 8px; background: rgba(0,0,0,0.6); border: none; border-radius: 50%; width: 28px; height: 28px; color: white; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.card-edit-btn { position: absolute; top: 8px; left: 42px; background: rgba(0,0,0,0.6); border: none; border-radius: 50%; width: 28px; height: 28px; color: #f0e6d3; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.card-fav { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.card-fav svg { width: 13px; height: 13px; transition: all 0.2s; }
+.card-fav.active { background: rgba(180,80,100,0.7); border-color: rgba(255,150,170,0.4); }
+.card-bottom { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px 8px; border-top: 1px solid #c9a96e11; }
+.card-last-worn { font-size: 9px; color: #666; line-height: 1.4; }
+.card-wear-btn { display: flex; flex-direction: row; align-items: center; gap: 5px; background: transparent; border: 1px solid #c9a96e33; border-radius: 8px; padding: 4px 8px; cursor: pointer; transition: background 0.2s; min-width: 80px; width: 80px; flex: none; justify-content: center; }
+.card-wear-btn:hover { background: #c9a96e11; }
+.card-wear-btn.worn-today { border-color: #c9a96e88; background: #c9a96e11; }
+.card-wear-count { font-size: 13px; font-weight: bold; color: #c9a96e; line-height: 1; min-width: 18px; text-align: center; display: inline-block; }
+.card-wear-label { font-size: 8px; color: #888; letter-spacing: 1px; }
+.empty { text-align: center; padding: 60px 20px; color: #555; font-size: 14px; grid-column: span 2; }
+.user-info { font-size: 11px; color: #888; text-align: center; margin-top: 4px; }
+.saving-indicator { position: fixed; top: 80px; right: 16px; background: #c9a96e; color: #111; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; z-index: 300; display: none; }
+.menu-btn { position: fixed; top: 16px; right: 16px; background: rgba(201,169,110,0.15); border: 1px solid #c9a96e44; border-radius: 50%; width: 32px; height: 32px; color: #c9a96e; font-size: 16px; cursor: pointer; z-index: 150; display: flex; align-items: center; justify-content: center; }
+.menu-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 400; justify-content: center; align-items: center; padding: 20px; }
+.menu-modal.show { display: flex; }
+.menu-box { background: #222; border-radius: 20px; padding: 24px; width: 100%; max-width: 300px; border: 1px solid #c9a96e22; }
+.menu-box h3 { color: #c9a96e; font-size: 14px; letter-spacing: 2px; margin-bottom: 16px; text-align: center; }
+.menu-item { width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #c9a96e22; border-radius: 10px; color: #f0e6d3; font-size: 14px; cursor: pointer; margin-bottom: 10px; text-align: left; display: flex; align-items: center; gap: 10px; }
+.menu-item.danger { color: #ff6b6b; border-color: #ff6b6b22; }
+.menu-close { width: 100%; padding: 10px; background: transparent; border: 1px solid #444; border-radius: 10px; color: #888; font-size: 13px; cursor: pointer; margin-top: 4px; }
+.similar-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #111; border-top: 1px solid #c9a96e33; padding: 12px 16px; z-index: 99; flex-direction: column; gap: 8px; }
+.similar-bar.show { display: flex; }
+.similar-bar-title { font-size: 11px; color: #c9a96e88; text-align: center; letter-spacing: 1px; }
+.similar-bar-btns { display: flex; gap: 10px; }
+.similar-bar-btns button { flex: 1; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; }
+.btn-similar-save { background: #c9a96e; color: #111; }
+.btn-similar-cancel { background: #333; color: #888; }
+
+/* ===== Outfit Modal ===== */
+.coorde-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #111; z-index: 500; flex-direction: column; overflow: hidden; }
+.coorde-modal.show { display: flex; }
+.coorde-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #c9a96e22; background: #111; flex-shrink: 0; }
+.coorde-title { font-size: 14px; color: #c9a96e; letter-spacing: 2px; }
+.coorde-counter { font-size: 12px; color: #888; }
+.coorde-close-btn { background: transparent; border: none; color: #888; font-size: 22px; cursor: pointer; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+.coorde-viewport { flex: 1; overflow: hidden; position: relative; }
+.coorde-slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 12px 16px; transition: transform 0.25s cubic-bezier(0.4,0,0.2,1), opacity 0.25s; }
+.coorde-slide.slide-from-right { transform: translateX(100%); opacity: 0; }
+.coorde-slide.slide-from-left { transform: translateX(-100%); opacity: 0; }
+.coorde-slide.slide-active { transform: translateX(0); opacity: 1; }
+.coorde-slide.slide-to-left { transform: translateX(-100%); opacity: 0; }
+.coorde-slide.slide-to-right { transform: translateX(100%); opacity: 0; }
+.coorde-outfit { display: grid; gap: 10px; width: 100%; height: 100%; }
+.coorde-outfit.count-2 { grid-template-columns: 1fr 1fr; }
+.coorde-outfit.count-3 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.coorde-outfit.count-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+.coorde-item { background: #222; border-radius: 10px; overflow: hidden; border: 2px solid #c9a96e22; display: flex; flex-direction: column; }
+.coorde-item.is-base { border-color: #c9a96e; box-shadow: 0 0 12px rgba(201,169,110,0.3); }
+.coorde-item img { width: 100%; flex: 1; object-fit: cover; min-height: 0; }
+.coorde-item-label { padding: 4px 8px; background: #1a1a1a; flex-shrink: 0; }
+.coorde-item-cat { font-size: 10px; color: #c9a96e; letter-spacing: 1px; }
+.coorde-footer { display: flex; gap: 12px; padding: 12px 16px; border-top: 1px solid #c9a96e22; background: #111; flex-shrink: 0; }
+.coorde-nav-btn { flex: 1; padding: 12px; background: #2a2a2a; border: 1px solid #c9a96e33; border-radius: 10px; color: #c9a96e; font-size: 14px; cursor: pointer; }
+.coorde-nav-btn:active { background: #c9a96e22; }
+.coorde-no-result { text-align: center; color: #666; font-size: 13px; line-height: 1.8; padding: 20px; }
+
+/* ===== Premium Modal ===== */
+.premium-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 600; justify-content: center; align-items: center; padding: 20px; }
+.premium-modal.show { display: flex; }
+.premium-box { background: #1a1a1a; border-radius: 24px; padding: 32px 24px; width: 100%; max-width: 360px; border: 1px solid #c9a96e55; text-align: center; }
+.premium-title { font-size: 16px; color: #c9a96e; letter-spacing: 3px; margin-bottom: 6px; margin-top: 4px; }
+.premium-price { font-size: 32px; font-weight: bold; color: #f0e6d3; margin-bottom: 2px; }
+.premium-price-sub { font-size: 12px; color: #888; margin-bottom: 20px; }
+.premium-features { background: #222; border-radius: 14px; padding: 16px; margin-bottom: 20px; text-align: left; }
+.premium-feature { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid #c9a96e11; font-size: 13px; color: #f0e6d3; line-height: 1.5; }
+.premium-feature:last-child { border-bottom: none; padding-bottom: 0; }
+.premium-feature-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.premium-feature-text { flex: 1; }
+.premium-feature-sub { font-size: 11px; color: #888; margin-top: 2px; }
+.premium-btn { display: block; width: 100%; padding: 14px; background: linear-gradient(135deg, #c9a96e, #e8c882); color: #111; border: none; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; text-decoration: none; margin-bottom: 10px; letter-spacing: 1px; }
+.premium-btn:active { opacity: 0.9; }
+.premium-note { font-size: 10px; color: #666; margin-bottom: 12px; line-height: 1.6; }
+.premium-close { width: 100%; padding: 10px; background: transparent; border: 1px solid #333; border-radius: 10px; color: #666; font-size: 13px; cursor: pointer; }
+.premium-badge { display: inline-block; background: linear-gradient(135deg, #c9a96e, #e8c882); color: #111; font-size: 8px; font-weight: bold; padding: 2px 5px; border-radius: 8px; letter-spacing: 1px; vertical-align: middle; margin-left: 4px; }
+/* Premium user badge */
+.premium-user-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(201,169,110,0.15); border: 1px solid #c9a96e44; border-radius: 12px; padding: 3px 8px; font-size: 10px; color: #c9a96e; margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<div class="saving-indicator" id="savingIndicator">Saving...</div>
+<button class="menu-btn" onclick="openMenu()">?</button>
+<div class="menu-modal" id="menuModal">
+  <div class="menu-box">
+    <h3>Menu</h3>
+    <button class="menu-item" id="premiumMenuBtn" onclick="closeMenu();openPremiumModal()" style="display:none;">View Premium Plan</button>
+    <button class="menu-item" onclick="openContact()">Contact Us</button>
+    <button class="menu-item danger" onclick="deleteAccount()">Delete Account</button>
+    <button class="menu-close" onclick="closeMenu()">Close</button>
+  </div>
+</div>
+
+<div class="loading" id="loadingScreen">
+  <div class="loading-spinner"></div>
+  <div style="color:#888;font-size:13px;">Loading...</div>
+</div>
+
+<div class="login-modal" id="loginModal">
+  <div class="login-box">
+    <button class="login-close" onclick="closeLoginModal()">×</button>
+    <h2>LookBookCheck</h2>
+    <div class="login-error" id="loginError"></div>
+    <div class="reset-success" id="resetSuccess"></div>
+    <div id="loginForm">
+      <input type="email" class="login-input" id="loginEmail" placeholder="Email address">
+      <input type="password" class="login-input" id="loginPassword" placeholder="Password">
+      <button class="login-btn-modal email" onclick="loginWithEmail()">Log In</button>
+      <div class="forgot-pw" onclick="showReset()">Forgot your password? <span>Click here</span></div>
+      <div class="login-switch">Don't have an account? <span onclick="showRegister()">Sign Up</span></div>
+    </div>
+    <div id="registerForm" style="display:none;">
+      <input type="email" class="login-input" id="registerEmail" placeholder="Email address">
+      <input type="password" class="login-input" id="registerPassword" placeholder="Password (6+ characters)">
+      <button class="login-btn-modal email" onclick="registerWithEmail()">Sign Up</button>
+      <div class="login-switch">Already have an account? <span onclick="showLoginForm()">Log In</span></div>
+    </div>
+    <div id="resetForm" style="display:none;">
+      <p style="font-size:13px;color:#888;margin-bottom:12px;line-height:1.6;">We'll send a password reset link to your registered email address.</p>
+      <input type="email" class="login-input" id="resetEmail" placeholder="Email address">
+      <button class="login-btn-modal email" onclick="sendReset()">Send Reset Email</button>
+      <div class="login-switch"><span onclick="showLoginForm()">Back to Log In</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Premium Modal -->
+<div class="premium-modal" id="premiumModal">
+  <div class="premium-box">
+    <div class="premium-title">PREMIUM</div>
+    <div class="premium-price">¥300</div>
+    <div class="premium-price-sub">/ month (tax incl.)</div>
+    <div class="premium-features">
+      <div class="premium-feature">
+        <div class="premium-feature-text">
+          Closet Stats
+          <div class="premium-feature-sub">See total items, by category, and unworn count at a glance</div>
+        </div>
+      </div>
+      <div class="premium-feature">
+        <div class="premium-feature-text">
+          AIOutfit
+          <div class="premium-feature-sub">Automatically suggests outfits from your registered items</div>
+        </div>
+      </div>
+    </div>
+    <div id="premiumBtnArea">
+      <!-- Dynamically updated based on login state -->
+    </div>
+    <button class="premium-close" onclick="closePremiumModal()">Close</button>
+  </div>
+</div>
+
+<div id="mainScreen" style="display:none;">
+  <header>
+    <h1>LookBookCheck</h1>
+    <div class="user-info" id="userInfo"></div>
+    <div id="premiumUserBadge" style="display:none;justify-content:center;margin-top:4px;"></div>
+    <div class="header-buttons">
+      <button class="header-btn" id="searchToggleBtn" onclick="toggleSearch()">Search</button>
+      <button class="header-btn" id="loginHeaderBtn" onclick="openLoginModal()" style="display:none;">Log In / Sign Up</button>
+      <button class="header-btn logout" id="logoutBtn" onclick="logout()" style="display:none;">Log Out</button>
+    </div>
+  </header>
+
+  <div class="guest-banner" id="guestBanner" style="display:none;">
+    <strong>Register to keep your data safe!</strong>
+    Without an account, you can save up to ~50 items.<br>
+    With an account, up to ~10,000 items — safe even after clearing cache or switching devices.<br>
+    Your account is used only for storing closet data and will never be shared.
+  </div>
+
+  <div class="search-panel" id="searchPanel">
+    <h3>Search</h3>
+    <div class="search-row">
+      <select class="search-select" id="searchSeason">
+        <option value="">Season: All</option>
+        <option>Spring/Summer</option><option>Fall/Winter</option><option>All Season</option>
+      </select>
+    </div>
+    <select class="search-select" id="searchTaste" style="width:100%;margin-bottom:12px;"><option value="">Style: All</option></select>
+    <label style="display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:pointer;font-size:12px;color:#c9a96e88;letter-spacing:1px;">
+      <input type="checkbox" id="searchFav" style="width:14px;height:14px;accent-color:#c9a96e;">Favorites only
+    </label>
+    <div class="color-search-section">
+      <div class="color-search-label">Filter by Color</div>
+      <div class="color-search-hint" id="colorSearchHint">Tap to select · Long press to slide-select multiple</div>
+      <div class="color-chips-row" id="colorChips"></div>
+    </div>
+    <div class="search-btns">
+      <button class="btn-search-reset" onclick="resetSearch()">Reset</button>
+      <button class="btn-search" onclick="doSearch()">Search</button>
+    </div>
+  </div>
+
+  <div class="search-result-notice" id="searchResultNotice"></div>
+  <div class="stats-panel" id="statsPanel"></div>
+
+  <div class="filter-row">
+    <select class="sort-select" id="sortSelect" onchange="renderGrid()">
+      <option value="new">Default</option>
+      <option value="worn_desc">Most worn</option>
+      <option value="worn_asc">Least worn</option>
+      <option value="date_desc">Recently worn</option>
+      <option value="date_asc">Longest unworn</option>
+    </select>
+    <button class="filter-btn active" onclick="filterItems('All')">All</button>
+    <button class="filter-btn" onclick="filterItems('Tops')">Tops</button>
+    <button class="filter-btn" onclick="filterItems('Bottoms')">Bottoms</button>
+    <button class="filter-btn" onclick="filterItems('Dress')">Dress</button>
+    <button class="filter-btn" onclick="filterItems('Outer')">Outer</button>
+    <button class="filter-btn" onclick="filterItems('Shoes')">Shoes</button>
+  </div>
+
+  <div class="color-notice">
+    <span class="color-notice-bar"></span>
+    The bar on the left of each card is the auto-detected main color from the photo
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <button class="add-btn" id="addBtn" onclick="openModal()">＋</button>
+
+  <div class="similar-bar" id="similarBar">
+    <div class="similar-bar-title">Register this item?</div>
+    <div class="similar-bar-btns">
+      <button class="btn-similar-cancel" onclick="cancelSimilarSearch()">Cancel</button>
+      <button class="btn-similar-save" onclick="registerPendingItem()">Register Item</button>
+    </div>
+  </div>
+
+  <!-- Outfit Modal -->
+  <div class="coorde-modal" id="coordeModal">
+    <div class="coorde-header">
+      <button class="coorde-close-btn" onclick="closeCoordeModal()">×</button>
+      <div class="coorde-title">Outfit</div>
+      <div class="coorde-counter" id="coordeCounter"></div>
+    </div>
+    <div class="coorde-viewport" id="coordeViewport"></div>
+    <div class="coorde-footer">
+      <button class="coorde-nav-btn" onclick="prevCoorde()">← Prev</button>
+      <button class="coorde-nav-btn" onclick="nextCoorde()">Next →</button>
+    </div>
+  </div>
+
+  <!-- Add / Edit Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h2 id="modalTitle">Add Item</h2>
+      <div id="addModeSection">
+        <div class="photo-buttons">
+          <div class="photo-btn" onclick="document.getElementById('cameraInput').click()">Take Photo</div>
+          <div class="photo-btn" onclick="document.getElementById('albumInput').click()">Choose from Album</div>
+        </div>
+        <p class="photo-hint">Drag the white box to adjust the color analysis area</p>
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" onchange="previewPhoto(event)">
+        <input type="file" id="albumInput" accept="image/*" onchange="previewPhoto(event)">
+        <div class="photo-preview-wrap" id="photoPreviewWrap">
+          <div class="photo-preview-empty">Please select a photo</div>
+        </div>
+        <div class="color-result-row" id="colorResultRow" style="display:none;">
+          <div class="color-result-chip" id="colorResultChip"></div>
+          <div class="color-result-info">Detected color<span>Move the box to change the area</span></div>
+        </div>
+      </div>
+      <div id="editModeSection" style="display:none;">
+        <div class="edit-photo-preview" id="editPhotoPreview"></div>
+      </div>
+      <select id="category">
+        <option value="">Select Category</option>
+        <option>Tops</option><option>Bottoms</option><option>Dress</option><option>Outer</option><option>Shoes</option>
+      </select>
+      <select id="season">
+        <option value="">Select Season</option>
+        <option>Spring/Summer</option><option>Fall/Winter</option><option>All Season</option>
+      </select>
+      <select id="tasteSelect"><option value="">Select Style</option></select>
+      <div class="taste-section">
+        <label>Add / Remove Styles</label>
+        <div class="taste-tags" id="tasteTags"></div>
+        <div class="add-taste-row">
+          <input type="text" id="newTasteInput" placeholder="Add style">
+          <button onclick="addTaste()">Add</button>
+        </div>
+      </div>
+      <input type="text" id="memo" placeholder="Memo (optional)">
+      <div id="similarSearchBtn">
+        <button style="width:100%;padding:10px;background:#2a2a2a;border:1px solid #c9a96e44;border-radius:10px;color:#c9a96e;font-size:13px;cursor:pointer;margin-top:8px;margin-bottom:10px;" onclick="searchSimilar()">Find Similar Items</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-save" id="modalSaveBtn" onclick="saveOrUpdateItem()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, getRedirectResult, sendPasswordResetEmail, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, updateDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
+
+const firebaseConfig = { apiKey:"AIzaSyDoQlri0Yl5CWOWROVz3lcpV-m5RZtWEn4", authDomain:"my-closet-21d11.firebaseapp.com", projectId:"my-closet-21d11", storageBucket:"my-closet-21d11.firebasestorage.app", messagingSenderId:"709312024370", appId:"1:709312024370:web:2a9cca87b06a2344e2112b", measurementId:"G-S43KFSX7LH" };
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app); auth.languageCode='ja';
+const db = getFirestore(app);
+
+// Stripe payment link
+const STRIPE_PREMIUM_URL = 'https://buy.stripe.com/6oU6oJept7LO6PceMe7IY00';
+
+let currentUser=null, items=[], tastes=["Casual","Feminine","Street","Formal"];
+let isPremium=false;
+let localItems=JSON.parse(localStorage.getItem('closet_items_guest_en')||'[]');
+let localTastes=JSON.parse(localStorage.getItem('closet_tastes_guest_en')||'["Casual","Feminine","Street","Formal"]');
+let currentFilter='All', currentPhoto=null, currentColor=null;
+let isSearchMode=false, searchResults=null, selectedSearchColors=[];
+let isEditMode=false, currentEditId=null;
+let isSimilarMode=false, similarSourceColor=null, pendingItem=null;
+let boxPctX=50, boxPctY=50, isDragging=false, dragStartX, dragStartY, boxStartX, boxStartY, currentImgEl=null;
+let coordeCombinations=[], coordeIndex=0, coordeTouchStartX=0, coordeIsAnimating=false;
+
+getRedirectResult(auth).then(r=>{if(r?.user){const isNew=r.user.metadata.creationTime===r.user.metadata.lastSignInTime;if(sessionStorage.getItem('googleFlow')==='login'&&isNew){signOut(auth);setTimeout(()=>{openLoginModal();document.getElementById('loginError').textContent='Account not found. Please sign up.';},500);}sessionStorage.removeItem('googleFlow');}}).catch(e=>console.error(e));
+
+onAuthStateChanged(auth, async(user)=>{
+  document.getElementById('loadingScreen').style.display='none';
+  document.getElementById('mainScreen').style.display='block';
+
+  // Check for ?paid=1
+  const urlParams = new URLSearchParams(window.location.search);
+  const paidParam = urlParams.get('paid');
+
+  if(user){
+    currentUser=user;
+    document.getElementById('userInfo').textContent=user.displayName||user.email;
+    document.getElementById('loginHeaderBtn').style.display='none';
+    document.getElementById('logoutBtn').style.display='inline-block';
+    document.getElementById('guestBanner').style.display='none';
+    closeLoginModal();
+
+    // Load premium status
+    const profileSnap = await getDoc(doc(db,'users',user.uid));
+    isPremium = profileSnap.exists() && profileSnap.data().isPremium === true;
+
+    // Payment complete redirect handler
+    if(paidParam === '1'){
+      await setDoc(doc(db,'users',user.uid), {isPremium:true}, {merge:true});
+      isPremium = true;
+      window.history.replaceState({}, '', window.location.pathname);
+      setTimeout(()=>{
+        alert('Welcome to Premium!\nYou can now use Outfit Suggestions and Closet Statistics!');
+      }, 800);
+    }
+
+    // Transfer guest data
+    const guestItems=JSON.parse(localStorage.getItem('closet_items_guest_en')||'[]');
+    const guestTastes=JSON.parse(localStorage.getItem('closet_tastes_guest_en')||'[]');
+    if(guestItems.length>0&&confirm(`You have ${guestItems.length} item(s) from guest mode. Transfer to your account?`)){for(const item of guestItems){const{id,...data}=item;await addDoc(collection(db,'users',user.uid,'items'),data);}localStorage.removeItem('closet_items_guest_en');}
+    if(guestTastes.length>0){const s=await getDocs(collection(db,'users',user.uid,'tastes'));if(s.empty){for(const t of guestTastes)await addDoc(collection(db,'users',user.uid,'tastes'),{name:t});}localStorage.removeItem('closet_tastes_guest_en');}
+
+    await loadItems(); await loadTastes();
+
+    // Show premium badge
+    updatePremiumUI();
+  }else{
+    currentUser=null; items=[...localItems]; tastes=[...localTastes];
+    isPremium=false;
+    document.getElementById('userInfo').textContent='';
+    document.getElementById('loginHeaderBtn').style.display='inline-block';
+    document.getElementById('logoutBtn').style.display='none';
+    document.getElementById('guestBanner').style.display='block';
+
+    // Guest returned with ?paid=1 — prompt login
+    if(paidParam === '1'){
+      window.history.replaceState({}, '', window.location.pathname);
+      setTimeout(()=>{
+        alert('Thank you for your payment!\nPlease log in to activate your Premium plan.');
+        openLoginModal();
+      }, 500);
+    }
+
+    updatePremiumUI();
+  }
+  renderTasteSelect(); renderTasteTags(); renderGrid(); renderStats();
+});
+setupSlideSelect();
+
+// Update premium UI
+function updatePremiumUI(){
+  const badge = document.getElementById('premiumUserBadge');
+  const menuBtn = document.getElementById('premiumMenuBtn');
+  if(isPremium){
+    badge.style.display='flex';
+    badge.innerHTML='<span class="premium-user-badge">Premium Member</span>';
+    if(menuBtn) menuBtn.style.display='none';
+  } else {
+    badge.style.display='none';
+    badge.innerHTML='';
+    if(menuBtn) menuBtn.style.display='flex';
+  }
+  // Update premium modal button
+  updatePremiumModalBtn();
+}
+
+function updatePremiumModalBtn(){
+  const area = document.getElementById('premiumBtnArea');
+  if(!area) return;
+  if(isPremium){
+    area.innerHTML='<div style="background:#222;border-radius:10px;padding:12px;font-size:13px;color:#c9a96e;margin-bottom:12px;">You are a Premium member</div>';
+  } else if(!currentUser){
+    area.innerHTML=`
+      <p class="premium-note">※ Login required to use this feature</p>
+      <button class="premium-btn" onclick="closePremiumModal();openLoginModal()">Log In to Subscribe</button>`;
+  } else {
+    area.innerHTML=`
+      <p class="premium-note">※ You can cancel anytime from the Stripe customer portal</p>
+      <button class="premium-btn" onclick="goToPremium()">Go Premium for ¥300/month</button>`;
+  }
+}
+
+window.openPremiumModal=function(){
+  updatePremiumModalBtn();
+  document.getElementById('premiumModal').classList.add('show');
+}
+window.closePremiumModal=function(){ document.getElementById('premiumModal').classList.remove('show'); }
+window.goToPremium=function(){
+  window.location.href = STRIPE_PREMIUM_URL;
+}
+
+window.openLoginModal=function(){document.getElementById('loginModal').classList.add('show');showLoginForm();}
+window.closeLoginModal=function(){document.getElementById('loginModal').classList.remove('show');document.getElementById('loginError').textContent='';document.getElementById('resetSuccess').textContent='';}
+window.showRegister=function(){document.getElementById('loginForm').style.display='none';document.getElementById('registerForm').style.display='block';document.getElementById('resetForm').style.display='none';document.getElementById('loginError').textContent='';}
+window.showLoginForm=function(){document.getElementById('loginForm').style.display='block';document.getElementById('registerForm').style.display='none';document.getElementById('resetForm').style.display='none';document.getElementById('loginError').textContent='';}
+window.showReset=function(){document.getElementById('loginForm').style.display='none';document.getElementById('registerForm').style.display='none';document.getElementById('resetForm').style.display='block';document.getElementById('loginError').textContent='';}
+window.loginWithEmail=async function(){const e=document.getElementById('loginEmail').value,p=document.getElementById('loginPassword').value;if(!e||!p){document.getElementById('loginError').textContent='Please enter your email and password';return;}try{await signInWithEmailAndPassword(auth,e,p);}catch(e){document.getElementById('loginError').textContent='Incorrect email or password';}}
+window.registerWithEmail=async function(){const e=document.getElementById('registerEmail').value,p=document.getElementById('registerPassword').value;if(!e||!p){document.getElementById('loginError').textContent='Please enter your email and password';return;}if(p.length<6){document.getElementById('loginError').textContent='Password must be at least 6 characters';return;}try{await createUserWithEmailAndPassword(auth,e,p);}catch(e){document.getElementById('loginError').textContent=e.code==='auth/email-already-in-use'?'This email is already in use':'Registration failed';}}
+window.sendReset=async function(){const e=document.getElementById('resetEmail').value;if(!e){document.getElementById('loginError').textContent='Email addressを入力してください';return;}try{await sendPasswordResetEmail(auth,e,{url:'https://mimimi-night.github.io/my-closet/en-reset.html'});document.getElementById('loginError').textContent='';document.getElementById('resetSuccess').textContent='Resetメールを送信しました！';}catch(e){document.getElementById('loginError').textContent='Email addressが見つかりません';}}
+window.logout=async function(){if(confirm('Are you sure you want to log out?'))await signOut(auth);}
+window.openMenu=function(){document.getElementById('menuModal').classList.add('show');}
+window.closeMenu=function(){document.getElementById('menuModal').classList.remove('show');}
+window.openContact=function(){closeMenu();window.open('mailto:nightmimimi@gmail.com?subject=あなたクローゼット Contact Us','_blank');}
+window.deleteAccount=async function(){
+  if(!currentUser){alert('You must be logged in to delete your account.');closeMenu();return;}
+  if(!confirm('Deleting your account will erase all your registered item data. Are you sure?'))return;
+  if(!confirm('This cannot be undone. Confirm deletion?'))return;
+  try{const s=await getDocs(collection(db,'users',currentUser.uid,'items'));for(const d of s.docs)await deleteDoc(doc(db,'users',currentUser.uid,'items',d.id));const t=await getDocs(collection(db,'users',currentUser.uid,'tastes'));for(const d of t.docs)await deleteDoc(doc(db,'users',currentUser.uid,'tastes',d.id));await currentUser.delete();alert('Account deleted.');}
+  catch(e){alert('Deletion failed. Please log out and log in again.');}
+}
+
+async function loadItems(){if(!currentUser)return;const q=query(collection(db,'users',currentUser.uid,'items'),orderBy('createdAt','desc'));const s=await getDocs(q);items=s.docs.map(d=>({id:d.id,...d.data()}));}
+async function loadTastes(){if(!currentUser)return;const s=await getDocs(collection(db,'users',currentUser.uid,'tastes'));tastes=s.empty?[]:s.docs.map(d=>d.data().name);}
+async function saveTastesToDB(){if(!currentUser){localStorage.setItem('closet_tastes_guest_en',JSON.stringify(tastes));renderTasteSelect();return;}const s=await getDocs(collection(db,'users',currentUser.uid,'tastes'));for(const d of s.docs)await deleteDoc(doc(db,'users',currentUser.uid,'tastes',d.id));for(const t of tastes)await addDoc(collection(db,'users',currentUser.uid,'tastes'),{name:t});}
+
+function colorDistance(c1,c2){const p=s=>{const m=s.match(/rgb\((\d+),(\d+),(\d+)\)/);return m?[+m[1],+m[2],+m[3]]:null;};const a=p(c1),b=p(c2);if(!a||!b)return 999;return Math.sqrt((a[0]-b[0])**2+(a[1]-b[1])**2+(a[2]-b[2])**2);}
+function rgbToHue(c){const m=c.match(/rgb\((\d+),(\d+),(\d+)\)/);if(!m)return 0;let r=m[1]/255,g=m[2]/255,b=m[3]/255;const max=Math.max(r,g,b),min=Math.min(r,g,b),d=max-min;if(d===0)return 0;let h=max===r?(g-b)/d%6:max===g?(b-r)/d+2:(r-g)/d+4;return(h*60+360)%360;}
+function getAllColors(){return items.filter(i=>i.color).map(i=>i.color).sort((a,b)=>rgbToHue(a)-rgbToHue(b));}
+
+// Outfit: with premium check
+function getTargetCategories(cat){const m={'Tops':['Bottoms','Outer','Shoes'],'Bottoms':['Tops','Outer','Shoes'],'Dress':['Outer','Shoes'],'Outer':['Tops','Bottoms','Shoes'],'Shoes':['Tops','Bottoms','Outer']};return m[cat]||[];}
+
+function generateCoordes(baseItem){
+  const targetCats=getTargetCategories(baseItem.category);
+  const catCandidates={};
+  for(const cat of targetCats){
+    let cands=items.filter(i=>i.id!==baseItem.id&&i.category===cat&&(i.season===baseItem.season||i.season==='All Season'||baseItem.season==='All Season'));
+    if(cands.length===0)continue;
+    if(baseItem.taste){const same=cands.filter(i=>i.taste===baseItem.taste);if(same.length===0)continue;cands=same;}
+    else{const none=cands.filter(i=>!i.taste);if(none.length===0)continue;cands=none;}
+    catCandidates[cat]=cands;
+  }
+  const validCats=targetCats.filter(c=>catCandidates[c]);
+  if(validCats.length===0)return[];
+  const combos=[],seen=new Set();
+  for(let attempt=0;attempt<500&&combos.length<50;attempt++){
+    const outfit=[baseItem];
+    for(const cat of validCats){const pool=catCandidates[cat];outfit.push(pool[Math.floor(Math.random()*pool.length)]);}
+    const key=outfit.map(x=>x.id).sort().join(',');
+    if(!seen.has(key)){seen.add(key);combos.push(outfit);}
+  }
+  return combos;
+}
+
+let coordeSwipeSetup=false;
+window.openCoordeModal=function(id){
+  if(!isPremium){ openPremiumModal(); return; }
+  const baseItem=items.find(i=>i.id===id);if(!baseItem)return;
+  coordeCombinations=generateCoordes(baseItem);coordeIndex=0;
+  document.getElementById('coordeModal').classList.add('show');
+  renderCoordeSlide(0,null);
+  if(!coordeSwipeSetup){
+    coordeSwipeSetup=true;
+    const vp=document.getElementById('coordeViewport');
+    vp.addEventListener('touchstart',e=>{coordeTouchStartX=e.touches[0].clientX;},{passive:true});
+    vp.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-coordeTouchStartX;if(Math.abs(dx)>50){dx<0?nextCoorde():prevCoorde();}},{passive:true});
+  }
+}
+window.closeCoordeModal=function(){document.getElementById('coordeModal').classList.remove('show');}
+
+function buildOutfitHTML(outfit){
+  const count=outfit.length,cls=count<=2?'count-2':count===3?'count-3':'count-4',baseId=outfit[0].id;
+  return`<div class="coorde-outfit ${cls}">${outfit.map(item=>`<div class="coorde-item ${item.id===baseId?'is-base':''}"><img src="${item.photo}" alt="${item.category}"><div class="coorde-item-label"><div class="coorde-item-cat">${item.category}${item.id===baseId?' ✦':''}</div></div></div>`).join('')}</div>`;
+}
+
+function renderCoordeSlide(idx, direction){
+  if(coordeIsAnimating)return;
+  const vp=document.getElementById('coordeViewport');
+  if(coordeCombinations.length===0){vp.innerHTML='<div class="coorde-slide slide-active"><div class="coorde-no-result">No outfit combinations found.<br>Try adding more items in different categories!</div></div>';document.getElementById('coordeCounter').textContent='';return;}
+  coordeIndex=((idx%coordeCombinations.length)+coordeCombinations.length)%coordeCombinations.length;
+  document.getElementById('coordeCounter').textContent=`${coordeIndex+1} / ${coordeCombinations.length}`;
+  if(!direction){vp.innerHTML=`<div class="coorde-slide slide-active">${buildOutfitHTML(coordeCombinations[coordeIndex])}</div>`;return;}
+  coordeIsAnimating=true;
+  const oldSlide=vp.querySelector('.coorde-slide');
+  const newSlide=document.createElement('div');
+  newSlide.className='coorde-slide '+(direction==='next'?'slide-from-right':'slide-from-left');
+  newSlide.innerHTML=buildOutfitHTML(coordeCombinations[coordeIndex]);
+  vp.appendChild(newSlide);
+  requestAnimationFrame(()=>{requestAnimationFrame(()=>{if(oldSlide)oldSlide.className='coorde-slide '+(direction==='next'?'slide-to-left':'slide-to-right');newSlide.className='coorde-slide slide-active';setTimeout(()=>{if(oldSlide)oldSlide.remove();coordeIsAnimating=false;},260);});});
+}
+window.nextCoorde=function(){renderCoordeSlide(coordeIndex+1,'next');}
+window.prevCoorde=function(){renderCoordeSlide(coordeIndex-1,'prev');}
+
+function setupSlideSelect(){
+  const row=document.getElementById('colorChips');
+  let slideTimer=null,isSliding=false,lastToggled=null;
+  row.addEventListener('touchstart',e=>{if(!e.target.closest('.color-chip-wrap'))return;slideTimer=setTimeout(()=>{isSliding=true;if(navigator.vibrate)navigator.vibrate(30);},350);},{passive:true});
+  row.addEventListener('touchmove',e=>{if(!isSliding)return;e.preventDefault();const el=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY);const wrap=el?.closest('.color-chip-wrap');if(!wrap||wrap===lastToggled)return;lastToggled=wrap;const chip=wrap.querySelector('.color-chip');if(!chip||chip.classList.contains('source-locked'))return;const color=chip.style.background;if(!selectedSearchColors.includes(color)){selectedSearchColors.push(color);chip.classList.add('selected');if(!document.querySelector('#colorChips .color-clear-btn')){const btn=document.createElement('button');btn.className='color-clear-btn';btn.textContent='Clear all';btn.onclick=clearColorSelection;row.appendChild(btn);}}},{passive:false});
+  row.addEventListener('touchend',()=>{clearTimeout(slideTimer);isSliding=false;lastToggled=null;},{passive:true});
+  row.addEventListener('touchcancel',()=>{clearTimeout(slideTimer);isSliding=false;lastToggled=null;},{passive:true});
+}
+
+// Stats: premium only
+function renderStats(){
+  const panel=document.getElementById('statsPanel');
+  if(!isPremium){
+    if(items.length===0){panel.innerHTML='';return;}
+    panel.innerHTML=`<div class="stats-locked" onclick="openPremiumModal()">Closet Stats <span class="premium-badge">PREMIUM</span><span style="margin-left:auto;font-size:10px;color:#666;">Tap for details</span></div>`;
+    return;
+  }
+  if(items.length===0){panel.innerHTML='';return;}
+  const total=items.length;
+  const cats=['Tops','Bottoms','Dress','Outer','Shoes'];
+  const seasons=['Spring/Summer','Fall/Winter','All Season'];
+  const catCounts=cats.map(c=>({label:c,count:items.filter(i=>i.category===c).length})).filter(x=>x.count>0);
+  const seasonCounts=seasons.map(s=>({label:s,count:items.filter(i=>i.season===s).length})).filter(x=>x.count>0);
+  const neverWorn=items.filter(i=>!i.wornCount||i.wornCount===0).length;
+  panel.innerHTML=`<div class="stats-row"><div class="stat-chip"><span class="stat-num">${total}</span><span class="stat-label">Total</span></div>${catCounts.map(x=>`<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}${seasonCounts.map(x=>`<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}${neverWorn>0?`<div class="stat-chip" style="border-color:#ff6b6b33;"><span class="stat-num" style="color:#ff6b6b88;">${neverWorn}</span><span class="stat-label">Unworn</span></div>`:''}</div>`;
+}
+
+window.toggleSearchColor=function(color){const idx=selectedSearchColors.indexOf(color);if(idx===-1)selectedSearchColors.push(color);else selectedSearchColors.splice(idx,1);renderColorChips();}
+window.renderTasteSelect=function(){document.getElementById('tasteSelect').innerHTML='<option value="">Select Style</option>'+tastes.map(t=>`<option value="${t}">${t}</option>`).join('');document.getElementById('searchTaste').innerHTML='<option value="">Style: All</option>'+tastes.map(t=>`<option value="${t}">${t}</option>`).join('');}
+window.renderTasteTags=function(){document.getElementById('tasteTags').innerHTML=tastes.map(t=>`<button class="taste-tag" onclick="deleteTaste(event,'${t}')">${t} <span style="font-size:14px">×</span></button>`).join('');}
+window.renderColorChips=function(){const container=document.getElementById('colorChips'),colors=getAllColors();let html='';if(isSimilarMode&&similarSourceColor)html+=`<div class="color-chip-wrap" title="Source color"><div class="color-chip source-locked" style="background:${similarSourceColor};"></div><span class="source-color-label">Source</span></div>`;if(colors.length===0&&!isSimilarMode){container.innerHTML='<span class="no-colors-msg">Colors will appear once you add items</span>';return;}html+=colors.map(color=>`<div class="color-chip-wrap" onclick="toggleSearchColor('${color}')"><div class="color-chip${selectedSearchColors.includes(color)?' selected':''}" style="background:${color};"></div></div>`).join('');if(selectedSearchColors.length>0)html+=`<button class="color-clear-btn" onclick="clearColorSelection()">Clear all</button>`;container.innerHTML=html;}
+window.clearColorSelection=function(){selectedSearchColors=[];renderColorChips();}
+window.toggleSearch=function(){if(isSimilarMode)return;const panel=document.getElementById('searchPanel'),btn=document.getElementById('searchToggleBtn');panel.classList.toggle('show');btn.classList.toggle('active');if(panel.classList.contains('show'))renderColorChips();}
+window.resetSearch=function(){if(isSimilarMode){selectedSearchColors=[];document.getElementById('searchSeason').value=pendingItem?.season||'';document.getElementById('searchTaste').value=pendingItem?.taste||'';renderColorChips();doSearch();return;}['searchSeason','searchTaste'].forEach(id=>document.getElementById(id).value='');document.getElementById('searchFav').checked=false;selectedSearchColors=[];renderColorChips();isSearchMode=false;searchResults=null;document.getElementById('searchResultNotice').textContent='';renderGrid();}
+window.deleteTaste=async function(e,t){e.stopPropagation();if(confirm(`Delete style "${t}"?`)){tastes=tastes.filter(x=>x!==t);await saveTastesToDB();renderTasteSelect();renderTasteTags();}}
+window.addTaste=async function(){const input=document.getElementById('newTasteInput'),val=input.value.trim();if(!val)return;if(tastes.includes(val)){alert('Already exists!');return;}tastes.push(val);await saveTastesToDB();input.value='';renderTasteSelect();renderTasteTags();}
+
+function extractColorAtPos(imgEl,pctX,pctY){if(!imgEl)return;const wrap=imgEl.parentElement,wW=wrap.offsetWidth,wH=wrap.offsetHeight,nW=imgEl.naturalWidth,nH=imgEl.naturalHeight;if(!nW||!nH)return;const ia=nW/nH,wa=wW/wH;let dW,dH,dX,dY;if(ia>wa){dW=wW;dH=wW/ia;dX=0;dY=(wH-dH)/2;}else{dH=wH;dW=wH*ia;dX=(wW-dW)/2;dY=0;}const bx=(pctX/100)*wW,by=(pctY/100)*wH,ss=40,ns=(ss/dW)*nW,nCX=((bx-dX)/dW)*nW,nCY=((by-dY)/dH)*nH;const cv=document.createElement('canvas');cv.width=cv.height=40;const ctx=cv.getContext('2d');ctx.drawImage(imgEl,nCX-ns/2,nCY-ns/2,ns,ns,0,0,40,40);const data=ctx.getImageData(0,0,40,40).data;let r=0,g=0,b=0,cnt=0;for(let i=0;i<data.length;i+=4){if(data[i+3]<10)continue;r+=data[i];g+=data[i+1];b+=data[i+2];cnt++;}if(cnt===0)return;r=Math.round(r/cnt);g=Math.round(g/cnt);b=Math.round(b/cnt);currentColor=`rgb(${r},${g},${b})`;document.getElementById('colorResultChip').style.background=currentColor;document.getElementById('colorResultRow').style.display='flex';}
+function updateBoxPosition(box){box.style.left=boxPctX+'%';box.style.top=boxPctY+'%';extractColorAtPos(currentImgEl,boxPctX,boxPctY);}
+function setupAnalysisBox(wrap){const old=wrap.querySelector('.analysis-box');if(old)old.remove();const box=document.createElement('div');box.className='analysis-box';box.innerHTML='<span class="analysis-box-label">Color</span>';wrap.appendChild(box);boxPctX=50;boxPctY=50;updateBoxPosition(box);function gP(e){const r=wrap.getBoundingClientRect();return{x:(e.touches?e.touches[0].clientX:e.clientX)-r.left,y:(e.touches?e.touches[0].clientY:e.clientY)-r.top,w:r.width,h:r.height};}function oS(e){e.preventDefault();isDragging=true;const p=gP(e);dragStartX=p.x;dragStartY=p.y;boxStartX=boxPctX;boxStartY=boxPctY;}function oM(e){if(!isDragging)return;e.preventDefault();const p=gP(e);boxPctX=Math.max(3,Math.min(97,boxStartX+((p.x-dragStartX)/p.w)*100));boxPctY=Math.max(3,Math.min(97,boxStartY+((p.y-dragStartY)/p.h)*100));updateBoxPosition(box);}function oE(){isDragging=false;}box.addEventListener('touchstart',oS,{passive:false});box.addEventListener('touchmove',oM,{passive:false});box.addEventListener('touchend',oE);box.addEventListener('mousedown',oS);document.addEventListener('mousemove',oM);document.addEventListener('mouseup',oE);}
+function compressImage(file,cb){const reader=new FileReader();reader.onload=function(e){const img=new Image();img.onload=function(){const cv=document.createElement('canvas');const M=600;let w=img.width,h=img.height;if(w>h){if(w>M){h=h*M/w;w=M;}}else{if(h>M){w=w*M/h;h=M;}}cv.width=w;cv.height=h;cv.getContext('2d').drawImage(img,0,0,w,h);cb(cv.toDataURL('image/jpeg',0.7));};img.src=e.target.result;};reader.readAsDataURL(file);}
+
+window.previewPhoto=function(e){const file=e.target.files[0];if(!file)return;compressImage(file,function(compressed){currentPhoto=compressed;const wrap=document.getElementById('photoPreviewWrap');wrap.innerHTML='';const img=document.createElement('img');img.src=compressed;img.onload=function(){wrap.appendChild(img);currentImgEl=img;setupAnalysisBox(wrap);};});}
+window.openModal=function(){isEditMode=false;currentEditId=null;currentPhoto=null;currentColor=null;currentImgEl=null;boxPctX=50;boxPctY=50;document.getElementById('modalTitle').textContent='Add Item';document.getElementById('modalSaveBtn').textContent='Save';document.getElementById('addModeSection').style.display='block';document.getElementById('editModeSection').style.display='none';document.getElementById('similarSearchBtn').style.display='block';document.getElementById('photoPreviewWrap').innerHTML='<div class="photo-preview-empty">Please select a photo</div>';document.getElementById('colorResultRow').style.display='none';renderTasteSelect();renderTasteTags();document.getElementById('modal').classList.add('show');}
+window.editItem=function(id){const item=items.find(i=>i.id===id);if(!item)return;isEditMode=true;currentEditId=id;document.getElementById('modalTitle').textContent='Edit Item';document.getElementById('modalSaveBtn').textContent='Save Changes';document.getElementById('addModeSection').style.display='none';document.getElementById('editModeSection').style.display='block';document.getElementById('similarSearchBtn').style.display='none';document.getElementById('editPhotoPreview').innerHTML=`<img src="${item.photo}">`;document.getElementById('category').value=item.category||'';document.getElementById('season').value=item.season||'';document.getElementById('memo').value=item.memo||'';renderTasteSelect();renderTasteTags();document.getElementById('tasteSelect').value=item.taste||'';document.getElementById('modal').classList.add('show');}
+window.closeModal=function(){document.getElementById('modal').classList.remove('show');['cameraInput','albumInput'].forEach(id=>document.getElementById(id).value='');['category','season','tasteSelect'].forEach(id=>document.getElementById(id).value='');document.getElementById('memo').value='';document.getElementById('newTasteInput').value='';document.getElementById('photoPreviewWrap').innerHTML='<div class="photo-preview-empty">Please select a photo</div>';document.getElementById('colorResultRow').style.display='none';currentPhoto=null;currentColor=null;currentImgEl=null;isEditMode=false;currentEditId=null;}
+window.saveOrUpdateItem=async function(){isEditMode?await updateItem():await saveItem();}
+async function saveItem(){const category=document.getElementById('category').value,season=document.getElementById('season').value,taste=document.getElementById('tasteSelect').value,memo=document.getElementById('memo').value;if(!currentPhoto){alert('Please select a photo！');return;}if(!category){alert('Please select a category!');return;}if(!season){alert('Please select a season!');return;}const ind=document.getElementById('savingIndicator');ind.style.display='block';const item={photo:currentPhoto,color:currentColor,category,season,taste,memo,createdAt:new Date().toISOString()};try{if(currentUser){const dr=await addDoc(collection(db,'users',currentUser.uid,'items'),item);items.unshift({id:dr.id,...item});}else{const li={id:Date.now().toString(),...item};localItems.unshift(li);items=[...localItems];localStorage.setItem('closet_items_guest_en',JSON.stringify(localItems));}closeModal();renderGrid();renderStats();}catch(e){alert('Failed to save. Please try again.');}finally{ind.style.display='none';}}
+async function updateItem(){const category=document.getElementById('category').value,season=document.getElementById('season').value,taste=document.getElementById('tasteSelect').value,memo=document.getElementById('memo').value;if(!category){alert('Please select a category!');return;}if(!season){alert('Please select a season!');return;}const ind=document.getElementById('savingIndicator');ind.style.display='block';const item=items.find(i=>i.id===currentEditId);if(!item)return;item.category=category;item.season=season;item.taste=taste;item.memo=memo;try{if(currentUser){await updateDoc(doc(db,'users',currentUser.uid,'items',currentEditId),{category,season,taste,memo});}else{const li=localItems.find(i=>i.id===currentEditId);if(li){li.category=category;li.season=season;li.taste=taste;li.memo=memo;}localStorage.setItem('closet_items_guest_en',JSON.stringify(localItems));}closeModal();renderGrid();renderStats();}catch(e){alert('Failed to update. Please try again.');}finally{ind.style.display='none';}}
+window.searchSimilar=function(){if(!currentColor){alert('Please select a photo first!');return;}const category=document.getElementById('category').value,season=document.getElementById('season').value;if(!category){alert('Please select a category!');return;}if(!season){alert('Please select a season!');return;}const taste=document.getElementById('tasteSelect').value,memo=document.getElementById('memo').value;pendingItem={photo:currentPhoto,color:currentColor,category,season,taste,memo,createdAt:new Date().toISOString()};isSimilarMode=true;similarSourceColor=currentColor;selectedSearchColors=[];document.getElementById('modal').classList.remove('show');['cameraInput','albumInput'].forEach(id=>document.getElementById(id).value='');if(category){currentFilter=category;document.querySelectorAll('.filter-btn').forEach(btn=>{btn.classList.toggle('active',btn.textContent.trim()===category);});}if(season)document.getElementById('searchSeason').value=season;if(taste)document.getElementById('searchTaste').value=taste;document.getElementById('searchPanel').classList.add('show');document.getElementById('searchToggleBtn').classList.add('active');document.getElementById('colorSearchHint').textContent='Source color is locked. Tap to add more colors.';document.getElementById('similarBar').classList.add('show');document.getElementById('addBtn').style.display='none';renderColorChips();doSearch();}
+window.cancelSimilarSearch=function(){isSimilarMode=false;similarSourceColor=null;pendingItem=null;selectedSearchColors=[];document.getElementById('similarBar').classList.remove('show');document.getElementById('addBtn').style.display='';document.getElementById('colorSearchHint').textContent='Tap to select · Long press to slide-select multiple';document.getElementById('searchPanel').classList.remove('show');document.getElementById('searchToggleBtn').classList.remove('active');isSearchMode=false;searchResults=null;document.getElementById('searchResultNotice').textContent='';document.getElementById('searchSeason').value='';document.getElementById('searchTaste').value='';currentFilter='All';document.querySelectorAll('.filter-btn').forEach(btn=>{btn.classList.toggle('active',btn.textContent.trim()==='All');});renderGrid();}
+window.registerPendingItem=async function(){if(!pendingItem)return;const ind=document.getElementById('savingIndicator');ind.style.display='block';try{if(currentUser){const dr=await addDoc(collection(db,'users',currentUser.uid,'items'),pendingItem);items.unshift({id:dr.id,...pendingItem});}else{const li={id:Date.now().toString(),...pendingItem};localItems.unshift(li);items=[...localItems];localStorage.setItem('closet_items_guest_en',JSON.stringify(localItems));}alert('Item registered!');cancelSimilarSearch();renderGrid();renderStats();}catch(e){alert('Failed to save. Please try again.');}finally{ind.style.display='none';}}
+window.deleteItem=async function(id){if(confirm('Delete this item?')){if(currentUser)await deleteDoc(doc(db,'users',currentUser.uid,'items',id));else{localItems=localItems.filter(i=>i.id!==id);localStorage.setItem('closet_items_guest_en',JSON.stringify(localItems));}items=items.filter(i=>i.id!==id);if(isSearchMode)doSearch();else renderGrid();renderStats();}}
+window.toggleFav=async function(id){const item=items.find(i=>i.id===id);if(!item)return;item.fav=!item.fav;if(currentUser){await updateDoc(doc(db,'users',currentUser.uid,'items',id),{fav:item.fav});}else{const li=localItems.find(i=>i.id===id);if(li)li.fav=item.fav;localStorage.setItem('closet_items_guest_en',JSON.stringify(localItems));}if(isSearchMode)doSearch();else renderGrid();}
+window.wearItem=async function(id){const item=items.find(i=>i.id===id);if(!item)return;const today=new Date().toISOString().slice(0,10);if(item.lastWornDate===today){item.wornCount=Math.max((item.wornCount||1)-1,0);item.lastWornDate=item.prevLastWornDate||null;item.prevLastWornDate=null;}else{item.prevLastWornDate=item.lastWornDate||null;item.wornCount=Math.min((item.wornCount||0)+1,99);item.lastWornDate=today;}if(currentUser){await updateDoc(doc(db,'users',currentUser.uid,'items',id),{wornCount:item.wornCount,lastWornDate:item.lastWornDate,prevLastWornDate:item.prevLastWornDate||null});}else{const li=localItems.find(i=>i.id===id);if(li){li.wornCount=item.wornCount;li.lastWornDate=item.lastWornDate;li.prevLastWornDate=item.prevLastWornDate||null;}localStorage.setItem('closet_items_guest_en',JSON.stringify(localItems));}if(isSearchMode)doSearch();else renderGrid();renderStats();}
+window.filterItems=function(filter){currentFilter=filter;isSearchMode=false;searchResults=null;document.getElementById('searchResultNotice').textContent='';document.querySelectorAll('.filter-btn').forEach(btn=>{btn.classList.toggle('active',btn.textContent.trim()===filter);});renderGrid();}
+function sortItems(arr){const sort=document.getElementById('sortSelect')?.value||'new',copy=[...arr];if(sort==='worn_desc')copy.sort((a,b)=>(b.wornCount||0)-(a.wornCount||0));else if(sort==='worn_asc')copy.sort((a,b)=>(a.wornCount||0)-(b.wornCount||0));else if(sort==='date_desc')copy.sort((a,b)=>{if(!a.lastWornDate&&!b.lastWornDate)return 0;if(!a.lastWornDate)return 1;if(!b.lastWornDate)return -1;return b.lastWornDate.localeCompare(a.lastWornDate);});else if(sort==='date_asc')copy.sort((a,b)=>{if(!a.lastWornDate&&!b.lastWornDate)return 0;if(!a.lastWornDate)return-1;if(!b.lastWornDate)return 1;return a.lastWornDate.localeCompare(b.lastWornDate);});return copy;}
+window.doSearch=function(){const category=currentFilter==='All'?'':currentFilter;const season=document.getElementById('searchSeason').value,taste=document.getElementById('searchTaste').value,favOnly=document.getElementById('searchFav').checked;searchResults=items.filter(item=>{if(category&&item.category!==category)return false;if(season&&item.season!==season)return false;if(taste&&item.taste!==taste)return false;if(favOnly&&!item.fav)return false;if(isSimilarMode&&similarSourceColor){const mS=item.color&&colorDistance(item.color,similarSourceColor)<50;const mC=selectedSearchColors.length>0&&item.color&&selectedSearchColors.includes(item.color);if(!mS&&!mC)return false;}else if(selectedSearchColors.length>0){if(!item.color||!selectedSearchColors.includes(item.color))return false;}return true;});isSearchMode=true;document.getElementById('searchResultNotice').textContent=`Results: ${searchResults.length}`;renderGrid();}
+
+window.renderGrid=function(){
+  const grid=document.getElementById('grid'),today=new Date().toISOString().slice(0,10);
+  let source;
+  if(isSearchMode)source=sortItems(searchResults);
+  else{let base=currentFilter==='All'?items:items.filter(i=>i.category===currentFilter);source=sortItems([...base.filter(i=>i.fav),...base.filter(i=>!i.fav)]);}
+  if(!source||source.length===0){grid.innerHTML=`<div class="empty">${isSearchMode?'No items found matching your search':'No items yet!<br>Tap + to add your first item'}</div>`;return;}
+
+  // Outfit button (premium check)
+  const coordeBtn = isPremium
+    ? (id) => `<button class="card-coorde-overlay" onclick="openCoordeModal('${id}')">Outfit</button>`
+    : (id) => `<button class="card-coorde-locked" onclick="openPremiumModal()">Outfit</button>`;
+
+  grid.innerHTML=source.map(item=>{
+    const worn=item.wornCount||0,wornToday=item.lastWornDate===today,wornDisplay=worn===0?'0':`${worn}`,lastDate=item.lastWornDate?item.lastWornDate.replace(/-/g,'/'):'Unworn';
+    return `<div class="card">
+  <div class="card-img-wrap">
+    <img src="${item.photo}" alt="${item.category}">
+    ${coordeBtn(item.id)}
+  </div>
+  <button class="card-delete" onclick="deleteItem('${item.id}')">×</button>
+  <button class="card-edit-btn" onclick="editItem('${item.id}')" title="Edit"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+  <button class="card-fav ${item.fav?'active':''}" onclick="toggleFav('${item.id}')">
+    <svg viewBox="0 0 24 24" fill="${item.fav?'#ffb3c1':'none'}" stroke="${item.fav?'#ffb3c1':'rgba(255,255,255,0.7)'}" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+  </button>
+  <div class="card-info">
+    ${item.color?`<div class="card-color-bar" style="background:${item.color};"></div>`:''}
+    <div class="card-info-inner">
+      <div class="card-category">${item.category}</div>
+      <div class="card-season">${item.season}</div>
+      ${item.taste?`<div class="card-taste">${item.taste}</div>`:''}
+      ${item.memo?`<div class="card-season">${item.memo}</div>`:''}
+    </div>
+  </div>
+  <div class="card-bottom">
+    <div class="card-last-worn">Last worn<br>${lastDate}</div>
+    <button class="card-wear-btn ${wornToday?'worn-today':''}" onclick="wearItem('${item.id}')" title="${wornToday?'Tap again to undo':'Tap if you wore this today'}">
+      <span class="card-wear-count">${wornDisplay}</span>
+      <span class="card-wear-label">Worn</span>
+    </button>
+  </div>
+</div>`;}).join('');
+}
+</script>
+</body>
+</html>
