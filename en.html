@@ -661,7 +661,7 @@ function renderStats(){
   const catCounts=cats.map(c=>({label:c,count:items.filter(i=>i.category===c).length})).filter(x=>x.count>0);
   const seasonCounts=seasons.map(s=>({label:s,count:items.filter(i=>i.season===s).length})).filter(x=>x.count>0);
   const neverWorn=items.filter(i=>!i.wornCount||i.wornCount===0).length;
-  panel.innerHTML=`<div class="stats-row"><div class="stat-chip"><span class="stat-num">${total}</span><span class="stat-label">Total</span></div>${catCounts.map(x=>`<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}${seasonCounts.map(x=>`<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}${neverWorn>0?`<div class="stat-chip" style="border-color:#ff6b6b33;"><span class="stat-num" style="color:#ff6b6b88;">${neverWorn}</span><span class="stat-label">Unworn</span></div>`:''}</div>`;
+  panel.innerHTML=`<div class="stats-row"><div class="stat-chip"><span class="stat-num">${total}</span><span class="stat-label">Total</span></div>${catCounts.map(x=>`<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}${seasonCounts.map(x=>`<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}${neverWorn>0?`<div class="stat-chip" style="border-color:#ff6b6b33;"><span class="stat-num" style="color:#ff6b6b88;">${neverWorn}</span><span class="stat-label">Never worn</span></div>`:''}</div>`;
 }
 
 window.toggleSearchColor=function(color){const idx=selectedSearchColors.indexOf(color);if(idx===-1)selectedSearchColors.push(color);else selectedSearchColors.splice(idx,1);renderColorChips();}
@@ -709,7 +709,7 @@ window.renderGrid=function(){
     : (id) => `<button class="card-coorde-locked" onclick="openPremiumModal()">Outfit</button>`;
 
   grid.innerHTML=source.map(item=>{
-    const worn=item.wornCount||0,wornToday=item.lastWornDate===today,wornDisplay=worn===0?'0':`${worn}`,lastDate=item.lastWornDate?item.lastWornDate.replace(/-/g,'/'):'Unworn';
+    const worn=item.wornCount||0,wornToday=item.lastWornDate===today,wornDisplay=worn===0?'0':`${worn}`,lastDate=item.lastWornDate?item.lastWornDate.replace(/-/g,'/'):'Never worn';
     return `<div class="card">
   <div class="card-img-wrap">
     <img src="${item.photo}" alt="${item.category}">
