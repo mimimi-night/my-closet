@@ -179,8 +179,7 @@ select option { background: #333; }
 .premium-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 600; justify-content: center; align-items: center; padding: 20px; }
 .premium-modal.show { display: flex; }
 .premium-box { background: #1a1a1a; border-radius: 24px; padding: 32px 24px; width: 100%; max-width: 360px; border: 1px solid #c9a96e55; text-align: center; }
-.premium-crown { font-size: 44px; margin-bottom: 10px; }
-.premium-title { font-size: 16px; color: #c9a96e; letter-spacing: 3px; margin-bottom: 6px; }
+.premium-title { font-size: 16px; color: #c9a96e; letter-spacing: 3px; margin-bottom: 6px; margin-top: 4px; }
 .premium-price { font-size: 32px; font-weight: bold; color: #f0e6d3; margin-bottom: 2px; }
 .premium-price-sub { font-size: 12px; color: #888; margin-bottom: 20px; }
 .premium-features { background: #222; border-radius: 14px; padding: 16px; margin-bottom: 20px; text-align: left; }
@@ -248,20 +247,17 @@ select option { background: #333; }
 <!-- プレミアムモーダル -->
 <div class="premium-modal" id="premiumModal">
   <div class="premium-box">
-    <div class="premium-crown"></div>
     <div class="premium-title">PREMIUM</div>
     <div class="premium-price">¥300</div>
     <div class="premium-price-sub">/ 月（税込）</div>
     <div class="premium-features">
       <div class="premium-feature">
-        <div class="premium-feature-icon"></div>
         <div class="premium-feature-text">
           クローゼット統計
           <div class="premium-feature-sub">総数・カテゴリ別枚数・未着用数が一覧で確認できる</div>
         </div>
       </div>
       <div class="premium-feature">
-        <div class="premium-feature-icon"></div>
         <div class="premium-feature-text">
           AIコーデ提案
           <div class="premium-feature-sub">登録した服からその日のコーデを自動で組み合わせ提案</div>
@@ -279,7 +275,7 @@ select option { background: #333; }
   <header>
     <h1>あなたクローゼット</h1>
     <div class="user-info" id="userInfo"></div>
-    <div id="premiumUserBadge" style="display:flex;justify-content:center;margin-top:4px;display:none;"></div>
+    <div id="premiumUserBadge" style="display:none;justify-content:center;margin-top:4px;"></div>
     <div class="header-buttons">
       <button class="header-btn" id="searchToggleBtn" onclick="toggleSearch()">詳細検索</button>
       <button class="header-btn" id="loginHeaderBtn" onclick="openLoginModal()" style="display:none;">ログイン / 登録</button>
