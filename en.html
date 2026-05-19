@@ -573,14 +573,20 @@ function colorDistance(c1,c2){const p=s=>{const m=s.match(/rgb\((\d+),(\d+),(\d+
 function rgbToHue(c){const m=c.match(/rgb\((\d+),(\d+),(\d+)\)/);if(!m)return 0;let r=m[1]/255,g=m[2]/255,b=m[3]/255;const max=Math.max(r,g,b),min=Math.min(r,g,b),d=max-min;if(d===0)return 0;let h=max===r?(g-b)/d%6:max===g?(b-r)/d+2:(r-g)/d+4;return(h*60+360)%360;}
 function getAllColors(){return items.filter(i=>i.color).map(i=>i.color).sort((a,b)=>rgbToHue(a)-rgbToHue(b));}
 
+// Category mapping (JP <-> EN)
+const CAT_TO_EN={'トップス':'Tops','ボトムス':'Bottoms','ワンピース':'Dress','アウター':'Outer','シューズ':'Shoes'};
+const CAT_TO_JP={'Tops':'トップス','Bottoms':'ボトムス','Dress':'ワンピース','Outer':'アウター','Shoes':'シューズ'};
+function toEnCat(c){return CAT_TO_EN[c]||c;}
+function matchCat(itemCat,filter){return itemCat===filter||itemCat===(CAT_TO_JP[filter]||filter);}
+
 // Outfit: with premium check
-function getTargetCategories(cat){const m={'Tops':['Bottoms','Outer','Shoes'],'Bottoms':['Tops','Outer','Shoes'],'Dress':['Outer','Shoes'],'Outer':['Tops','Bottoms','Shoes'],'Shoes':['Tops','Bottoms','Outer']};return m[cat]||[];}
+function getTargetCategories(cat){const enCat=toEnCat(cat);const m={'Tops':['Bottoms','Outer','Shoes'],'Bottoms':['Tops','Outer','Shoes'],'Dress':['Outer','Shoes'],'Outer':['Tops','Bottoms','Shoes'],'Shoes':['Tops','Bottoms','Outer']};return m[enCat]||[];}
 
 function generateCoordes(baseItem){
   const targetCats=getTargetCategories(baseItem.category);
   const catCandidates={};
   for(const cat of targetCats){
-    let cands=items.filter(i=>i.id!==baseItem.id&&i.category===cat&&(i.season===baseItem.season||i.season==='All Season'||baseItem.season==='All Season'));
+    let cands=items.filter(i=>i.id!==baseItem.id&&matchCat(i.category,cat)&&(i.season===baseItem.season||i.season==='All Season'||baseItem.season==='All Season'||i.season==='オールシーズン'||baseItem.season==='オールシーズン'));
     if(cands.length===0)continue;
     if(baseItem.taste){const same=cands.filter(i=>i.taste===baseItem.taste);if(same.length===0)continue;cands=same;}
     else{const none=cands.filter(i=>!i.taste);if(none.length===0)continue;cands=none;}
@@ -658,7 +664,7 @@ function renderStats(){
   const total=items.length;
   const cats=['Tops','Bottoms','Dress','Outer','Shoes'];
   const seasons=['Spring/Summer','Fall/Winter','All Season'];
-  const catCounts=cats.map(c=>({label:c,count:items.filter(i=>i.category===c).length})).filter(x=>x.count>0);
+  const catCounts=cats.map(c=>({label:c,count:items.filter(i=>matchCat(i.category,c)).length})).filter(x=>x.count>0);
   const seasonCounts=seasons.map(s=>({label:s,count:items.filter(i=>i.season===s).length})).filter(x=>x.count>0);
   const neverWorn=items.filter(i=>!i.wornCount||i.wornCount===0).length;
   panel.innerHTML=`<div class="stats-row"><div class="stat-chip"><span class="stat-num">${total}</span><span class="stat-label">Total</span></div>${catCounts.map(x=>`<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}${seasonCounts.map(x=>`<div class="stat-chip"><span class="stat-num">${x.count}</span><span class="stat-label">${x.label}</span></div>`).join('')}${neverWorn>0?`<div class="stat-chip" style="border-color:#ff6b6b33;"><span class="stat-num" style="color:#ff6b6b88;">${neverWorn}</span><span class="stat-label">Never worn</span></div>`:''}</div>`;
@@ -700,7 +706,7 @@ window.renderGrid=function(){
   const grid=document.getElementById('grid'),today=new Date().toISOString().slice(0,10);
   let source;
   if(isSearchMode)source=sortItems(searchResults);
-  else{let base=currentFilter==='All'?items:items.filter(i=>i.category===currentFilter);source=sortItems([...base.filter(i=>i.fav),...base.filter(i=>!i.fav)]);}
+  else{let base=currentFilter==='All'?items:items.filter(i=>matchCat(i.category,currentFilter));source=sortItems([...base.filter(i=>i.fav),...base.filter(i=>!i.fav)]);}
   if(!source||source.length===0){grid.innerHTML=`<div class="empty">${isSearchMode?'No items found matching your search':'No items yet!<br>Tap + to add your first item'}</div>`;return;}
 
   // Outfit button (premium check)
@@ -723,7 +729,7 @@ window.renderGrid=function(){
   <div class="card-info">
     ${item.color?`<div class="card-color-bar" style="background:${item.color};"></div>`:''}
     <div class="card-info-inner">
-      <div class="card-category">${item.category}</div>
+      <div class="card-category">${toEnCat(item.category)}</div>
       <div class="card-season">${item.season}</div>
       ${item.taste?`<div class="card-taste">${item.taste}</div>`:''}
       ${item.memo?`<div class="card-season">${item.memo}</div>`:''}
