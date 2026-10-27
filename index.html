@@ -462,12 +462,17 @@ onAuthStateChanged(auth, async(user)=>{
 
     // 支払い完了リダイレクト処理
     if(paidParam === '1'){
-      await setDoc(doc(db,'users',user.uid), {isPremium:true}, {merge:true});
-      isPremium = true;
+      // プレミアムはStripeの通知を受けたサーバーだけが有効にする。ここでは反映を待つだけ
       window.history.replaceState({}, '', window.location.pathname);
-      setTimeout(()=>{
-        alert('プレミアムプランへようこそ！\nコーデ提案と統計機能が使えるようになりました！');
-      }, 800);
+      (async()=>{
+        for(let i=0;i<15&&!isPremium;i++){
+          await new Promise(r=>setTimeout(r,2000));
+          const s=await getDoc(doc(db,'users',user.uid));
+          isPremium = s.exists() && s.data().isPremium === true;
+        }
+        updatePremiumUI(); window.renderGrid();
+        alert(isPremium ? 'プレミアムプランへようこそ！\nコーデ提案と統計機能が使えるようになりました！' : 'お支払いを確認しています。\n数分たってもプレミアムにならない場合は、ページを再読み込みしてください。');
+      })();
     }
 
     // ゲストデータ引き継ぎ
@@ -542,7 +547,11 @@ window.openPremiumModal=function(){
 }
 window.closePremiumModal=function(){ document.getElementById('premiumModal').classList.remove('show'); }
 window.goToPremium=function(){
-  window.location.href = STRIPE_PREMIUM_URL;
+  if(!currentUser){closePremiumModal();openLoginModal();return;}
+  const u=new URL(STRIPE_PREMIUM_URL);
+  u.searchParams.set('client_reference_id', currentUser.uid);
+  if(currentUser.email) u.searchParams.set('prefilled_email', currentUser.email);
+  window.location.href = u.toString();
 }
 
 window.openLoginModal=function(){document.getElementById('loginModal').classList.add('show');showLoginForm();}
