@@ -205,6 +205,7 @@ select option { background: #333; }
   <div class="menu-box">
     <h3>メニュー</h3>
     <button class="menu-item" id="premiumMenuBtn" onclick="closeMenu();openPremiumModal()" style="display:none;">プレミアムプランを見る</button>
+    <button class="menu-item" id="manageBillingBtn" onclick="closeMenu();openBillingPortal()" style="display:none;">お支払い・解約の管理</button>
     <button class="menu-item" onclick="openContact()">お問い合わせ</button>
     <button class="menu-item danger" onclick="deleteAccount()">アカウントを削除する</button>
     <button class="menu-close" onclick="closeMenu()">閉じる</button>
@@ -512,14 +513,17 @@ setupSlideSelect();
 function updatePremiumUI(){
   const badge = document.getElementById('premiumUserBadge');
   const menuBtn = document.getElementById('premiumMenuBtn');
+  const manageBtn = document.getElementById('manageBillingBtn');
   if(isPremium){
     badge.style.display='flex';
     badge.innerHTML='<span class="premium-user-badge">プレミアム会員</span>';
     if(menuBtn) menuBtn.style.display='none';
+    if(manageBtn) manageBtn.style.display='flex';
   } else {
     badge.style.display='none';
     badge.innerHTML='';
     if(menuBtn) menuBtn.style.display='flex';
+    if(manageBtn) manageBtn.style.display='none';
   }
   // プレミアムモーダルのボタン更新
   updatePremiumModalBtn();
@@ -529,7 +533,7 @@ function updatePremiumModalBtn(){
   const area = document.getElementById('premiumBtnArea');
   if(!area) return;
   if(isPremium){
-    area.innerHTML='<div style="background:#222;border-radius:10px;padding:12px;font-size:13px;color:#c9a96e;margin-bottom:12px;">プレミアム会員です</div>';
+    area.innerHTML='<div style="background:#222;border-radius:10px;padding:12px;font-size:13px;color:#c9a96e;margin-bottom:12px;">プレミアム会員です</div><button class="premium-btn" onclick="openBillingPortal()">お支払い・解約の管理</button>';
   } else if(!currentUser){
     area.innerHTML=`
       <p class="premium-note">※ ご利用にはログインが必要です</p>
@@ -546,6 +550,30 @@ window.openPremiumModal=function(){
   document.getElementById('premiumModal').classList.add('show');
 }
 window.closePremiumModal=function(){ document.getElementById('premiumModal').classList.remove('show'); }
+const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/28EeVe1uAfta3Xw4SlfUQ00';
+window.openBillingPortal=function(){
+  const u=new URL(STRIPE_PORTAL_URL);
+  if(currentUser&&currentUser.email) u.searchParams.set('prefilled_email', currentUser.email);
+  window.open(u.toString(), '_blank', 'noopener');
+}
+// アプリ内アプリ（LINEなど）では confirm() が出ないことがあるので、自前の確認画面を使う
+function askConfirm(msg, okLabel, cancelLabel){
+  return new Promise(resolve=>{
+    const wrap=document.createElement('div');
+    wrap.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:900;display:flex;align-items:center;justify-content:center;padding:20px;';
+    const box=document.createElement('div');
+    box.style.cssText='background:#1a1a1a;border:1px solid #c9a96e44;border-radius:14px;padding:20px;max-width:320px;width:100%;color:#f0e6d3;font-size:14px;text-align:center;';
+    const p=document.createElement('p'); p.textContent=msg; p.style.cssText='margin:0 0 16px;line-height:1.6;';
+    const row=document.createElement('div'); row.style.cssText='display:flex;gap:10px;';
+    const no=document.createElement('button'); no.textContent=cancelLabel;
+    no.style.cssText='flex:1;padding:12px;border-radius:10px;border:1px solid #c9a96e44;background:#2a2a2a;color:#f0e6d3;font-size:14px;cursor:pointer;';
+    const yes=document.createElement('button'); yes.textContent=okLabel;
+    yes.style.cssText='flex:1;padding:12px;border-radius:10px;border:none;background:#ff6b6b;color:#111;font-weight:bold;font-size:14px;cursor:pointer;';
+    const done=v=>{wrap.remove();resolve(v);};
+    no.onclick=()=>done(false); yes.onclick=()=>done(true); wrap.onclick=e=>{if(e.target===wrap)done(false);};
+    row.append(no,yes); box.append(p,row); wrap.append(box); document.body.append(wrap);
+  });
+}
 window.goToPremium=function(){
   if(!currentUser){closePremiumModal();openLoginModal();return;}
   const u=new URL(STRIPE_PREMIUM_URL);
@@ -698,7 +726,7 @@ async function updateItem(){const category=document.getElementById('category').v
 window.searchSimilar=function(){if(!currentColor){alert('先に写真を選んでください！');return;}const category=document.getElementById('category').value,season=document.getElementById('season').value;if(!category){alert('カテゴリを選んでください！');return;}if(!season){alert('季節を選んでください！');return;}const taste=document.getElementById('tasteSelect').value,memo=document.getElementById('memo').value;pendingItem={photo:currentPhoto,color:currentColor,category,season,taste,memo,createdAt:new Date().toISOString()};isSimilarMode=true;similarSourceColor=currentColor;selectedSearchColors=[];document.getElementById('modal').classList.remove('show');['cameraInput','albumInput'].forEach(id=>document.getElementById(id).value='');if(category){currentFilter=category;document.querySelectorAll('.filter-btn').forEach(btn=>{btn.classList.toggle('active',btn.textContent.trim()===category);});}if(season)document.getElementById('searchSeason').value=season;if(taste)document.getElementById('searchTaste').value=taste;document.getElementById('searchPanel').classList.add('show');document.getElementById('searchToggleBtn').classList.add('active');document.getElementById('colorSearchHint').textContent='「検索元」の色は外せません。他の色をタップで追加できます';document.getElementById('similarBar').classList.add('show');document.getElementById('addBtn').style.display='none';renderColorChips();doSearch();}
 window.cancelSimilarSearch=function(){isSimilarMode=false;similarSourceColor=null;pendingItem=null;selectedSearchColors=[];document.getElementById('similarBar').classList.remove('show');document.getElementById('addBtn').style.display='';document.getElementById('colorSearchHint').textContent='タップで選択・長押しでスライド複数選択OK';document.getElementById('searchPanel').classList.remove('show');document.getElementById('searchToggleBtn').classList.remove('active');isSearchMode=false;searchResults=null;document.getElementById('searchResultNotice').textContent='';document.getElementById('searchSeason').value='';document.getElementById('searchTaste').value='';currentFilter='全て';document.querySelectorAll('.filter-btn').forEach(btn=>{btn.classList.toggle('active',btn.textContent.trim()==='全て');});renderGrid();}
 window.registerPendingItem=async function(){if(!pendingItem)return;const ind=document.getElementById('savingIndicator');ind.style.display='block';try{if(currentUser){const dr=await addDoc(collection(db,'users',currentUser.uid,'items'),pendingItem);items.unshift({id:dr.id,...pendingItem});}else{const li={id:Date.now().toString(),...pendingItem};localItems.unshift(li);items=[...localItems];localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}alert('登録しました！');cancelSimilarSearch();renderGrid();renderStats();}catch(e){alert('保存に失敗しました。');}finally{ind.style.display='none';}}
-window.deleteItem=async function(id){if(confirm('この服を削除しますか？')){if(currentUser)await deleteDoc(doc(db,'users',currentUser.uid,'items',id));else{localItems=localItems.filter(i=>i.id!==id);localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}items=items.filter(i=>i.id!==id);if(isSearchMode)doSearch();else renderGrid();renderStats();}}
+window.deleteItem=async function(id){if(!(await askConfirm('この服を削除しますか？','削除する','やめる')))return;try{if(currentUser)await deleteDoc(doc(db,'users',currentUser.uid,'items',id));else{localItems=localItems.filter(i=>i.id!==id);localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}}catch(e){console.error(e);alert('削除できませんでした。通信を確認して、もう一度お試しください。');return;}items=items.filter(i=>i.id!==id);if(isSearchMode)doSearch();else renderGrid();renderStats();}
 window.toggleFav=async function(id){const item=items.find(i=>i.id===id);if(!item)return;item.fav=!item.fav;if(currentUser){await updateDoc(doc(db,'users',currentUser.uid,'items',id),{fav:item.fav});}else{const li=localItems.find(i=>i.id===id);if(li)li.fav=item.fav;localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}if(isSearchMode)doSearch();else renderGrid();}
 window.wearItem=async function(id){const item=items.find(i=>i.id===id);if(!item)return;const today=new Date().toISOString().slice(0,10);if(item.lastWornDate===today){item.wornCount=Math.max((item.wornCount||1)-1,0);item.lastWornDate=item.prevLastWornDate||null;item.prevLastWornDate=null;}else{item.prevLastWornDate=item.lastWornDate||null;item.wornCount=Math.min((item.wornCount||0)+1,99);item.lastWornDate=today;}if(currentUser){await updateDoc(doc(db,'users',currentUser.uid,'items',id),{wornCount:item.wornCount,lastWornDate:item.lastWornDate,prevLastWornDate:item.prevLastWornDate||null});}else{const li=localItems.find(i=>i.id===id);if(li){li.wornCount=item.wornCount;li.lastWornDate=item.lastWornDate;li.prevLastWornDate=item.prevLastWornDate||null;}localStorage.setItem('closet_items_guest',JSON.stringify(localItems));}if(isSearchMode)doSearch();else renderGrid();renderStats();}
 window.filterItems=function(filter){currentFilter=filter;isSearchMode=false;searchResults=null;document.getElementById('searchResultNotice').textContent='';document.querySelectorAll('.filter-btn').forEach(btn=>{btn.classList.toggle('active',btn.textContent.trim()===filter);});renderGrid();}
